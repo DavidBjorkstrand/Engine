@@ -1,16 +1,16 @@
 #include "Engine.h"
-#include "renderer\WindowManager.h"
+#include "WindowManager.h"
 
 #include <iostream>
 
 Engine::Engine() 
 {
-    WindowManager::init();
+    _windowManager = new WindowManager();
 }
 
 Engine::~Engine()
 {
-    WindowManager::terminate();
+    delete _windowManager;
 }
 
 int main(int argc, char *argv[])

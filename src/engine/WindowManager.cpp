@@ -8,6 +8,15 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
+WindowManager::WindowManager()
+{
+    init();
+}
+
+WindowManager::~WindowManager() 
+{
+    terminate();
+}
 
 void WindowManager::init()
 {
@@ -20,7 +29,7 @@ void WindowManager::init()
     GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", nullptr, nullptr);
     if (window == nullptr)
     {
-        WindowManager::terminate();
+        terminate();
         throw glfwInitException;
     }
 
@@ -29,7 +38,7 @@ void WindowManager::init()
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
     {
-        WindowManager::terminate();
+        terminate();
         throw glewInitException;
     }
 }
