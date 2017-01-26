@@ -1,10 +1,15 @@
 #include "Engine.h"
+#include "InputManager.h"
+#include "interfaces/Input.h"
 #include "WindowManager.h"
 
 #include <iostream>
 
 Engine::Engine() 
 {
+    _inputManager = new InputManager();
+    Input::init(_inputManager);
+
     _windowManager = new WindowManager();
 }
 

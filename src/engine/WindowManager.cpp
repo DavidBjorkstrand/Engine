@@ -8,8 +8,9 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-WindowManager::WindowManager()
+WindowManager::WindowManager(InputManager *inputManager)
 {
+    _inputManager = inputManager;
     init();
 }
 
@@ -26,14 +27,16 @@ void WindowManager::init()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", nullptr, nullptr);
-    if (window == nullptr)
+    _window = glfwCreateWindow(800, 600, "Engine", nullptr, nullptr);
+    if (_window == nullptr)
     {
         terminate();
         throw glfwInitException;
     }
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(_window);
+
+    glfwSetKeyCallback(_window, keyCallback);
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
@@ -46,4 +49,10 @@ void WindowManager::init()
 void WindowManager::terminate() 
 {
     glfwTerminate();
+}
+
+void WindowManager::keyCallback(GLFWwindow *window, int key, int scancode,
+    int action, int mode)
+{
+    
 }

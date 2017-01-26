@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WindowManager.h"
+class WindowManager;
+class InputManager;
 
 class Engine
 {
@@ -10,5 +11,6 @@ class Engine
 
     private:
         WindowManager *_windowManager;
+        InputManager *_inputManager;
 
 };

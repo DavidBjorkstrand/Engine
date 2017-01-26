@@ -117,10 +117,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\Engine.cpp" />
+    <ClCompile Include="src\engine\interfaces\Input.cpp" />
+    <ClCompile Include="src\engine\InputManager.cpp" />
     <ClCompile Include="src\engine\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Engine.h" />
+    <ClInclude Include="src\engine\interfaces\Input.h" />
+    <ClInclude Include="src\engine\InputManager.h" />
     <ClInclude Include="src\engine\WindowManager.h" />
     <ClInclude Include="src\exceptions\GLEWInitException.h" />
     <ClInclude Include="src\exceptions\GLFWInitException.h" />
