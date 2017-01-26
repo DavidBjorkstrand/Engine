@@ -1,4 +1,5 @@
 #include "WindowManager.h"
+#include "InputManager.h"
 #include "exceptions\GLFWInitException.h"
 #include "exceptions\GLEWInitException.h"
 
@@ -8,10 +9,23 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
+WindowManager *WindowManager::instance = nullptr;
+
+void WindowManager::show()
+{
+    glfwSwapBuffers(_window);
+}
+
 WindowManager::WindowManager(InputManager *inputManager)
 {
+    if (instance != nullptr) {
+        delete instance;
+    }
+
     _inputManager = inputManager;
     init();
+
+    instance = this;
 }
 
 WindowManager::~WindowManager() 
@@ -54,5 +68,5 @@ void WindowManager::terminate()
 void WindowManager::keyCallback(GLFWwindow *window, int key, int scancode,
     int action, int mode)
 {
-    
+    WindowManager::instance->_inputManager->setKey(key, action);
 }
