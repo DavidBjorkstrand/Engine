@@ -1,11 +1,26 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <GLFW\glfw3.h>
+#include "Engine.h"
+#include "renderer\WindowManager.h"
+
 #include <iostream>
+
+Engine::Engine() 
+{
+    WindowManager::init();
+}
+
+Engine::~Engine()
+{
+    WindowManager::terminate();
+}
 
 int main(int argc, char *argv[])
 {
-    std::cerr << "Testing" << std::endl;
+
+    Engine *engine = new Engine();
+
     std::cin.ignore();
+
+    delete engine;
+
     return 0;
 }
