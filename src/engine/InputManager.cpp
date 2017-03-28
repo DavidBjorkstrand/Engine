@@ -10,6 +10,11 @@ InputManager::InputManager()
     {
         _keys[i] = false;
     }
+
+	mouseInitialized = false;
+
+	deltaMousePos[0] = 0;
+	deltaMousePos[1] = 0;
 }
 
 InputManager::~InputManager() 
@@ -29,12 +34,44 @@ void InputManager::setKey(int key, int action)
     }
 }
 
+void InputManager::setMousePos(double xpos, double ypos)
+{
+	if (!mouseInitialized)
+	{
+		prevMousePos[0] = xpos;
+		prevMousePos[1] = ypos;
+
+		mouseInitialized = true;
+	}
+	else
+	{
+		deltaMousePos[0] = prevMousePos[0] - xpos;
+		deltaMousePos[1] = prevMousePos[1] - ypos;
+
+		prevMousePos[0] = xpos;
+		prevMousePos[1] = ypos;
+	}
+}
+
 bool InputManager::checkKey(int key) 
 {
     return _keys[key];
 }
 
+double InputManager::getDeltaMouseX()
+{
+	return deltaMousePos[0];
+}
+
+double InputManager::getDeltaMouseY()
+{
+	return deltaMousePos[1];
+}
+
 void InputManager::pollEvents()
 {
+	deltaMousePos[0] = 0;
+	deltaMousePos[1] = 0;
+
     glfwPollEvents();
 }

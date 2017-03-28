@@ -17,6 +17,16 @@ class Input
         */
         static bool checkKey(int key);
 
+		/*
+		* Gets how much the mouse has moved along x-axis since last frame.
+		*/
+		static double getDeltaMouseX();
+
+		/*
+		* Gets how much the mouse has moved along y-axis since last frame.
+		*/
+		static double getDeltaMouseY();
+
     protected:
         /* 
         * Initiates the interface. 

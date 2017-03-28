@@ -43,6 +43,8 @@ vector<Component*> *Entity::getComponents()
 
 void Entity::addComponent(Component *component)
 {
+	component->_entity = this;
+
     _components->push_back(component);
 }
 

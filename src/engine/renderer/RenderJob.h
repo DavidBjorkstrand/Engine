@@ -23,6 +23,11 @@ class RenderJob
 		~RenderJob();
 
 		/*
+		* Gets the model matrix. 
+		*/
+		glm::mat4 getModelMatrix();
+
+		/*
 		* Draws the render job. 
 		*/
 		void draw();

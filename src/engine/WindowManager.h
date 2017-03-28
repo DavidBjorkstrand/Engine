@@ -16,6 +16,16 @@ class WindowManager
         */
         void show();
 
+		/*
+		* Gets the height of the window
+		*/
+		int getWindowHeight();
+
+		/*
+		* Gets the width of the window
+		*/
+		int getWindowWidth();
+
     protected:
         /* 
         * Constructor for the WindowManager can only be one, constuctor
@@ -50,6 +60,11 @@ class WindowManager
         */
         static void keyCallback(GLFWwindow *window, int key, int scancode,
             int action, int mode);
+
+		/*
+		* Mouse position callback sent to GLFW
+		*/
+		static void mousePosCallBack(GLFWwindow *window, double xpos, double ypos);
 
         static WindowManager *instance;
         InputManager *_inputManager;

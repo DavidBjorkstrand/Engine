@@ -16,6 +16,27 @@ void WindowManager::show()
     glfwSwapBuffers(_window);
 }
 
+int WindowManager::getWindowHeight()
+{
+	int width;
+	int height;
+
+	glfwGetWindowSize(_window, &width, &height);
+
+	return height;
+}
+
+int WindowManager::getWindowWidth()
+{
+	int width;
+	int height;
+
+	glfwGetWindowSize(_window, &width, &height);
+
+	return width;
+
+}
+
 WindowManager::WindowManager(InputManager *inputManager)
 {
     if (instance != nullptr) {
@@ -41,7 +62,7 @@ void WindowManager::init()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    _window = glfwCreateWindow(800, 600, "Engine", nullptr, nullptr);
+    _window = glfwCreateWindow(1280, 720, "Engine", nullptr, nullptr);
     if (_window == nullptr)
     {
         terminate();
@@ -51,6 +72,8 @@ void WindowManager::init()
     glfwMakeContextCurrent(_window);
 
     glfwSetKeyCallback(_window, keyCallback);
+
+	glfwSetCursorPosCallback(_window, mousePosCallBack);
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
@@ -69,4 +92,9 @@ void WindowManager::keyCallback(GLFWwindow *window, int key, int scancode,
     int action, int mode)
 {
     WindowManager::instance->_inputManager->setKey(key, action);
+}
+
+void WindowManager::mousePosCallBack(GLFWwindow *window, double xpos, double ypos)
+{
+	WindowManager::instance->_inputManager->setMousePos(xpos, ypos);
 }

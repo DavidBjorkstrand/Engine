@@ -17,12 +17,27 @@ class InputManager
         */
         void setKey(int key, int action);
 
+		/*
+		* Sets mouse position
+		*/
+		void setMousePos(double xpos, double ypos);
+
         /*
         * Checks if a key is pressed or not.
         * param: key - The key to check. 
         * return: True if the key is pressed else false.
         */
         bool checkKey(int key);
+
+		/*
+		* Gets how much the mouse has moved along x-axis since last frame.
+		*/
+		double getDeltaMouseX();
+
+		/*
+		* Gets how much the mouse has moved along y-axis since last frame.
+		*/
+		double getDeltaMouseY();
 
         /*
         * Polls events, needs to be called each frame.  
@@ -43,5 +58,8 @@ class InputManager
 
     private:
         bool _keys[1024];
+		bool mouseInitialized;
+		double prevMousePos[2];
+		double deltaMousePos[2];
         
 };

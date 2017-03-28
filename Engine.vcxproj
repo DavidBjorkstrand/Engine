@@ -116,11 +116,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\behviour\CameraController.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\interfaces\Input.cpp" />
     <ClCompile Include="src\engine\InputManager.cpp" />
+    <ClCompile Include="src\engine\interfaces\Window.cpp" />
+    <ClCompile Include="src\engine\renderer\Renderer.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderInformation.cpp" />
     <ClCompile Include="src\engine\renderer\RenderJob.cpp" />
+    <ClCompile Include="src\engine\renderer\Shader.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\Behaviour.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\Camera.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\Component.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Mesh.cpp" />
+    <ClCompile Include="src\engine\scene\MatrixStack.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\scene\SceneParser.cpp" />
     <ClCompile Include="src\engine\scene\entity\Transform.cpp" />
@@ -128,11 +137,19 @@
     <ClCompile Include="src\engine\scene\entity\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\behviour\CameraController.h" />
     <ClInclude Include="src\engine\Engine.h" />
     <ClInclude Include="src\engine\interfaces\Input.h" />
     <ClInclude Include="src\engine\InputManager.h" />
+    <ClInclude Include="src\engine\interfaces\Window.h" />
+    <ClInclude Include="src\engine\renderer\Renderer.h" />
+    <ClInclude Include="src\engine\renderer\RenderInformation.h" />
     <ClInclude Include="src\engine\renderer\RenderJob.h" />
+    <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\scene\entity\component\Behaviour.h" />
+    <ClInclude Include="src\engine\scene\entity\component\Camera.h" />
     <ClInclude Include="src\engine\scene\entity\component\Mesh.h" />
+    <ClInclude Include="src\engine\scene\MatrixStack.h" />
     <ClInclude Include="src\engine\scene\SceneParser.h" />
     <ClInclude Include="src\engine\scene\entity\Transform.h" />
     <ClInclude Include="src\engine\WindowManager.h" />
@@ -141,6 +158,10 @@
     <ClInclude Include="src\engine\scene\entity\component\Component.h" />
     <ClInclude Include="src\engine\scene\entity\Entity.h" />
     <ClInclude Include="src\engine\scene\Scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\engine\renderer\shaders\pbr.fs" />
+    <None Include="src\engine\renderer\shaders\pbr.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
