@@ -2,6 +2,8 @@
 #include "InputManager.h"
 #include "interfaces/Input.h"
 #include "WindowManager.h"
+#include "scene/Scene.h"
+#include "scene/entity/Entity.h"
 
 #include <iostream>
 
@@ -35,10 +37,15 @@ int main(int argc, char *argv[])
 {
 
     Engine *engine = new Engine();
+	Scene *scene = new Scene("TheScene");
+	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Plane);
+
+	scene->addEntity(entity);
 
     engine->run();
 
     delete engine;
+	delete scene;
 
     return 0;
 }

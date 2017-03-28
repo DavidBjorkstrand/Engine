@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C4668740-FC79-4232-A4D9-6A6B4B7E09B6}</ProjectGuid>
     <RootNamespace>Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -119,15 +119,28 @@
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\interfaces\Input.cpp" />
     <ClCompile Include="src\engine\InputManager.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderJob.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\Mesh.cpp" />
+    <ClCompile Include="src\engine\scene\Scene.cpp" />
+    <ClCompile Include="src\engine\scene\SceneParser.cpp" />
+    <ClCompile Include="src\engine\scene\entity\Transform.cpp" />
     <ClCompile Include="src\engine\WindowManager.cpp" />
+    <ClCompile Include="src\engine\scene\entity\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Engine.h" />
     <ClInclude Include="src\engine\interfaces\Input.h" />
     <ClInclude Include="src\engine\InputManager.h" />
+    <ClInclude Include="src\engine\renderer\RenderJob.h" />
+    <ClInclude Include="src\engine\scene\entity\component\Mesh.h" />
+    <ClInclude Include="src\engine\scene\SceneParser.h" />
+    <ClInclude Include="src\engine\scene\entity\Transform.h" />
     <ClInclude Include="src\engine\WindowManager.h" />
     <ClInclude Include="src\exceptions\GLEWInitException.h" />
     <ClInclude Include="src\exceptions\GLFWInitException.h" />
+    <ClInclude Include="src\engine\scene\entity\component\Component.h" />
+    <ClInclude Include="src\engine\scene\entity\Entity.h" />
+    <ClInclude Include="src\engine\scene\Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

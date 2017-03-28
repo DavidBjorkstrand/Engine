@@ -10,6 +10,10 @@ class WindowManager
     friend class Engine;
     
     public:
+        /*
+        * Swaps the window buffers so the things that got drawed are showed
+        * in the window. Needs to be called each frame.
+        */
         void show();
 
     protected:
