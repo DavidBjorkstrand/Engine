@@ -1,4 +1,6 @@
-#include "Window.h"
+#include "engine/interface/Window.h"
+
+#include "engine/WindowManager.h"
 
 WindowManager *Window::_windowManager = nullptr;
 

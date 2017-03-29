@@ -1,7 +1,8 @@
-#include "WindowManager.h"
-#include "InputManager.h"
-#include "exceptions\GLFWInitException.h"
-#include "exceptions\GLEWInitException.h"
+#include "engine/WindowManager.h"
+
+#include "engine/InputManager.h"
+#include "engine/exception/GLFWInitException.h"
+#include "engine/exception/GLEWInitException.h"
 
 #include <iostream>
 

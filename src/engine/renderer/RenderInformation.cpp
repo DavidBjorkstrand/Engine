@@ -1,6 +1,7 @@
-#include "RenderInformation.h"
-#include "RenderJob.h"
-#include "..\scene\entity\component\Camera.h"
+#include "engine/renderer/RenderInformation.h"
+
+#include "engine/renderer/RenderJob.h"
+#include "engine/scene/entity/component/Camera.h"
 
 #include <vector>
 

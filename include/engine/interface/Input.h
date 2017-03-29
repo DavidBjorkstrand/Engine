@@ -1,8 +1,7 @@
 #pragma once
 
-#include "..\InputManager.h"
-
 class Engine;
+class InputManager;
 
 /* Input interface class used for quering about inputs */
 class Input

@@ -24,9 +24,6 @@
     <ClCompile Include="src\engine\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\interfaces\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,16 +54,10 @@
     <ClCompile Include="src\engine\scene\entity\component\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\interfaces\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\renderer\RenderInformation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\scene\entity\component\Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\behviour\CameraController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\scene\entity\component\Behaviour.cpp">
@@ -81,84 +72,93 @@
     <ClCompile Include="src\engine\MaterialManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\interfaces\MaterialSystem.cpp">
+    <ClCompile Include="src\behaviour\CameraController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\interface\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\interface\MaterialSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\interface\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\exceptions\GLFWInitException.h">
+    <ClInclude Include="include\engine\renderer\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\exceptions\GLEWInitException.h">
+    <ClInclude Include="include\engine\renderer\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Engine.h">
+    <ClInclude Include="include\engine\renderer\RenderInformation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\WindowManager.h">
+    <ClInclude Include="include\engine\renderer\RenderJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\InputManager.h">
+    <ClInclude Include="include\engine\renderer\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\interfaces\Input.h">
+    <ClInclude Include="include\engine\scene\MatrixStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Scene.h">
+    <ClInclude Include="include\engine\scene\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\SceneParser.h">
+    <ClInclude Include="include\engine\scene\SceneParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\Entity.h">
+    <ClInclude Include="include\engine\scene\entity\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\Transform.h">
+    <ClInclude Include="include\engine\scene\entity\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\component\Component.h">
+    <ClInclude Include="include\engine\scene\entity\component\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\component\Mesh.h">
+    <ClInclude Include="include\engine\scene\entity\component\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\RenderJob.h">
+    <ClInclude Include="include\engine\scene\entity\component\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\MatrixStack.h">
+    <ClInclude Include="include\engine\scene\entity\component\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\Shader.h">
+    <ClInclude Include="include\engine\scene\entity\component\PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\Renderer.h">
+    <ClInclude Include="include\engine\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\component\Camera.h">
+    <ClInclude Include="include\engine\InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\interfaces\Window.h">
+    <ClInclude Include="include\engine\MaterialManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\RenderInformation.h">
+    <ClInclude Include="include\engine\WindowManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\component\Behaviour.h">
+    <ClInclude Include="include\engine\interface\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\behviour\CameraController.h">
+    <ClInclude Include="include\engine\interface\MaterialSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\entity\component\PointLight.h">
+    <ClInclude Include="include\engine\interface\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\Material.h">
+    <ClInclude Include="include\behaviour\CameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\MaterialManager.h">
+    <ClInclude Include="include\engine\exception\GLEWInitException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\interfaces\MaterialSystem.h">
+    <ClInclude Include="include\engine\exception\GLFWInitException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

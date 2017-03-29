@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../WindowManager.h"
-
 class Engine;
+class WindowManager;
 
 /*
 * Interface for getting information about the window.

@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Projects\Engine\src;D:\Projects\Engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Projects\Engine\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Projects\Engine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -116,13 +116,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\behviour\CameraController.cpp" />
+    <ClCompile Include="src\behaviour\CameraController.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
-    <ClCompile Include="src\engine\interfaces\Input.cpp" />
+    <ClCompile Include="src\engine\interface\Input.cpp" />
     <ClCompile Include="src\engine\InputManager.cpp" />
-    <ClCompile Include="src\engine\interfaces\MaterialSystem.cpp" />
+    <ClCompile Include="src\engine\interface\MaterialSystem.cpp" />
     <ClCompile Include="src\engine\MaterialManager.cpp" />
-    <ClCompile Include="src\engine\interfaces\Window.cpp" />
+    <ClCompile Include="src\engine\interface\Window.cpp" />
     <ClCompile Include="src\engine\renderer\Renderer.cpp" />
     <ClCompile Include="src\engine\renderer\RenderInformation.cpp" />
     <ClCompile Include="src\engine\renderer\RenderJob.cpp" />
@@ -141,31 +141,31 @@
     <ClCompile Include="src\engine\scene\entity\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\behviour\CameraController.h" />
-    <ClInclude Include="src\engine\Engine.h" />
-    <ClInclude Include="src\engine\interfaces\Input.h" />
-    <ClInclude Include="src\engine\InputManager.h" />
-    <ClInclude Include="src\engine\interfaces\MaterialSystem.h" />
-    <ClInclude Include="src\engine\MaterialManager.h" />
-    <ClInclude Include="src\engine\interfaces\Window.h" />
-    <ClInclude Include="src\engine\renderer\Renderer.h" />
-    <ClInclude Include="src\engine\renderer\RenderInformation.h" />
-    <ClInclude Include="src\engine\renderer\RenderJob.h" />
-    <ClInclude Include="src\engine\renderer\Shader.h" />
-    <ClInclude Include="src\engine\scene\entity\component\Behaviour.h" />
-    <ClInclude Include="src\engine\scene\entity\component\Camera.h" />
-    <ClInclude Include="src\engine\renderer\Material.h" />
-    <ClInclude Include="src\engine\scene\entity\component\Mesh.h" />
-    <ClInclude Include="src\engine\scene\entity\component\PointLight.h" />
-    <ClInclude Include="src\engine\scene\MatrixStack.h" />
-    <ClInclude Include="src\engine\scene\SceneParser.h" />
-    <ClInclude Include="src\engine\scene\entity\Transform.h" />
-    <ClInclude Include="src\engine\WindowManager.h" />
-    <ClInclude Include="src\exceptions\GLEWInitException.h" />
-    <ClInclude Include="src\exceptions\GLFWInitException.h" />
-    <ClInclude Include="src\engine\scene\entity\component\Component.h" />
-    <ClInclude Include="src\engine\scene\entity\Entity.h" />
-    <ClInclude Include="src\engine\scene\Scene.h" />
+    <ClInclude Include="include\behaviour\CameraController.h" />
+    <ClInclude Include="include\engine\Engine.h" />
+    <ClInclude Include="include\engine\interface\Input.h" />
+    <ClInclude Include="include\engine\InputManager.h" />
+    <ClInclude Include="include\engine\interface\MaterialSystem.h" />
+    <ClInclude Include="include\engine\MaterialManager.h" />
+    <ClInclude Include="include\engine\interface\Window.h" />
+    <ClInclude Include="include\engine\renderer\Renderer.h" />
+    <ClInclude Include="include\engine\renderer\RenderInformation.h" />
+    <ClInclude Include="include\engine\renderer\RenderJob.h" />
+    <ClInclude Include="include\engine\renderer\Shader.h" />
+    <ClInclude Include="include\engine\scene\entity\component\Behaviour.h" />
+    <ClInclude Include="include\engine\scene\entity\component\Camera.h" />
+    <ClInclude Include="include\engine\renderer\Material.h" />
+    <ClInclude Include="include\engine\scene\entity\component\Mesh.h" />
+    <ClInclude Include="include\engine\scene\entity\component\PointLight.h" />
+    <ClInclude Include="include\engine\scene\MatrixStack.h" />
+    <ClInclude Include="include\engine\scene\SceneParser.h" />
+    <ClInclude Include="include\engine\scene\entity\Transform.h" />
+    <ClInclude Include="include\engine\WindowManager.h" />
+    <ClInclude Include="include\engine\exception\GLEWInitException.h" />
+    <ClInclude Include="include\engine\exception\GLFWInitException.h" />
+    <ClInclude Include="include\engine\scene\entity\component\Component.h" />
+    <ClInclude Include="include\engine\scene\entity\Entity.h" />
+    <ClInclude Include="include\engine\scene\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\materials\default.mat" />

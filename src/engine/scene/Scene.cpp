@@ -1,8 +1,9 @@
-#include "Scene.h"
-#include "entity/Entity.h"
-#include "SceneParser.h"
-#include "..\renderer\RenderInformation.h"
-#include "entity\component\Behaviour.h"
+#include "engine/scene/Scene.h"
+
+#include "engine/scene/SceneParser.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/component/Behaviour.h"
+#include "engine/renderer/RenderInformation.h"
 
 #include <string>
 #include <vector>

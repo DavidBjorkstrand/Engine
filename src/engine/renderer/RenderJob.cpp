@@ -1,5 +1,4 @@
-#include "RenderJob.h"
-#include "..\scene\entity\component\Component.h"
+#include "engine/renderer/RenderJob.h"
 
 #include <string>
 

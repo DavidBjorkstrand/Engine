@@ -1,13 +1,13 @@
-#include "SceneParser.h"
-#include "entity\Entity.h"
-#include "entity\component\Component.h"
-#include "entity\Transform.h"
-#include "entity\component\Mesh.h"
-#include "entity\component\Camera.h"
-#include "entity\component\Behaviour.h"
-#include "entity\Transform.h"
-#include "MatrixStack.h"
-#include "..\renderer\RenderInformation.h"
+#include "engine/scene/SceneParser.h"
+
+#include "engine/scene/MatrixStack.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/Transform.h"
+#include "engine/scene/entity/component/Component.h"
+#include "engine/scene/entity/component/Mesh.h"
+#include "engine/scene/entity/component/Camera.h"
+#include "engine/scene/entity/component/Behaviour.h"
+#include "engine/renderer/RenderInformation.h"
 
 #include <vector>
 

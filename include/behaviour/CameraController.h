@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\engine\scene\entity\component\Behaviour.h"
+#include "engine/scene/entity/component/Behaviour.h"
 
 class Transform;
 

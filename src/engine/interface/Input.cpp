@@ -1,5 +1,7 @@
-#include "Input.h"
-#include "..\InputManager.h"
+#include "engine/interface/Input.h"
+
+#include "engine/InputManager.h"
+
 
 InputManager *Input::_inputManager = nullptr;
 

@@ -1,8 +1,9 @@
-#include "Mesh.h"
-#include "../../SceneParser.h"
-#include "../../../renderer/RenderJob.h"
-#include "..\Entity.h"
-#include "..\Transform.h"
+#include "engine/scene/entity/component/Mesh.h"
+
+#include "engine/scene/SceneParser.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/Transform.h"
+#include "engine/renderer/RenderJob.h"
 
 #include <string>
 

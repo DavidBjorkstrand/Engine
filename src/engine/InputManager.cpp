@@ -1,4 +1,4 @@
-#include "InputManager.h"
+#include "engine/InputManager.h"
 
 #define GLEW_STATIC
 #include <GL\glew.h>

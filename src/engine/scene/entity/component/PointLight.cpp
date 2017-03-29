@@ -1,5 +1,6 @@
-#include "PointLight.h"
-#include "..\..\SceneParser.h"
+#include "engine/scene/entity/component/PointLight.h"
+
+#include "engine/scene/SceneParser.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

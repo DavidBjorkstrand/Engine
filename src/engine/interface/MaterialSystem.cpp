@@ -1,6 +1,7 @@
-#include "MaterialSystem.h"
-#include "..\renderer\Material.h"
-#include "..\MaterialManager.h"
+#include "engine/interface/MaterialSystem.h"
+
+#include "engine/MaterialManager.h"
+#include "engine/renderer/Material.h"
 
 #include <string>
 

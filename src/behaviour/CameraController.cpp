@@ -1,7 +1,8 @@
-#include "CameraController.h"
-#include "..\engine\interfaces\Input.h"
-#include "..\engine\scene\entity\Entity.h"
-#include "..\engine\scene\entity\Transform.h"
+#include "behaviour/CameraController.h"
+
+#include "engine/interface/Input.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/Transform.h"
 
 #include <GLFW\glfw3.h>
 

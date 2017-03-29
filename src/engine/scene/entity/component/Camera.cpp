@@ -1,8 +1,9 @@
-#include "Camera.h"
-#include "..\..\..\interfaces\Window.h"
-#include "..\..\SceneParser.h"
-#include "..\Entity.h"
-#include "..\Transform.h"
+#include "engine/scene/entity/component/Camera.h"
+
+#include "engine/interface/Window.h"
+#include "engine/scene/SceneParser.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/Transform.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>

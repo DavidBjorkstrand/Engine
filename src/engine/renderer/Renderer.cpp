@@ -1,13 +1,14 @@
-#include "Renderer.h"
-#include "Shader.h"
-#include "RenderJob.h"
-#include "RenderInformation.h"
-#include "..\scene\entity\component\Camera.h"
-#include "..\scene\entity\Entity.h"
-#include "..\scene\entity\Transform.h"
-#include "Material.h"
-#include "..\scene\entity\component\PointLight.h"
-#include "..\interfaces\MaterialSystem.h"
+#include "engine/renderer/Renderer.h"
+
+#include "engine/renderer/Shader.h"
+#include "engine/renderer/RenderJob.h"
+#include "engine/renderer/RenderInformation.h"
+#include "engine/renderer/Material.h"
+#include "engine/scene/entity/Entity.h"
+#include "engine/scene/entity/Transform.h"
+#include "engine/scene/entity/component/Camera.h"
+#include "engine/scene/entity/component/PointLight.h"
+#include "engine/interface/MaterialSystem.h"
 
 #include <vector>
 #include <iostream>

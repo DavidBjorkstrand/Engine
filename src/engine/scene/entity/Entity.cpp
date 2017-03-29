@@ -1,7 +1,8 @@
-#include "Entity.h"
-#include "Transform.h"
-#include "component/Component.h"
-#include "component/Mesh.h"
+#include "engine/scene/entity/Entity.h"
+
+#include "engine/scene/entity/Transform.h"
+#include "engine/scene/entity/component/Component.h"
+#include "engine/scene/entity/component/Mesh.h" 
 
 #include <vector>
 
