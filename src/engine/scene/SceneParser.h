@@ -6,6 +6,7 @@ class Entity;
 class Mesh;
 class Camera;
 class Behaviour;
+class PointLight;
 class RenderJob;
 class MatrixStack;
 class RenderInformation;
@@ -53,6 +54,8 @@ class SceneParser
 
 		void visit(Behaviour *behaviour);
 
+		void visit(PointLight *pointLight);
+
 	private:
 		/*
 		* Private helper function that traverses scene. 
@@ -63,5 +66,6 @@ class SceneParser
 		vector<RenderJob *> *_renderJobs;
 		vector<Camera *> *_cameras;
 		vector<Behaviour *> *_behaviours;
+		vector<PointLight *> *_pointLights;
 		MatrixStack *_matrixStack;
 };

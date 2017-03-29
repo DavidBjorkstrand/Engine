@@ -8,7 +8,7 @@
 void CameraController::update()
 {
 	Transform *transform = getEntity()->getTransform();
-	glm::vec3 right = glm::cross(transform->getWorldDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::vec3 right = glm::mat3(transform->getMatrix()) * glm::vec3(1.0f, 0.0f, 0.0f);
 
 	if (Input::checkKey(GLFW_KEY_W))
 	{

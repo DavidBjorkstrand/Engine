@@ -38,11 +38,11 @@ void Shader::setUniform1f(string name, GLfloat f0)
 	glUniform1f(loc, f0);
 }
 
-void Shader::setUniform3f(string name, GLfloat f0, GLfloat f1, GLfloat f2)
+void Shader::setUniform3fv(string name, glm::vec3 value)
 {
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
-	glUniform3f(loc, f0, f1, f2);
+	glUniform3f(loc, value.x, value.y, value.z);
 }
 
 void Shader::setUniform1i(string name, GLint value)

@@ -71,6 +71,8 @@ void WindowManager::init()
 
     glfwMakeContextCurrent(_window);
 
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     glfwSetKeyCallback(_window, keyCallback);
 
 	glfwSetCursorPosCallback(_window, mousePosCallBack);

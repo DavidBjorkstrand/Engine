@@ -26,6 +26,16 @@ class Transform
 		void rotate(float angle, glm::vec3 axis);
 
 		/*
+		* Gets the position of the transform in the world. 
+		*/
+		glm::vec3 getWorldPosition();
+
+		/*
+		* Gets the orientation of the transform in the world.
+		*/
+		glm::quat getWorldOrientation();
+
+		/*
 		* Gets the direction of the transform in world. 
 		* Initial direction is always along negative z-axis.
 		*/

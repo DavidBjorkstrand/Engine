@@ -19,11 +19,6 @@ void Camera::accept(SceneParser *sceneParser)
 	sceneParser->visit(this);
 }
 
-void Camera::setTransform(glm::mat4 transform)
-{
-	_transform = transform;
-}
-
 glm::mat4 Camera::getProjectionMatrix()
 {
 	float aspect = (float)Window::getWindowWidth() / (float)Window::getWindowHeight();
@@ -33,9 +28,9 @@ glm::mat4 Camera::getProjectionMatrix()
 
 glm::mat4 Camera::getViewMatrix()
 {
-	glm::vec3 position = glm::vec3(_transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	glm::vec3 position = getEntity()->getTransform()->getWorldPosition();
 	glm::vec3 lookAt = position + getEntity()->getTransform()->getWorldDirection();
-	glm::vec3 up = glm::vec3(_transform * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+	glm::vec3 up = getEntity()->getTransform()->getWorldOrientation() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * glm::conjugate(getEntity()->getTransform()->getWorldOrientation());
 
 	return glm::lookAt(position, lookAt, up);
 }

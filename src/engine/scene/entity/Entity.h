@@ -7,7 +7,7 @@ using namespace std;
 class Transform;
 class Component;
 
-enum class PrimitiveTypes { Plane };
+enum class PrimitiveTypes { Plane, Sphere };
 
 /*
 * This class represents a object in the world. 
@@ -41,6 +41,14 @@ class Entity
 		*/
 		vector<Component*> *getComponents();
 
+		/*
+		* Returns first component of type T if it exists
+		* in Entity else returns null. 
+		*/
+		template<class T>
+		T *getComponent();
+		
+
         /*
         * Adds a component to the entity. 
         */
@@ -62,3 +70,17 @@ class Entity
         vector<Component*> *_components;
         vector<Entity*> *_children;
 };
+
+template<class T>
+T *Entity::getComponent()
+{
+	for (Component *component : *_components)
+	{
+		T *object = dynamic_cast<T *> (component);
+
+		if (object != nullptr)
+		{
+			return object;
+		}
+	}
+}

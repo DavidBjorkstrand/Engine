@@ -23,11 +23,6 @@ class Camera : public Component
 		void accept(SceneParser *sceneParser);
 
 		/*
-		* Sets the transform matrix of the camera. 
-		*/
-		void setTransform(glm::mat4 transform);
-
-		/*
 		* Get projection matrix.
 		*/
 		glm::mat4 getProjectionMatrix();
@@ -41,5 +36,4 @@ class Camera : public Component
 		float _fov;
 		float _zNear;
 		float _zFar;
-		glm::mat4 _transform;
 };

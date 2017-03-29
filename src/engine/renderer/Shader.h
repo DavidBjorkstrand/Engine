@@ -61,7 +61,7 @@ class Shader
 		// Parameter: GLfloat f1 - Second value.
 		// Parameter: GLfloat f2 - Third value.
 		//************************************
-		void setUniform3f(string name, GLfloat f0, GLfloat f1, GLfloat f2);
+		void setUniform3fv(string name, glm::vec3 values);
 
 		//************************************
 		// Method:    Sets int uniforms in the shader program.

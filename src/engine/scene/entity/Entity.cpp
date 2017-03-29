@@ -63,6 +63,12 @@ Entity *Entity::createPrimitive(PrimitiveTypes type)
 
 		entity->addComponent(mesh);
 	}
+	else if (type == PrimitiveTypes::Sphere)
+	{
+		Mesh *mesh = Mesh::createSphere();
+
+		entity->addComponent(mesh);
+	}
 
 	return entity;
 }

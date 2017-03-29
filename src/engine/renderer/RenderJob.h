@@ -1,7 +1,13 @@
 #pragma once
 
+#include <string>
+
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
+
+class Material;
+
+using namespace std;
 
 /*
 * This class holds information for object the renderer should render.
@@ -15,7 +21,7 @@ class RenderJob
 		* GLuint VAO - A vertex array object.
 		* GLuint nINdices - Amount of indices to render. 
 		*/
-		RenderJob(glm::mat4 modelMatrix, GLuint VAO, GLuint nIndices);
+		RenderJob(glm::mat4 modelMatrix, GLuint VAO, GLuint nIndices, string materialName);
 
 		/*
 		* Deconstructor.
@@ -28,6 +34,11 @@ class RenderJob
 		glm::mat4 getModelMatrix();
 
 		/*
+		* Gets the material for the render job. 
+		*/
+		string getMaterialName();
+
+		/*
 		* Draws the render job. 
 		*/
 		void draw();
@@ -36,4 +47,5 @@ class RenderJob
 		glm::mat4 _modelMatrix;
 		GLuint _VAO;
 		GLuint _nIndices;
+		string _materialName;
 };

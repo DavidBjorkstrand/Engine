@@ -72,6 +72,18 @@
     <ClCompile Include="src\engine\scene\entity\component\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scene\entity\component\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\MaterialManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\interfaces\MaterialSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\exceptions\GLFWInitException.h">
@@ -137,9 +149,23 @@
     <ClInclude Include="src\behviour\CameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\scene\entity\component\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\renderer\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\MaterialManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\interfaces\MaterialSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\shaders\pbr.vs" />
     <None Include="src\engine\renderer\shaders\pbr.fs" />
+    <None Include="src\engine\renderer\materials\red.mat" />
+    <None Include="src\engine\renderer\materials\default.mat" />
   </ItemGroup>
 </Project>

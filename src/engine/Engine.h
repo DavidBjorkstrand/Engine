@@ -7,6 +7,7 @@ using namespace std;
 
 class WindowManager;
 class InputManager;
+class MaterialManager;
 class Scene;
 class Renderer;
 
@@ -37,6 +38,7 @@ class Engine
     private:
         WindowManager *_windowManager;
         InputManager *_inputManager;
+		MaterialManager *_materialManager;
 		Scene *_activeScene;
 		map<string, Scene *> *_scenes;
 		Renderer *_renderer;

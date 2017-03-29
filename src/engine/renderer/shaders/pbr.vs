@@ -7,7 +7,15 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
+out vec3 Position;
+out vec3 Normal;
+out vec2 TexCoords;
+
 void main()
 {
 	gl_Position = proj * view * model * vec4(position, 1.0f);
+
+	Position = vec3(model * vec4(position, 1.0f));
+	Normal = mat3(transpose(inverse(model))) * normal;
+	TexCoords = texCoords;
 }

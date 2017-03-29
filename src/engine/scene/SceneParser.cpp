@@ -16,6 +16,7 @@ SceneParser::SceneParser()
 	_renderJobs = new vector<RenderJob *>();
 	_cameras = new vector<Camera *>();
 	_behaviours = new vector<Behaviour *>();
+	_pointLights = new vector<PointLight *>();
 	_matrixStack = new MatrixStack();
 }
 
@@ -27,7 +28,7 @@ SceneParser::~SceneParser()
 
 RenderInformation *SceneParser::getRenderInformation()
 {
-	return new RenderInformation(_cameras, _renderJobs);
+	return new RenderInformation(_cameras, _renderJobs, _pointLights);
 }
 
 vector<Behaviour *> *SceneParser::getBehaviours()
@@ -40,27 +41,31 @@ void SceneParser::parse(vector<Entity *> *root)
 	_renderJobs->clear();
 	_cameras->clear();
 	_behaviours->clear();
+	_pointLights->clear();
 
 	traverse(root);
 }
 
 void SceneParser::visit(Mesh *mesh)
 {
-	RenderJob *renderJob = mesh->getRenderJob(_matrixStack->top());
+	RenderJob *renderJob = mesh->getRenderJob();
 
 	_renderJobs->push_back(renderJob);
 }
 
 void SceneParser::visit(Camera *camera)
 {
-	camera->setTransform(_matrixStack->top());
-
 	_cameras->push_back(camera);
 }
 
 void SceneParser::visit(Behaviour *behaviour)
 {
 	_behaviours->push_back(behaviour);
+}
+
+void SceneParser::visit(PointLight *pointLight)
+{
+	_pointLights->push_back(pointLight);
 }
 
 void SceneParser::traverse(vector<Entity *> *root)

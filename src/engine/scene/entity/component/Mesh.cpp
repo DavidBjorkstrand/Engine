@@ -1,11 +1,19 @@
 #include "Mesh.h"
 #include "../../SceneParser.h"
 #include "../../../renderer/RenderJob.h"
+#include "..\Entity.h"
+#include "..\Transform.h"
+
+#include <string>
+
+#include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 
-Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices)
+Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName)
 {
 	initBuffers(vertices, indices);
+
+	_materialName = materialName;
 }
 
 Mesh::~Mesh()
@@ -18,9 +26,14 @@ void Mesh::accept(SceneParser *parser)
 	parser->visit(this);
 }
 
-RenderJob *Mesh::getRenderJob(glm::mat4 modelMatrix)
+void Mesh::setMaterial(string materialName)
 {
-	return new RenderJob(modelMatrix, _VAO, _nIndices);
+	_materialName = materialName;
+}
+
+RenderJob *Mesh::getRenderJob()
+{
+	return new RenderJob(getEntity()->getTransform()->getMatrix(), _VAO, _nIndices, _materialName);
 }
 
 void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
@@ -114,5 +127,60 @@ Mesh *Mesh::createPlane()
 	indices->push_back(3);
 	indices->push_back(0);
 
-	return new Mesh(vertices, indices);
+	return new Mesh(vertices, indices, "default");
+}
+
+Mesh *Mesh::createSphere()
+{
+	vector<Vertex> *vertices = new vector<Vertex>();
+	vector<GLuint> *indices = new vector<GLuint>();
+
+	const unsigned int X_SEGMENTS = 64;
+	const unsigned int Y_SEGMENTS = 64;
+	const float PI = 3.14159265359;
+
+	for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
+	{
+		for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+		{
+			Vertex vertex;
+
+			float xSegment = (float)x / (float)X_SEGMENTS;
+			float ySegment = (float)y / (float)Y_SEGMENTS;
+			float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+			float yPos = std::cos(ySegment * PI);
+			float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+
+			vertex.position = glm::vec3(xPos, yPos, zPos);
+			vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));
+			vertex.texCoords = glm::vec2(xSegment, ySegment);
+
+			vertices->push_back(vertex);
+		}
+	}
+
+	bool oddRow = false;
+	for (int y = 0; y < Y_SEGMENTS; ++y)
+	{
+		if (!oddRow)
+		{
+			for (int x = 0; x <= X_SEGMENTS; ++x)
+			{
+				indices->push_back(y       * (X_SEGMENTS + 1) + x);
+				indices->push_back((y + 1) * (X_SEGMENTS + 1) + x);
+			}
+		}
+		else
+		{
+			for (int x = X_SEGMENTS; x >= 0; --x)
+			{
+				indices->push_back((y + 1) * (X_SEGMENTS + 1) + x);
+				indices->push_back(y       * (X_SEGMENTS + 1) + x);
+			}
+		}
+		oddRow = !oddRow;
+	}
+
+	return new Mesh(vertices, indices, "default");
+
 }
