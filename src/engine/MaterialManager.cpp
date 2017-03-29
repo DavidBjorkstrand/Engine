@@ -1,6 +1,7 @@
 #include "engine/MaterialManager.h"
 
 #include "engine/renderer/Material.h"
+#include "engine/renderer/Texture.h"
 
 #include <vector>
 #include <iostream>
@@ -51,16 +52,53 @@ void MaterialManager::loadMaterials()
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
 		do {
-			string fullPath = "resources\\materials\\";
-			fullPath.append(data.cFileName);
+			string materialPath = "resources\\materials\\";
+			materialPath.append(data.cFileName);
 
-			ifstream file(fullPath);
+			ifstream file(materialPath);
 			nlohmann::json j;
 
 			file >> j;
 
 			glm::vec3 albedo(j["albedo"]["r"], j["albedo"]["g"], j["albedo"]["b"]);
 			Material *material = new Material(j["name"], albedo, j["roughness"], j["metallic"]);
+
+			Texture *texture;
+			string texturePathBase = "resources\\textures\\";
+
+			if (!j["albedoMap"].is_null())
+			{
+				string texturePath = texturePathBase;
+				string imagePath = j["albedoMap"];
+				texturePath.append(imagePath);
+
+				texture = new Texture(texturePath);
+
+				material->setAlbedoMap(texture);
+			}
+
+			if (!j["roughnessMap"].is_null())
+			{
+				string texturePath = texturePathBase;
+				string imagePath = j["roughnessMap"];
+				texturePath.append(imagePath);
+
+				texture = new Texture(texturePath);
+
+				material->setRoughnessMap(texture);
+			}
+
+			if (!j["metallicMap"].is_null())
+			{
+				string texturePath = texturePathBase;
+				string imagePath = j["metallicMap"];
+				texturePath.append(imagePath);
+
+				texture = new Texture(texturePath);
+
+				material->setMetallicMap(texture);
+			}
+			
 
 			MaterialManager::_materials->push_back(material);
 

@@ -16,9 +16,12 @@ const float PI = 3.14159265359;
 
 uniform vec3 viewPos;
 
-uniform vec3 albedo;
-uniform float roughness;
-uniform float metallic;
+uniform vec3 uAlbedo;
+uniform sampler2D albedoMap;
+uniform float uRoughness;
+uniform sampler2D roughnessMap;
+uniform float uMetallic;
+uniform sampler2D metallicMap;
 
 uniform int nPointLights;
 uniform PointLight pointLights[5];
@@ -65,6 +68,10 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 void main()
 {
+	vec3 albedo = uAlbedo + texture(albedoMap, TexCoords).rgb;
+	float roughness = uRoughness + texture(roughnessMap, TexCoords).r;
+	float metallic = uMetallic + texture(metallicMap, TexCoords).r;
+
 	vec3 N = normalize(Normal);
 	vec3 V = normalize(viewPos - Position);
 

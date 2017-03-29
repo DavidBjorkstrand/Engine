@@ -4,6 +4,7 @@
 #include "engine/renderer/RenderJob.h"
 #include "engine/renderer/RenderInformation.h"
 #include "engine/renderer/Material.h"
+#include "engine/renderer/Texture.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Camera.h"
@@ -61,9 +62,25 @@ void Renderer::draw(RenderInformation *renderInformation)
 		{
 			string materialName = renderJob->getMaterialName();
 			Material *material = MaterialSystem::find(materialName);
-			_shader->setUniform3fv("albedo", material->getAlbedo());
-			_shader->setUniform1f("roughness", material->getRoughness());
-			_shader->setUniform1f("metallic", material->getMetallic());
+
+			_shader->setUniform3fv("uAlbedo", material->getAlbedo());
+			_shader->setUniform1f("uRoughness", material->getRoughness());
+			_shader->setUniform1f("uMetallic", material->getMetallic());
+
+			if (material->getAlbedoMap())
+			{
+				_shader->bindTexture(material->getAlbedoMap(), GL_TEXTURE0, "albedoMap");
+			}
+
+			if (material->getRoughnessMap())
+			{
+				_shader->bindTexture(material->getRoughnessMap(), GL_TEXTURE1, "roughnessMap");
+			}
+
+			if (material->getMetallicMap())
+			{
+				_shader->bindTexture(material->getMetallicMap(), GL_TEXTURE2, "metallicMap");
+			}
 
 			glm::mat4 modelMatrix = renderJob->getModelMatrix();
 			_shader->setUniformMat4("model", modelMatrix);

@@ -23,14 +23,14 @@
 
 Engine::Engine() 
 {
-	_materialManager = new MaterialManager();
-	MaterialSystem::init(_materialManager);
-
     _inputManager = new InputManager();
     Input::init(_inputManager);
 
     _windowManager = new WindowManager(_inputManager);
 	Window::init(_windowManager);
+
+	_materialManager = new MaterialManager();
+	MaterialSystem::init(_materialManager);
 
 	_scenes = new map<string, Scene *>();
 

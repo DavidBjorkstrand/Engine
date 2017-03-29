@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
+class Texture;
+
 using namespace std;
 
 //Class that acts as a interface for a OpenGL shader. Also has functions for 
@@ -73,6 +75,8 @@ class Shader
 		// Parameter: GLint value - Value of the int.
 		//************************************
 		void setUniform1i(string name, GLint value);
+
+		void bindTexture(Texture *texture, GLenum textureUnit, string name);
 
 	private:
 		//************************************

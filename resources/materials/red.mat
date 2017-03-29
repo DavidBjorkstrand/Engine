@@ -1,10 +1,13 @@
 {
 	"name": "red",
-	"albedo" : {
-		"r" : 1.0,
-		"g" : 0.0,
-		"b" : 0.0
-	},
-	"roughness" : 0.01,
-	"metallic" : 0.0
+  "albedo": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "albedoMap" :  "rustediron\\albedo.png",
+  "roughness": 0.0,
+  "roughnessMap":  "rustediron\\roughness.png",
+  "metallic": 0.0,
+  "metallicMap" : "rustediron\\metallic.png"
 }

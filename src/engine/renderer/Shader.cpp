@@ -1,5 +1,7 @@
 #include "engine/renderer/Shader.h"
 
+#include "engine/renderer/Texture.h"
+
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -51,6 +53,15 @@ void Shader::setUniform1i(string name, GLint value)
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
 	glUniform1i(loc, value);
+}
+
+void Shader::bindTexture(Texture *texture, GLenum textureUnit, string name)
+{
+	GLuint textureID = texture->getTextureID();
+
+	glActiveTexture(textureUnit);
+	texture->bind();
+	setUniform1i(name, (textureUnit - GL_TEXTURE0));
 }
 
 string Shader::parseShaderSource(string path)
