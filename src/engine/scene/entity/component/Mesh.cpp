@@ -156,7 +156,7 @@ Mesh *Mesh::createSphere()
 			float yPos = std::cos(ySegment * PI);
 			float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
-			vertex.position = glm::vec3(xPos, yPos, zPos);
+			vertex.position = glm::vec3(xPos/2, yPos/2, zPos/2);
 			vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));
 			vertex.texCoords = glm::vec2(xSegment, ySegment);
 
