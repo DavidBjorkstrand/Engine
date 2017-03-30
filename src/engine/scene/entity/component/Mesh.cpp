@@ -119,14 +119,18 @@ Mesh *Mesh::createPlane()
 	topLeft.texCoords.t = 1.0f;
 	vertices->push_back(topLeft);
 
-	
 	indices->push_back(0);
+	indices->push_back(3);
+	indices->push_back(1);
+	indices->push_back(2);
+
+	/*indices->push_back(0);
 	indices->push_back(1);
 	indices->push_back(2);
 
 	indices->push_back(2);
 	indices->push_back(3);
-	indices->push_back(0);
+	indices->push_back(0);*/
 
 	return new Mesh(vertices, indices, "default");
 }
@@ -181,6 +185,120 @@ Mesh *Mesh::createSphere()
 		}
 		oddRow = !oddRow;
 	}
+
+	return new Mesh(vertices, indices, "default");
+
+}
+
+Mesh *Mesh::createCube()
+{
+	vector<Vertex> *vertices = new vector<Vertex>();
+	vector<GLuint> *indices = new vector<GLuint>();
+
+	Vertex one;
+	one.position = glm::vec3(0.5f, 0.5f, -0.5f);
+	one.normal = glm::normalize(glm::vec3(1.0f, 1.0f, -1.0f));
+	one.texCoords = glm::vec2(1.0f, 1.0f);
+
+	Vertex two;
+	two.position = glm::vec3(-0.5f, 0.5f, -0.5f);
+	two.normal = glm::normalize(glm::vec3(-1.0f, 1.0f, -1.0f));
+	two.texCoords = glm::vec2(0.0f, 1.0f);
+
+	Vertex three;
+	three.position = glm::vec3(0.5f, -0.5f, -0.5f);
+	three.normal = glm::normalize(glm::vec3(1.0f, -1.0f, -1.0f));
+	three.texCoords = glm::vec2(1.0f, 0.0f);
+
+	Vertex four;
+	four.position = glm::vec3(-0.5f, -0.5f, -0.5f);
+	four.normal = glm::normalize(glm::vec3(-1.0f, -1.0f, -1.0f));
+	four.texCoords = glm::vec2(0.0f, 0.0f);
+
+	Vertex five;
+	five.position = glm::vec3(0.5f, 0.5f, 0.5f);
+	five.normal = glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f));
+	five.texCoords = glm::vec2(1.0f, 1.0f);
+
+	Vertex six;
+	six.position = glm::vec3(-0.5f, 0.5f, 0.5f);
+	six.normal = glm::normalize(glm::vec3(-1.0f, 1.0f, 1.0f));
+	six.texCoords = glm::vec2(0.0f, 1.0f);
+
+	Vertex seven;
+	seven.position = glm::vec3(-0.5f, -0.5f, 0.5f);
+	seven.normal = glm::normalize(glm::vec3(-1.0f, -1.0f, 1.0f));
+	seven.texCoords = glm::vec2(0.0f, 0.0f);
+
+	Vertex eight;
+	eight.position = glm::vec3(0.5f, -0.5f, 0.5f);
+	eight.normal = glm::normalize(glm::vec3(1.0f, -1.0f, 1.0f));
+	eight.texCoords = glm::vec2(1.0f, 0.0f);
+
+	//Bottom
+	four.texCoords = glm::vec2(0.0f, 1.0f);
+	three.texCoords = glm::vec2(1.0f, 1.0f);
+	seven.texCoords = glm::vec2(0.0f, 0.0f);
+	eight.texCoords = glm::vec2(1.0f, 0.0f);
+
+	vertices->push_back(four);
+	vertices->push_back(three);
+	vertices->push_back(seven);
+	vertices->push_back(eight);
+
+	//Right half of front
+	five.texCoords = glm::vec2(1.0f, 1.0f);
+
+	vertices->push_back(five);
+
+	//Right
+	three.texCoords = glm::vec2(0.0f, 0.0f);
+	one.texCoords = glm::vec2(0.0f, 1.0f);
+	
+	vertices->push_back(three);
+	vertices->push_back(one);
+
+	//Back
+	four.texCoords = glm::vec2(1.0f, 0.0f);
+	two.texCoords = glm::vec2(1.0f, 1.0f);
+
+	vertices->push_back(four);
+	vertices->push_back(two);
+
+	//Left
+	seven.texCoords = glm::vec2(0.0f, 0.0f);
+	six.texCoords = glm::vec2(0.0f, 1.0f);
+
+	vertices->push_back(seven);
+	vertices->push_back(six);
+
+	//Left half front
+	five.texCoords = glm::vec2(1.0f, 1.0f);
+
+	vertices->push_back(five);
+
+	//Top
+	two.texCoords = glm::vec2(0.0f, 0.0f);
+	one.texCoords = glm::vec2(1.0f, 0.0f);
+
+	vertices->push_back(two);
+	vertices->push_back(one);
+
+	indices->push_back(0);
+	indices->push_back(1);
+	indices->push_back(2);
+	indices->push_back(3);
+	indices->push_back(4);
+	indices->push_back(5);
+	indices->push_back(6);
+	indices->push_back(7);
+	indices->push_back(8);
+	indices->push_back(9);
+	indices->push_back(10);
+	indices->push_back(11);
+	indices->push_back(12);
+	indices->push_back(13);
+
 
 	return new Mesh(vertices, indices, "default");
 

@@ -70,6 +70,12 @@ Entity *Entity::createPrimitive(PrimitiveTypes type)
 
 		entity->addComponent(mesh);
 	}
+	else if (type == PrimitiveTypes::Cube)
+	{
+		Mesh *mesh = Mesh::createCube();
+
+		entity->addComponent(mesh);
+	}
 
 	return entity;
 }

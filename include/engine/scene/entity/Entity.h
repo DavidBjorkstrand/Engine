@@ -7,7 +7,7 @@ using namespace std;
 class Transform;
 class Component;
 
-enum class PrimitiveTypes { Plane, Sphere };
+enum class PrimitiveTypes { Plane, Sphere, Cube};
 
 /*
 * This class represents a object in the world. 

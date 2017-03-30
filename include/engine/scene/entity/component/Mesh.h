@@ -64,6 +64,11 @@ class Mesh : public Component
 		*/
 		static Mesh *createSphere();
 
+		/*
+		* Factory function that creates a cube Mesh.
+		*/
+		static Mesh *createCube();
+
 	private:
 		/*
 		* Helper function that creates buffers needed by OpenGL to draw. 

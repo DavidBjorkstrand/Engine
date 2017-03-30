@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     Engine *engine = new Engine();
 	Scene *scene = new Scene("TheScene");
 
-	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
+	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Cube);
 	entity->getComponent<Mesh>()->setMaterial("red");
 	scene->addEntity(entity);
 
