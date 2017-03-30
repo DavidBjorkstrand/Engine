@@ -89,7 +89,7 @@ void main()
 
 		float NDF = DistributionGGX(N, H, roughness);
 		float G = GeometrySmith(N, V, L, roughness);
-		vec3 F = fresnelSchlick(max(dot(H, V), 0.0f), F0, roughness);
+		vec3 F = fresnelSchlick(max(dot(N, V), 0.0f), F0, roughness);
 
 		vec3 nominator = NDF * G * F;
 		float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.001f;
