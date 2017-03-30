@@ -1,20 +1,20 @@
 #include "engine/interface/Window.h"
 
-#include "engine/WindowManager.h"
+#include "engine/WindowSystem.h"
 
-WindowManager *Window::_windowManager = nullptr;
+WindowSystem *Window::_windowSystem = nullptr;
 
 int Window::getWindowHeight()
 {
-	return _windowManager->getWindowHeight();
+	return _windowSystem->getWindowHeight();
 }
 
 int Window::getWindowWidth()
 {
-	return _windowManager->getWindowWidth();
+	return _windowSystem->getWindowWidth();
 }
 
-void Window::init(WindowManager *windowManager)
+void Window::init(WindowSystem *windowSystem)
 {
-	_windowManager = windowManager;
+	_windowSystem = windowSystem;
 }

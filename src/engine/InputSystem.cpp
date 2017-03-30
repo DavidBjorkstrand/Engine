@@ -1,10 +1,10 @@
-#include "engine/InputManager.h"
+#include "engine/InputSystem.h"
 
 #define GLEW_STATIC
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-InputManager::InputManager() 
+InputSystem::InputSystem()
 {
     for (int i = 0; i < 1024; i++)
     {
@@ -17,12 +17,12 @@ InputManager::InputManager()
 	deltaMousePos[1] = 0;
 }
 
-InputManager::~InputManager() 
+InputSystem::~InputSystem()
 {
 
 }
 
-void InputManager::setKey(int key, int action) 
+void InputSystem::setKey(int key, int action)
 {
     if (action == GLFW_PRESS) 
     {
@@ -34,7 +34,7 @@ void InputManager::setKey(int key, int action)
     }
 }
 
-void InputManager::setMousePos(double xpos, double ypos)
+void InputSystem::setMousePos(double xpos, double ypos)
 {
 	if (!mouseInitialized)
 	{
@@ -53,22 +53,22 @@ void InputManager::setMousePos(double xpos, double ypos)
 	}
 }
 
-bool InputManager::checkKey(int key) 
+bool InputSystem::checkKey(int key)
 {
     return _keys[key];
 }
 
-double InputManager::getDeltaMouseX()
+double InputSystem::getDeltaMouseX()
 {
 	return deltaMousePos[0];
 }
 
-double InputManager::getDeltaMouseY()
+double InputSystem::getDeltaMouseY()
 {
 	return deltaMousePos[1];
 }
 
-void InputManager::pollEvents()
+void InputSystem::pollEvents()
 {
 	deltaMousePos[0] = 0;
 	deltaMousePos[1] = 0;

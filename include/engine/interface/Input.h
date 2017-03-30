@@ -1,7 +1,7 @@
 #pragma once
 
 class Engine;
-class InputManager;
+class InputSystem;
 
 /* Input interface class used for quering about inputs */
 class Input
@@ -31,9 +31,9 @@ class Input
         * Initiates the interface. 
         * param: inputManager - The class that holds the state of the inputs
         */
-        static void init(InputManager *inputManager);
+        static void init(InputSystem *inputManager);
     
     private:
-        static InputManager *_inputManager;
+        static InputSystem *_inputSystem;
 
 };

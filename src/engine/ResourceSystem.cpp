@@ -1,4 +1,4 @@
-#include "engine/MaterialManager.h"
+#include "engine/ResourceSystem.h"
 
 #include "engine/renderer/Material.h"
 #include "engine/renderer/Texture.h"
@@ -12,12 +12,12 @@
 #include "json.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-MaterialManager::MaterialManager()
+ResourceSystem::ResourceSystem()
 {
 	loadMaterials();
 }
 
-MaterialManager::~MaterialManager()
+ResourceSystem::~ResourceSystem()
 {
 	for (Material *material : *_materials)
 	{
@@ -27,9 +27,9 @@ MaterialManager::~MaterialManager()
 	delete _materials;
 }
 
-Material *MaterialManager::find(string name)
+Material *ResourceSystem::findMaterial(string name)
 {
-	for (Material *material : *MaterialManager::_materials)
+	for (Material *material : *ResourceSystem::_materials)
 	{
 		if (material->getName() == name)
 		{
@@ -38,7 +38,7 @@ Material *MaterialManager::find(string name)
 	}
 }
 
-void MaterialManager::loadMaterials()
+void ResourceSystem::loadMaterials()
 {
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
@@ -100,7 +100,7 @@ void MaterialManager::loadMaterials()
 			}
 			
 
-			MaterialManager::_materials->push_back(material);
+			_materials->push_back(material);
 
 		} while (FindNextFile(hFind, &data));
 

@@ -5,9 +5,9 @@
 
 using namespace std;
 
-class WindowManager;
-class InputManager;
-class MaterialManager;
+class WindowSystem;
+class InputSystem;
+class ResourceSystem;
 class Scene;
 class Renderer;
 
@@ -36,9 +36,9 @@ class Engine
         void run();
 
     private:
-        WindowManager *_windowManager;
-        InputManager *_inputManager;
-		MaterialManager *_materialManager;
+        WindowSystem *_windowSystem;
+        InputSystem *_inputSystem;
+		ResourceSystem *_resourceSystem;
 		Scene *_activeScene;
 		map<string, Scene *> *_scenes;
 		Renderer *_renderer;

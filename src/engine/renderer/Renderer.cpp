@@ -9,7 +9,7 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Camera.h"
 #include "engine/scene/entity/component/PointLight.h"
-#include "engine/interface/MaterialSystem.h"
+#include "engine/interface/Resources.h"
 
 #include <vector>
 #include <iostream>
@@ -61,7 +61,7 @@ void Renderer::draw(RenderInformation *renderInformation)
 		for (RenderJob *renderJob : *renderInformation->getRenderJobs())
 		{
 			string materialName = renderJob->getMaterialName();
-			Material *material = MaterialSystem::find(materialName);
+			Material *material = Resources::findMaterial(materialName);
 
 			_shader->setUniform3fv("uAlbedo", material->getAlbedo());
 			_shader->setUniform1f("uRoughness", material->getRoughness());

@@ -3,7 +3,7 @@
 class Engine;
 
 /* This class keeps track of inputs */
-class InputManager 
+class InputSystem
 {
     friend class Engine;
 
@@ -48,13 +48,13 @@ class InputManager
         /*
         * Constuctor for InputManager. Should only be called from Engine class.
         */
-        InputManager();
+        InputSystem();
 
         /*
         * Deconstructor for InputManager. Should only be called from 
         * Engine class.
         */
-        ~InputManager();
+        ~InputSystem();
 
     private:
         bool _keys[1024];

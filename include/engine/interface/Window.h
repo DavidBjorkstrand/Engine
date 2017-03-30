@@ -1,7 +1,7 @@
 #pragma once
 
 class Engine;
-class WindowManager;
+class WindowSystem;
 
 /*
 * Interface for getting information about the window.
@@ -25,8 +25,8 @@ class Window
 		/*
 		* Initiates the interface with the window manager. 
 		*/
-		static void init(WindowManager *windowManager);
+		static void init(WindowSystem *windowSystem);
 
 	private:
-		static WindowManager *_windowManager;
+		static WindowSystem *_windowSystem;
 };

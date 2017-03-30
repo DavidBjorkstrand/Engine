@@ -1,11 +1,11 @@
 #pragma once
 
 class Engine;
-class InputManager;
+class InputSystem;
 struct GLFWwindow;
 
 /* Class that handles window and other stuff needed to use OpenGL. */
-class WindowManager
+class WindowSystem
 {
     friend class Engine;
     
@@ -33,14 +33,14 @@ class WindowManager
         * Engine class.
         * throws: GLFWInitException, GLEWInitException 
         */
-        WindowManager(InputManager *inputManager);
+        WindowSystem(InputSystem *inputSystem);
 
         /* 
         * Deconstructor for the WindowManager, should only be called from
         * Engine class.
         * throws: GLFWInitException, GLEWInitException 
         */
-        ~WindowManager();
+        ~WindowSystem();
 
 
     private:
@@ -66,8 +66,8 @@ class WindowManager
 		*/
 		static void mousePosCallBack(GLFWwindow *window, double xpos, double ypos);
 
-        static WindowManager *instance;
-        InputManager *_inputManager;
+        static WindowSystem *instance;
+        InputSystem *_inputSystem;
         GLFWwindow *_window;
         
 };

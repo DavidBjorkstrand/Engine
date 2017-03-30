@@ -1,6 +1,6 @@
-#include "engine/WindowManager.h"
+#include "engine/WindowSystem.h"
 
-#include "engine/InputManager.h"
+#include "engine/InputSystem.h"
 #include "engine/exception/GLFWInitException.h"
 #include "engine/exception/GLEWInitException.h"
 
@@ -10,14 +10,14 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-WindowManager *WindowManager::instance = nullptr;
+WindowSystem *WindowSystem::instance = nullptr;
 
-void WindowManager::show()
+void WindowSystem::show()
 {
     glfwSwapBuffers(_window);
 }
 
-int WindowManager::getWindowHeight()
+int WindowSystem::getWindowHeight()
 {
 	int width;
 	int height;
@@ -27,7 +27,7 @@ int WindowManager::getWindowHeight()
 	return height;
 }
 
-int WindowManager::getWindowWidth()
+int WindowSystem::getWindowWidth()
 {
 	int width;
 	int height;
@@ -38,24 +38,24 @@ int WindowManager::getWindowWidth()
 
 }
 
-WindowManager::WindowManager(InputManager *inputManager)
+WindowSystem::WindowSystem(InputSystem *inputSystem)
 {
     if (instance != nullptr) {
         delete instance;
     }
 
-    _inputManager = inputManager;
+    _inputSystem = inputSystem;
     init();
 
     instance = this;
 }
 
-WindowManager::~WindowManager() 
+WindowSystem::~WindowSystem()
 {
     terminate();
 }
 
-void WindowManager::init()
+void WindowSystem::init()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -86,18 +86,18 @@ void WindowManager::init()
     }
 }
 
-void WindowManager::terminate() 
+void WindowSystem::terminate()
 {
     glfwTerminate();
 }
 
-void WindowManager::keyCallback(GLFWwindow *window, int key, int scancode,
+void WindowSystem::keyCallback(GLFWwindow *window, int key, int scancode,
     int action, int mode)
 {
-    WindowManager::instance->_inputManager->setKey(key, action);
+    WindowSystem::instance->_inputSystem->setKey(key, action);
 }
 
-void WindowManager::mousePosCallBack(GLFWwindow *window, double xpos, double ypos)
+void WindowSystem::mousePosCallBack(GLFWwindow *window, double xpos, double ypos)
 {
-	WindowManager::instance->_inputManager->setMousePos(xpos, ypos);
+	WindowSystem::instance->_inputSystem->setMousePos(xpos, ypos);
 }

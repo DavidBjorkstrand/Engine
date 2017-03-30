@@ -7,12 +7,12 @@ class Material;
 
 using namespace std;
 
-class MaterialManager
+class ResourceSystem
 {
 	public:
-		MaterialManager();
-		~MaterialManager();
-		Material *find(string name);
+		ResourceSystem();
+		~ResourceSystem();
+		Material *findMaterial(string name);
 
 	private:
 		void loadMaterials();

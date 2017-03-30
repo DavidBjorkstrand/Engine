@@ -1,9 +1,9 @@
 #include "engine/Engine.h"
 
-#include "engine/MaterialManager.h"
-#include "engine/InputManager.h"
-#include "engine/WindowManager.h"
-#include "engine/interface/MaterialSystem.h"
+#include "engine/ResourceSystem.h"
+#include "engine/InputSystem.h"
+#include "engine/WindowSystem.h"
+#include "engine/interface/Resources.h"
 #include "engine/interface/Input.h"
 #include "engine/interface/Window.h"
 #include "engine/renderer/Renderer.h"
@@ -23,14 +23,14 @@
 
 Engine::Engine() 
 {
-    _inputManager = new InputManager();
-    Input::init(_inputManager);
+    _inputSystem = new InputSystem();
+    Input::init(_inputSystem);
 
-    _windowManager = new WindowManager(_inputManager);
-	Window::init(_windowManager);
+    _windowSystem = new WindowSystem(_inputSystem);
+	Window::init(_windowSystem);
 
-	_materialManager = new MaterialManager();
-	MaterialSystem::init(_materialManager);
+	_resourceSystem = new ResourceSystem();
+	Resources::init(_resourceSystem);
 
 	_scenes = new map<string, Scene *>();
 
@@ -39,9 +39,9 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    delete _windowManager;
-    delete _inputManager;
-	delete _materialManager;
+    delete _windowSystem;
+    delete _inputSystem;
+	delete _resourceSystem;
 	delete _scenes;
 	delete _renderer;
 }
@@ -62,14 +62,14 @@ void Engine::run()
     {
 		RenderInformation *renderInformation;
 
-        _inputManager->pollEvents();
+        _inputSystem->pollEvents();
 
 		_activeScene->runBehaviours();
 
 		renderInformation = _activeScene->getRenderInformation();
 		_renderer->draw(renderInformation);
 
-        _windowManager->show();
+        _windowSystem->show();
     }
 }
 

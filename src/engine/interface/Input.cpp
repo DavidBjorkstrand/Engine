@@ -1,26 +1,26 @@
 #include "engine/interface/Input.h"
 
-#include "engine/InputManager.h"
+#include "engine/InputSystem.h"
 
 
-InputManager *Input::_inputManager = nullptr;
+InputSystem *Input::_inputSystem = nullptr;
 
 bool Input::checkKey(int key)
 {
-    return _inputManager->checkKey(key);
+    return _inputSystem->checkKey(key);
 }
 
 double Input::getDeltaMouseX()
 {
-	return _inputManager->getDeltaMouseX();
+	return _inputSystem->getDeltaMouseX();
 }
 
 double Input::getDeltaMouseY()
 {
-	return _inputManager->getDeltaMouseY();
+	return _inputSystem->getDeltaMouseY();
 }
 
-void Input::init(InputManager *inputManager)
+void Input::init(InputSystem *inputManager)
 {
-    _inputManager = inputManager;
+    _inputSystem = inputManager;
 }

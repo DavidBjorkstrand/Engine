@@ -119,9 +119,9 @@
     <ClCompile Include="src\behaviour\CameraController.cpp" />
     <ClCompile Include="src\engine\Engine.cpp" />
     <ClCompile Include="src\engine\interface\Input.cpp" />
-    <ClCompile Include="src\engine\InputManager.cpp" />
-    <ClCompile Include="src\engine\interface\MaterialSystem.cpp" />
-    <ClCompile Include="src\engine\MaterialManager.cpp" />
+    <ClCompile Include="src\engine\InputSystem.cpp" />
+    <ClCompile Include="src\engine\interface\Resources.cpp" />
+    <ClCompile Include="src\engine\ResourceSystem.cpp" />
     <ClCompile Include="src\engine\interface\Window.cpp" />
     <ClCompile Include="src\engine\renderer\Renderer.cpp" />
     <ClCompile Include="src\engine\renderer\RenderInformation.cpp" />
@@ -138,16 +138,16 @@
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\scene\SceneParser.cpp" />
     <ClCompile Include="src\engine\scene\entity\Transform.cpp" />
-    <ClCompile Include="src\engine\WindowManager.cpp" />
+    <ClCompile Include="src\engine\WindowSystem.cpp" />
     <ClCompile Include="src\engine\scene\entity\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\behaviour\CameraController.h" />
     <ClInclude Include="include\engine\Engine.h" />
     <ClInclude Include="include\engine\interface\Input.h" />
-    <ClInclude Include="include\engine\InputManager.h" />
-    <ClInclude Include="include\engine\interface\MaterialSystem.h" />
-    <ClInclude Include="include\engine\MaterialManager.h" />
+    <ClInclude Include="include\engine\InputSystem.h" />
+    <ClInclude Include="include\engine\interface\Resources.h" />
+    <ClInclude Include="include\engine\ResourceSystem.h" />
     <ClInclude Include="include\engine\interface\Window.h" />
     <ClInclude Include="include\engine\renderer\Renderer.h" />
     <ClInclude Include="include\engine\renderer\RenderInformation.h" />
@@ -162,7 +162,7 @@
     <ClInclude Include="include\engine\scene\MatrixStack.h" />
     <ClInclude Include="include\engine\scene\SceneParser.h" />
     <ClInclude Include="include\engine\scene\entity\Transform.h" />
-    <ClInclude Include="include\engine\WindowManager.h" />
+    <ClInclude Include="include\engine\WindowSystem.h" />
     <ClInclude Include="include\engine\exception\GLEWInitException.h" />
     <ClInclude Include="include\engine\exception\GLFWInitException.h" />
     <ClInclude Include="include\engine\scene\entity\component\Component.h" />
