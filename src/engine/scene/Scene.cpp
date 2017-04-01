@@ -48,6 +48,11 @@ void Scene::setSkyBox(SkyBox *skyBox)
 	_skyBox = skyBox;
 }
 
+SkyBox *Scene::getSkyBox()
+{
+	return _skyBox;
+}
+
 void Scene::addEntity(Entity *entity)
 {
     _entities->push_back(entity);

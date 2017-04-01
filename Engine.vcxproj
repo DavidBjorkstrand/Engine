@@ -122,6 +122,7 @@
     <ClCompile Include="src\engine\InputSystem.cpp" />
     <ClCompile Include="src\engine\interface\Resources.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
+    <ClCompile Include="src\engine\renderer\stb_image.cpp" />
     <ClCompile Include="src\engine\ResourceSystem.cpp" />
     <ClCompile Include="src\engine\interface\Window.cpp" />
     <ClCompile Include="src\engine\renderer\RenderSystem.cpp" />
@@ -166,12 +167,20 @@
     <ClInclude Include="include\engine\scene\entity\component\Component.h" />
     <ClInclude Include="include\engine\scene\entity\Entity.h" />
     <ClInclude Include="include\engine\scene\Scene.h" />
+    <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\materials\red.mat" />
+    <None Include="src\engine\renderer\shaders\brdf.fs" />
+    <None Include="src\engine\renderer\shaders\brdf.vs" />
+    <None Include="src\engine\renderer\shaders\equi.fs" />
+    <None Include="src\engine\renderer\shaders\equi.vs" />
+    <None Include="src\engine\renderer\shaders\irradiance.fs" />
+    <None Include="src\engine\renderer\shaders\irradiance.vs" />
     <None Include="src\engine\renderer\shaders\pbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.vs" />
+    <None Include="src\engine\renderer\shaders\preFilterEnvMap.fs" />
     <None Include="src\engine\renderer\shaders\skybox.fs" />
     <None Include="src\engine\renderer\shaders\skybox.vs" />
   </ItemGroup>

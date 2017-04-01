@@ -23,6 +23,18 @@ Shader::Shader(string vertex_shader_path, string fragment_shader_path, map<strin
 	_uniforms = uniforms;
 }
 
+Shader::Shader(string vertex_shader_path, string fragment_shader_path)
+{
+	string vertex_shader_source = parseShaderSource(vertex_shader_path);
+	string fragment_shader_source = parseShaderSource(fragment_shader_path);
+
+	GLuint vertex_shader = compileShader(GL_VERTEX_SHADER, vertex_shader_source);
+	GLuint fragment_shader = compileShader(GL_FRAGMENT_SHADER,
+		fragment_shader_source);
+
+	_program = createShaderProgram(vertex_shader, fragment_shader);
+}
+
 void Shader::use()
 {
 	glUseProgram(_program);

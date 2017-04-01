@@ -62,6 +62,7 @@ void WindowSystem::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
     _window = glfwCreateWindow(1280, 720, "Engine", nullptr, nullptr);
     if (_window == nullptr)

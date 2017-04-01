@@ -1,17 +1,29 @@
 {
   "name": "red",
-  "shader":  "default",
+  "shader": "default",
   "uAlbedo": {
     "type": "vec3",
     "value": {
-      "x": 1.0,
+      "x": 0.0,
       "y": 0.0,
       "z": 0.0
     }
   },
+  "albedoMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\albedo.png"
+  },
+  "roughnessMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\roughness.png"
+  },
+  "metallicMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\metallic.png"
+  },
   "uRoughness": {
     "type": "float",
-    "value": 0.5
+    "value": 0.0
   },
   "uMetallic": {
     "type": "float",

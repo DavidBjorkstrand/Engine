@@ -96,20 +96,20 @@ int main(int argc, char *argv[])
 	cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	scene->addEntity(cameraEntity);
 
-	PointLight *pointLight = new PointLight(glm::vec3(10.0f, 10.0f, 10.0f));
+	PointLight *pointLight = new PointLight(glm::vec3(300.0f, 300.0f, 300.0f));
 	Entity *lightEntity = new Entity();
 	lightEntity->addComponent(pointLight);
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	map<string, string> *pathMap = new map<string, string>();
+	/*map<string, string> *pathMap = new map<string, string>();
 	pathMap->insert(pair < string, string>("BACK", "resources\\textures\\skybox\\back.jpg"));
 	pathMap->insert(pair < string, string>("BOTTOM", "resources\\textures\\skybox\\bottom.jpg"));
 	pathMap->insert(pair < string, string>("FRONT", "resources\\textures\\skybox\\front.jpg"));
 	pathMap->insert(pair < string, string>("LEFT", "resources\\textures\\skybox\\left.jpg"));
 	pathMap->insert(pair < string, string>("RIGHT", "resources\\textures\\skybox\\right.jpg"));
-	pathMap->insert(pair < string, string>("TOP", "resources\\textures\\skybox\\top.jpg"));
-	SkyBox *skyBox = new SkyBox(pathMap);
+	pathMap->insert(pair < string, string>("TOP", "resources\\textures\\skybox\\top.jpg"));*/
+	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");
 
 	scene->setSkyBox(skyBox);
 

@@ -9,7 +9,8 @@ using namespace std;
 class Texture
 {
 	public:
-		Texture(string path);
+		Texture(string path, GLint wrap, GLint internalFormat, GLenum format, GLenum type);
+		Texture();
 
 		GLuint getTextureID();
 

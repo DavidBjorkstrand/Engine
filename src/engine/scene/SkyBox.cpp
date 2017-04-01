@@ -5,15 +5,16 @@
 #include "engine/renderer/CubeMap.h"
 
 #include <map>
+#include <string>
 
 #include <GL/glew.h>
 
-SkyBox::SkyBox(map<string, string> *pathMap)
+SkyBox::SkyBox(string path)
 {
 	Material *material = new Material();
 	material->setShader("skybox");
 
-	CubeMap *cubeMap = new CubeMap(pathMap);
+	CubeMap *cubeMap = new CubeMap(path);
 	material->setCubeMap("skybox", cubeMap);
 
 	_cube = Mesh::createCube();

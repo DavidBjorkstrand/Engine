@@ -27,6 +27,8 @@ class Shader
 		//************************************
 		Shader(string vertex_shader_path, string fragment_shader_path, map<string, string> *uniforms);
 
+		Shader(string vertex_shader_path, string fragment_shader_path);
+
 		//************************************
 		// Method:    Activates the shader program with glUseProgram().
 		// FullName:  Shader::Use

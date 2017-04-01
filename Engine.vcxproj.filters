@@ -84,6 +84,9 @@
     <ClCompile Include="src\engine\renderer\RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\renderer\Material.h">
@@ -161,6 +164,9 @@
     <ClInclude Include="include\engine\renderer\RenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\shaders\pbr.vs" />
@@ -169,5 +175,12 @@
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\shaders\skybox.vs" />
     <None Include="src\engine\renderer\shaders\skybox.fs" />
+    <None Include="src\engine\renderer\shaders\irradiance.fs" />
+    <None Include="src\engine\renderer\shaders\irradiance.vs" />
+    <None Include="src\engine\renderer\shaders\preFilterEnvMap.fs" />
+    <None Include="src\engine\renderer\shaders\brdf.vs" />
+    <None Include="src\engine\renderer\shaders\brdf.fs" />
+    <None Include="src\engine\renderer\shaders\equi.vs" />
+    <None Include="src\engine\renderer\shaders\equi.fs" />
   </ItemGroup>
 </Project>

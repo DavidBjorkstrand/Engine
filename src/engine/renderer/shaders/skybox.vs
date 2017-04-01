@@ -10,7 +10,7 @@ out vec3 TexCoords;
 
 void main()
 {
-	vec4 pos = proj * mat4(mat3(view)) * vec4(position, 1.0f)*2;
+	vec4 pos = proj * mat4(mat3(view)) * vec4(position*2, 1.0f);
 	gl_Position = pos.xyww;
 	TexCoords = position*2;
 }

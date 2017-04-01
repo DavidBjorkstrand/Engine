@@ -11,6 +11,8 @@ class CubeMap
 {
 	public:
 		CubeMap(map<string, string> *pathMap);
+		CubeMap(GLuint size, bool mipmap);
+		CubeMap(string path);
 
 		GLuint getTextureID();
 

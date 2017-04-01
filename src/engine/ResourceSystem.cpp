@@ -110,6 +110,13 @@ void ResourceSystem::loadMaterials()
 
 						material->setFloat(key, value);
 					}
+					else if (type == "texture")
+					{
+						string path = j[key]["value"];
+						Texture *texture = new Texture(path, GL_REPEAT, GL_RGB32F, GL_RGB, GL_UNSIGNED_BYTE);
+
+						material->setTexture(key, texture);
+					}
 				}
 			}
 
@@ -129,6 +136,12 @@ void ResourceSystem::loadShaders()
 	uniforms->insert(pair<string, string>("uAlbedo", "vec3"));
 	uniforms->insert(pair<string, string>("uRoughness", "float"));
 	uniforms->insert(pair<string, string>("uMetallic", "float"));
+	uniforms->insert(pair<string, string>("albedoMap", "texture"));
+	uniforms->insert(pair<string, string>("roughnessMap", "texture"));
+	uniforms->insert(pair<string, string>("metallicMap", "texture"));
+	uniforms->insert(pair<string, string>("irradianceMap", "samplerCube"));
+	uniforms->insert(pair<string, string>("preFilterEnvMap", "samplerCube"));
+	uniforms->insert(pair<string, string>("brdfLUT", "sampler2D"));
 
 	Shader *shader = new Shader("src/engine/renderer/shaders/pbr.vs", "src/engine/renderer/shaders/pbr.fs", uniforms);
 
@@ -140,4 +153,20 @@ void ResourceSystem::loadShaders()
 	shader = new Shader("src/engine/renderer/shaders/skybox.vs", "src/engine/renderer/shaders/skybox.fs", uniforms);
 
 	_shaders->insert(pair<string, Shader*>("skybox", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/irradiance.vs", "src/engine/renderer/shaders/irradiance.fs");
+
+	_shaders->insert(pair<string, Shader*>("irradiance", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/irradiance.vs", "src/engine/renderer/shaders/preFilterEnvMap.fs");
+
+	_shaders->insert(pair<string, Shader*>("preFilterEnvMap", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/brdf.vs", "src/engine/renderer/shaders/brdf.fs");
+
+	_shaders->insert(pair<string, Shader*>("brdf", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/equi.vs", "src/engine/renderer/shaders/equi.fs");
+
+	_shaders->insert(pair<string, Shader*>("equi", shader));
 }

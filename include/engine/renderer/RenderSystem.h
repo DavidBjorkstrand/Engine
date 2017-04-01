@@ -7,6 +7,8 @@
 class Mesh;
 class Shader;
 class Scene;
+class CubeMap;
+class Texture;
 
 using namespace std;
 
@@ -49,6 +51,14 @@ class RenderSystem
 		*/
 		void draw();
 
+		
+
 	private:
+		void createIrradianceMap();
+		void createPreFilterEnvMap();
+
 		Scene *_scene;
+		CubeMap *_irradianceMap;
+		CubeMap *_preFilterEnvMap;
+		Texture *_brdfLut;
 };

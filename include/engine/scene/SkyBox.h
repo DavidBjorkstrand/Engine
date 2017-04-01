@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <string>
 
 class Mesh;
 class CubeMap;
@@ -10,7 +11,7 @@ using namespace std;
 class SkyBox
 {
 	public:
-		SkyBox(map<string, string> *pathMap);
+		SkyBox(string path);
 
 		Mesh *getMesh();
 
