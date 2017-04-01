@@ -1,8 +1,8 @@
 #include "engine/scene/entity/component/Behaviour.h"
 
-#include "engine/scene/SceneParser.h"
+#include "engine/scene/Scene.h"
 
-void Behaviour::accept(SceneParser *sceneParser)
+void Behaviour::accept(Scene *scene)
 {
-	sceneParser->visit(this);
+	scene->visit(this);
 }

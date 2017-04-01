@@ -1,10 +1,20 @@
 {
-	"name": "red",
-  "albedo": {
-    "r": 1.0,
-    "g": 0.0,
-    "b": 0.0
+  "name": "red",
+  "shader":  "default",
+  "uAlbedo": {
+    "type": "vec3",
+    "value": {
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0
+    }
   },
-  "roughness": 0.5,
-  "metallic": 0.0
+  "uRoughness": {
+    "type": "float",
+    "value": 0.5
+  },
+  "uMetallic": {
+    "type": "float",
+    "value": 0.0
+  }
 }

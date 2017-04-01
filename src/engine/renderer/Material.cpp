@@ -1,24 +1,58 @@
 #include "engine/renderer/Material.h"
 
 #include "engine/renderer/Texture.h"
+#include "engine/renderer/Shader.h"
+#include "engine/renderer/CubeMap.h"
+#include "engine/interface/Resources.h"
 
 #include <string>
+#include <map>
 
 #include <glm/gtc/type_ptr.hpp>
 
-Material::Material(string name, glm::vec3 albedo, float roughness, float metallic)
+Material::Material()
 {
-	_name = name;
-	_albedo = albedo;
-	_roughness = roughness;
-	_metallic = metallic;
+	_vec3 = new map<string, glm::vec3>();
+	_float = new map<string, float>();
+	_texture = new map<string, Texture*>();
+	_cubeMap = new map<string, CubeMap*>();
 }
 
 Material::~Material()
 {
-	delete _albedoMap;
-	delete _roughnessMap;
-	delete _metallicMap;
+	delete _vec3;
+	delete _float;
+	delete _texture;
+}
+
+void Material::setName(string name)
+{
+	_name = name;
+}
+
+void Material::setShader(string shaderName)
+{
+	_shaderName = shaderName;
+}
+
+void Material::setVec3(string name, glm::vec3 vec3)
+{
+	_vec3->insert(pair<string, glm::vec3>(name, vec3));
+}
+
+void Material::setFloat(string name, float f)
+{
+	_float->insert(pair<string, float>(name, f));
+}
+
+void Material::setTexture(string name, Texture *texture)
+{
+	_texture->insert(pair<string, Texture*>(name, texture));
+}
+
+void Material::setCubeMap(string name, CubeMap *cubeMap)
+{
+	_cubeMap->insert(pair<string, CubeMap*>(name, cubeMap));
 }
 
 string Material::getName()
@@ -26,47 +60,32 @@ string Material::getName()
 	return _name;
 }
 
-glm::vec3 Material::getAlbedo()
+Shader *Material::getShader()
 {
-	return _albedo;
+	if (_shader == nullptr)
+	{
+		_shader = Resources::findShader(_shaderName);
+	}
+
+	return _shader;
 }
 
-Texture *Material::getAlbedoMap()
+glm::vec3 Material::getVec3(string name)
 {
-	return _albedoMap;
+	return _vec3->at(name);
 }
 
-void Material::setAlbedoMap(Texture *texture)
+float Material::getFloat(string name)
 {
-	_albedoMap = texture;
+	return _float->at(name);
 }
 
-float Material::getRoughness()
+Texture *Material::getTexture(string name)
 {
-	return _roughness;
+	return _texture->at(name);
 }
 
-Texture *Material::getRoughnessMap()
+CubeMap *Material::getCubeMap(string name)
 {
-	return _roughnessMap;
-}
-
-void Material::setRoughnessMap(Texture *texture)
-{
-	_roughnessMap = texture;
-}
-
-float Material::getMetallic()
-{
-	return _metallic;
-}
-
-Texture *Material::getMetallicMap()
-{
-	return _metallicMap;
-}
-
-void Material::setMetallicMap(Texture *texture)
-{
-	_metallicMap = texture;
+	return _cubeMap->at(name);
 }

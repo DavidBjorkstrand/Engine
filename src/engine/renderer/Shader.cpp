@@ -1,6 +1,7 @@
 #include "engine/renderer/Shader.h"
 
 #include "engine/renderer/Texture.h"
+#include "engine/renderer/CubeMap.h"
 
 #include <string>
 #include <fstream>
@@ -9,7 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
-Shader::Shader(string vertex_shader_path, string fragment_shader_path)
+Shader::Shader(string vertex_shader_path, string fragment_shader_path, map<string, string> *uniforms)
 {
 	string vertex_shader_source = parseShaderSource(vertex_shader_path);
 	string fragment_shader_source = parseShaderSource(fragment_shader_path);
@@ -19,7 +20,7 @@ Shader::Shader(string vertex_shader_path, string fragment_shader_path)
 		fragment_shader_source);
 
 	_program = createShaderProgram(vertex_shader, fragment_shader);
-
+	_uniforms = uniforms;
 }
 
 void Shader::use()
@@ -27,32 +28,54 @@ void Shader::use()
 	glUseProgram(_program);
 }
 
+map<string, string> *Shader::getUniforms()
+{
+	return _uniforms;
+}
+
+bool Shader::hasUniform(string name)
+{
+	return _uniforms->find(name) != _uniforms->end();
+}
+
 void Shader::setUniformMat4(string name, glm::mat4 matrix)
 {
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	if (loc >= 0)
+	{
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
 }
 
 void Shader::setUniform1f(string name, GLfloat f0)
 {
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
-	glUniform1f(loc, f0);
+	if (loc >= 0)
+	{
+		glUniform1f(loc, f0);
+	}
 }
 
 void Shader::setUniform3fv(string name, glm::vec3 value)
 {
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
-	glUniform3f(loc, value.x, value.y, value.z);
+	if (loc >= 0)
+	{
+		glUniform3f(loc, value.x, value.y, value.z);
+	}
 }
 
 void Shader::setUniform1i(string name, GLint value)
 {
 	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
 
-	glUniform1i(loc, value);
+	if (loc >= 0)
+	{
+		glUniform1i(loc, value);
+	}
 }
 
 void Shader::bindTexture(Texture *texture, GLenum textureUnit, string name)
@@ -61,6 +84,15 @@ void Shader::bindTexture(Texture *texture, GLenum textureUnit, string name)
 
 	glActiveTexture(textureUnit);
 	texture->bind();
+	setUniform1i(name, (textureUnit - GL_TEXTURE0));
+}
+
+void Shader::bindCubeMap(CubeMap *cubeMap, GLenum textureUnit, string name)
+{
+	GLuint textureID = cubeMap->getTextureID();
+
+	glActiveTexture(textureUnit);
+	cubeMap->bind();
 	setUniform1i(name, (textureUnit - GL_TEXTURE0));
 }
 

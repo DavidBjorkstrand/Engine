@@ -4,7 +4,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-class SceneParser;
+class Scene;
 
 /*
 * Camera class. 
@@ -20,7 +20,7 @@ class Camera : public Component
 		/*
 		* Used when parsing scene. 
 		*/
-		void accept(SceneParser *sceneParser);
+		void accept(Scene *scene);
 
 		/*
 		* Get projection matrix.

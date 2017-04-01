@@ -16,3 +16,8 @@ Material *Resources::findMaterial(string name)
 {
 	return _resourceSystem->findMaterial(name);
 }
+
+Shader *Resources::findShader(string name)
+{
+	return _resourceSystem->findShader(name);
+}

@@ -2,11 +2,11 @@
 
 #include "Component.h"
 
-class SceneParser;
+class Scene;
 
 class Behaviour : public Component
 {
 	public:
-		void accept(SceneParser *sceneParser);
+		void accept(Scene *scene);
 		virtual void update() = 0;
 };

@@ -121,11 +121,10 @@
     <ClCompile Include="src\engine\interface\Input.cpp" />
     <ClCompile Include="src\engine\InputSystem.cpp" />
     <ClCompile Include="src\engine\interface\Resources.cpp" />
+    <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
     <ClCompile Include="src\engine\ResourceSystem.cpp" />
     <ClCompile Include="src\engine\interface\Window.cpp" />
-    <ClCompile Include="src\engine\renderer\Renderer.cpp" />
-    <ClCompile Include="src\engine\renderer\RenderInformation.cpp" />
-    <ClCompile Include="src\engine\renderer\RenderJob.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderSystem.cpp" />
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\engine\renderer\Texture.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Behaviour.cpp" />
@@ -136,8 +135,8 @@
     <ClCompile Include="src\engine\scene\entity\component\PointLight.cpp" />
     <ClCompile Include="src\engine\scene\MatrixStack.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
-    <ClCompile Include="src\engine\scene\SceneParser.cpp" />
     <ClCompile Include="src\engine\scene\entity\Transform.cpp" />
+    <ClCompile Include="src\engine\scene\SkyBox.cpp" />
     <ClCompile Include="src\engine\WindowSystem.cpp" />
     <ClCompile Include="src\engine\scene\entity\Entity.cpp" />
   </ItemGroup>
@@ -147,11 +146,10 @@
     <ClInclude Include="include\engine\interface\Input.h" />
     <ClInclude Include="include\engine\InputSystem.h" />
     <ClInclude Include="include\engine\interface\Resources.h" />
+    <ClInclude Include="include\engine\renderer\CubeMap.h" />
     <ClInclude Include="include\engine\ResourceSystem.h" />
     <ClInclude Include="include\engine\interface\Window.h" />
-    <ClInclude Include="include\engine\renderer\Renderer.h" />
-    <ClInclude Include="include\engine\renderer\RenderInformation.h" />
-    <ClInclude Include="include\engine\renderer\RenderJob.h" />
+    <ClInclude Include="include\engine\renderer\RenderSystem.h" />
     <ClInclude Include="include\engine\renderer\Shader.h" />
     <ClInclude Include="include\engine\renderer\Texture.h" />
     <ClInclude Include="include\engine\scene\entity\component\Behaviour.h" />
@@ -160,8 +158,8 @@
     <ClInclude Include="include\engine\scene\entity\component\Mesh.h" />
     <ClInclude Include="include\engine\scene\entity\component\PointLight.h" />
     <ClInclude Include="include\engine\scene\MatrixStack.h" />
-    <ClInclude Include="include\engine\scene\SceneParser.h" />
     <ClInclude Include="include\engine\scene\entity\Transform.h" />
+    <ClInclude Include="include\engine\scene\SkyBox.h" />
     <ClInclude Include="include\engine\WindowSystem.h" />
     <ClInclude Include="include\engine\exception\GLEWInitException.h" />
     <ClInclude Include="include\engine\exception\GLFWInitException.h" />
@@ -174,6 +172,8 @@
     <None Include="src\engine\renderer\materials\red.mat" />
     <None Include="src\engine\renderer\shaders\pbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.vs" />
+    <None Include="src\engine\renderer\shaders\skybox.fs" />
+    <None Include="src\engine\renderer\shaders\skybox.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

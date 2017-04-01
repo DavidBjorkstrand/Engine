@@ -1,9 +1,10 @@
 #include "engine/scene/entity/component/Mesh.h"
 
-#include "engine/scene/SceneParser.h"
+#include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
-#include "engine/renderer/RenderJob.h"
+#include "engine/interface/Resources.h"
+#include "engine/renderer/RenderSystem.h"
 
 #include <string>
 
@@ -12,29 +13,59 @@
 
 Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName)
 {
-	initBuffers(vertices, indices);
+	_vertices = vertices;
+	_indices = indices;
+	_material = Resources::findMaterial(materialName);
 
-	_materialName = materialName;
+	_depthFunc = GL_LESS;
+
+	initBuffers(vertices, indices);
 }
 
 Mesh::~Mesh()
 {
-
+	delete _vertices;
+	delete _indices;
 }
 
-void Mesh::accept(SceneParser *parser) 
+void Mesh::accept(Scene *scene) 
 {
-	parser->visit(this);
+	scene->visit(this);
 }
 
 void Mesh::setMaterial(string materialName)
 {
-	_materialName = materialName;
+	_material = Resources::findMaterial(materialName);
 }
 
-RenderJob *Mesh::getRenderJob()
+void Mesh::setMaterial(Material *material)
 {
-	return new RenderJob(getEntity()->getTransform()->getMatrix(), _VAO, _nIndices, _materialName);
+	_material = material;
+}
+
+void Mesh::setDepthFunc(GLenum depthFunc)
+{
+	_depthFunc = depthFunc;
+}
+
+Material *Mesh::getMaterial()
+{
+	return _material;
+}
+
+GLuint Mesh::getVAO()
+{
+	return _VAO;
+}
+
+GLuint Mesh::getNIndices()
+{
+	return _indices->size();
+}
+
+GLenum Mesh::getDepthFunc()
+{
+	return _depthFunc;
 }
 
 void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
@@ -46,11 +77,10 @@ void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
 	glBindVertexArray(_VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices->size()*sizeof(Vertex), &vertices->at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices->size() * sizeof(Vertex), &vertices->at(0), GL_STATIC_DRAW);
 
-	_nIndices = indices->size();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _nIndices*sizeof(GLuint), &indices->at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->size() * sizeof(GLuint), &indices->at(0), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)0);
@@ -64,9 +94,6 @@ void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
-
-	delete vertices;
-	delete indices; 
 
 }
 
@@ -123,14 +150,6 @@ Mesh *Mesh::createPlane()
 	indices->push_back(3);
 	indices->push_back(1);
 	indices->push_back(2);
-
-	/*indices->push_back(0);
-	indices->push_back(1);
-	indices->push_back(2);
-
-	indices->push_back(2);
-	indices->push_back(3);
-	indices->push_back(0);*/
 
 	return new Mesh(vertices, indices, "default");
 }

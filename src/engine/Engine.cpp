@@ -6,14 +6,15 @@
 #include "engine/interface/Resources.h"
 #include "engine/interface/Input.h"
 #include "engine/interface/Window.h"
-#include "engine/renderer/Renderer.h"
-#include "engine/renderer/RenderInformation.h"
+#include "engine/renderer/RenderSystem.h"
+#include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Mesh.h"
 #include "engine/scene/entity/component/Camera.h"
 #include "engine/scene/entity/component/PointLight.h"
+#include "engine/scene/entity/component/Behaviour.h"
 #include "behaviour/CameraController.h"
 
 #include <map>
@@ -34,7 +35,7 @@ Engine::Engine()
 
 	_scenes = new map<string, Scene *>();
 
-	_renderer = new Renderer();
+	_renderSystem = new RenderSystem();
 }
 
 Engine::~Engine()
@@ -43,7 +44,7 @@ Engine::~Engine()
     delete _inputSystem;
 	delete _resourceSystem;
 	delete _scenes;
-	delete _renderer;
+	delete _renderSystem;
 }
 
 void Engine::addScene(Scene *scene)
@@ -54,20 +55,23 @@ void Engine::addScene(Scene *scene)
 	}
 
 	_scenes->insert(pair<string, Scene *>(scene->getName(), scene));
+
+	_renderSystem->setScene(_activeScene);
 }
 
 void Engine::run() 
 {
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
-		RenderInformation *renderInformation;
-
         _inputSystem->pollEvents();
 
-		_activeScene->runBehaviours();
+		_activeScene->traverse();
+		for (Behaviour *behaviour : *_activeScene->getBehaviours())
+		{
+			behaviour->update();
+		}
 
-		renderInformation = _activeScene->getRenderInformation();
-		_renderer->draw(renderInformation);
+		_renderSystem->draw();
 
         _windowSystem->show();
     }
@@ -97,6 +101,17 @@ int main(int argc, char *argv[])
 	lightEntity->addComponent(pointLight);
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
 	scene->addEntity(lightEntity);
+
+	map<string, string> *pathMap = new map<string, string>();
+	pathMap->insert(pair < string, string>("BACK", "resources\\textures\\skybox\\back.jpg"));
+	pathMap->insert(pair < string, string>("BOTTOM", "resources\\textures\\skybox\\bottom.jpg"));
+	pathMap->insert(pair < string, string>("FRONT", "resources\\textures\\skybox\\front.jpg"));
+	pathMap->insert(pair < string, string>("LEFT", "resources\\textures\\skybox\\left.jpg"));
+	pathMap->insert(pair < string, string>("RIGHT", "resources\\textures\\skybox\\right.jpg"));
+	pathMap->insert(pair < string, string>("TOP", "resources\\textures\\skybox\\top.jpg"));
+	SkyBox *skyBox = new SkyBox(pathMap);
+
+	scene->setSkyBox(skyBox);
 
 	engine->addScene(scene);
 

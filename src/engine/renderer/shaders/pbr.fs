@@ -26,10 +26,15 @@ uniform sampler2D metallicMap;
 uniform int nPointLights;
 uniform PointLight pointLights[5];
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0, float roughness) 
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+}
+
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
-}
+}  
 
 float DistributionGGX(vec3 N, vec3 H, float roughness) 
 {
@@ -89,7 +94,7 @@ void main()
 
 		float NDF = DistributionGGX(N, H, roughness);
 		float G = GeometrySmith(N, V, L, roughness);
-		vec3 F = fresnelSchlick(max(dot(N, V), 0.0f), F0, roughness);
+		vec3 F = fresnelSchlick(max(dot(H, V), 0.0f), F0);
 
 		vec3 nominator = NDF * G * F;
 		float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.001f;

@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
 class Texture;
+class CubeMap;
 
 using namespace std;
 
@@ -23,7 +25,7 @@ class Shader
 		// Parameter: string fragment_shader_path - Path to fragment shader 
 		//            source. 
 		//************************************
-		Shader(string vertex_shader_path, string fragment_shader_path);
+		Shader(string vertex_shader_path, string fragment_shader_path, map<string, string> *uniforms);
 
 		//************************************
 		// Method:    Activates the shader program with glUseProgram().
@@ -32,6 +34,10 @@ class Shader
 		// Returns:   void
 		//************************************
 		void use();
+
+		map<string, string> *getUniforms();
+
+		bool hasUniform(string name);
 
 		//************************************
 		// Method:    Sets 4x4 matrix uniforms in the shader program.
@@ -78,6 +84,8 @@ class Shader
 
 		void bindTexture(Texture *texture, GLenum textureUnit, string name);
 
+		void bindCubeMap(CubeMap *cubeMap, GLenum textureUnit, string name);
+
 	private:
 		//************************************
 		// Method:    Parses the shader source from a text file and puts it in 
@@ -111,4 +119,5 @@ class Shader
 			GLuint fragment_shader);
 
 		GLuint _program;
+		map<string, string> *_uniforms;
 };

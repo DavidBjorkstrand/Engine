@@ -1,61 +1,57 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 
 #include <glm/gtc/type_ptr.hpp>
 
 class Texture;
+class CubeMap;
+class Shader;
 
 using namespace std;
 
 class Material
 {
 	public: 
-		/*
-		* Constructor
-		*/
-		Material(string name, glm::vec3 albedo, float roughness, float metallic);
+		Material();
 
 		~Material();
+
+		void setName(string name);
+
+		void setShader(string shaderName);
+
+		void setVec3(string name, glm::vec3 vec3);
+
+		void setFloat(string name, float f);
+
+		void setTexture(string name, Texture *texture);
+
+		void setCubeMap(string name, CubeMap *cubeMap);
 
 		/*
 		* Gets the name of the material
 		*/
 		string getName();
 
-		/*
-		* Gets the albedo of the material.
-		*/
-		glm::vec3 getAlbedo();
+		Shader *getShader();
 
-		Texture *getAlbedoMap();
+		glm::vec3 getVec3(string name);
 
-		void setAlbedoMap(Texture *texture);
+		float getFloat(string name);
 
-		/*
-		* Gets the roughness of the material.
-		*/
-		float getRoughness();
+		Texture *getTexture(string name);
 
-		Texture *getRoughnessMap();
-
-		void setRoughnessMap(Texture *texture);
-
-		/*
-		* Gets how metllic the matrial is. 
-		*/
-		float getMetallic();
-
-		Texture *getMetallicMap();
-
-		void setMetallicMap(Texture *texture);
+		CubeMap *getCubeMap(string name);
 
 	private:
 		string _name;
-		glm::vec3 _albedo;
-		Texture *_albedoMap;
-		float _roughness;
-		Texture *_roughnessMap;
-		float _metallic;
-		Texture *_metallicMap;
+		string _shaderName;
+		Shader *_shader;
+
+		map<string, glm::vec3> *_vec3;
+		map<string, float> *_float;
+		map<string, Texture *> *_texture;
+		map<string, CubeMap *> *_cubeMap;
 };

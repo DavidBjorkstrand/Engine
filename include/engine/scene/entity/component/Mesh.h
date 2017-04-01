@@ -10,17 +10,9 @@
 
 using namespace std;
 
-class RenderJob;
-
-/*
-* Vertex information struct. 
-*/
-struct Vertex
-{
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 texCoords;
-};
+struct Vertex;
+class Scene;
+class Material;
 
 /*
 * Class for component that describes a renderble. 
@@ -42,17 +34,24 @@ class Mesh : public Component
 		/*
 		* Inherited from Component. Used for parsing scene. 
 		*/
-		void accept(SceneParser *sceneParser);
+		void accept(Scene *scene);
 
 		/*
 		* Sets the material of the mesh. 
 		*/
 		void setMaterial(string materialName);
 
-		/*
-		* Gets a render job for the mesh.
-		*/
-		RenderJob *getRenderJob();
+		void setMaterial(Material *material);
+
+		void setDepthFunc(GLenum depthFunc);
+
+		Material *getMaterial();
+
+		GLuint getVAO();
+
+		GLuint getNIndices();
+
+		GLenum getDepthFunc();
 
 		/*
 		* Factory function that creates a Plane mesh. 
@@ -70,15 +69,14 @@ class Mesh : public Component
 		static Mesh *createCube();
 
 	private:
-		/*
-		* Helper function that creates buffers needed by OpenGL to draw. 
-		*/
 		void initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices);
 
+		vector<Vertex> *_vertices;
+		vector<GLuint> *_indices;
+		Material *_material;
 		GLuint _VAO;
-		GLuint _VBO;
 		GLuint _EBO;
-		GLuint _nIndices;
-		string _materialName;
+		GLuint _VBO;
+		GLenum _depthFunc;
 
 };

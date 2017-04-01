@@ -1,7 +1,7 @@
 #include "engine/scene/entity/component/Camera.h"
 
 #include "engine/interface/Window.h"
-#include "engine/scene/SceneParser.h"
+#include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
 
@@ -15,9 +15,9 @@ Camera::Camera(float fov, float zNear, float zFar)
 	_zFar = zFar;
 }
 
-void Camera::accept(SceneParser *sceneParser)
+void Camera::accept(Scene *scene)
 {
-	sceneParser->visit(this);
+	scene->visit(this);
 }
 
 glm::mat4 Camera::getProjectionMatrix()

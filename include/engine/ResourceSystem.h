@@ -1,9 +1,10 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <map>
 
 class Material;
+class Shader;
 
 using namespace std;
 
@@ -13,8 +14,11 @@ class ResourceSystem
 		ResourceSystem();
 		~ResourceSystem();
 		Material *findMaterial(string name);
+		Shader *findShader(string name);
 
 	private:
 		void loadMaterials();
-		vector<Material *> *_materials;
+		void loadShaders();
+		map<string, Material*> *_materials;
+		map<string, Shader*> *_shaders;
 };

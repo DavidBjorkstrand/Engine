@@ -2,12 +2,17 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
+class SkyBox;
 class Entity;
-class RenderJob;
+class MatrixStack;
+class Behaviour;
 class Camera;
-class SceneParser;
-class RenderInformation;
+class Mesh;
+class PointLight;
+
+struct RenderCommand;
 
 using namespace std;
 
@@ -32,23 +37,46 @@ class Scene
 		*/
 		string getName();
 
+		void setSkyBox(SkyBox *skyBox);
+
+		SkyBox *getSkyBox();
+
 		/*
 		* Adds a Entity to the scene. 
 		*/
         void addEntity(Entity *entity);
 
-		/*
-		* Runs all behaviours in the scene. 
-		*/
-		void runBehaviours();
+		vector<Behaviour *> *getBehaviours();
+
+		vector<Camera *> *getCameras();
+
+		vector<PointLight *> *getPointLights();
+
+		vector<RenderCommand> *getRenderCommands();
 
 		/*
-		* Gets render jobs from the scene.
+		* Parse functions
 		*/
-		RenderInformation *getRenderInformation();
+		void traverse();
+
+		void visit(Behaviour *behaviour);
+
+		void visit(Camera *camera);
+
+		void visit(Mesh *mesh);
+
+		void visit(PointLight *pointLight);
 
     private:
+		void depthFirst(vector<Entity*> *entities);
+
 		string _name;
         vector<Entity*> *_entities;
-		SceneParser *_sceneParser;
+		SkyBox *_skyBox;
+
+		MatrixStack *_matrixStack;
+		vector<Behaviour *> *_behaviours;
+		vector<Camera *> *_cameras;
+		vector<RenderCommand> *_renderCommands;
+		vector<PointLight *> *_pointLights;
 };

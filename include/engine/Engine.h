@@ -9,7 +9,7 @@ class WindowSystem;
 class InputSystem;
 class ResourceSystem;
 class Scene;
-class Renderer;
+class RenderSystem;
 
 /* Main class for the engine */
 class Engine
@@ -39,9 +39,10 @@ class Engine
         WindowSystem *_windowSystem;
         InputSystem *_inputSystem;
 		ResourceSystem *_resourceSystem;
+		RenderSystem *_renderSystem;
 		Scene *_activeScene;
 		map<string, Scene *> *_scenes;
-		Renderer *_renderer;
+		
 
 
 };

@@ -4,7 +4,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-class SceneParser;
+class Scene;
 
 class PointLight : public Component
 {
@@ -14,7 +14,7 @@ class PointLight : public Component
 		/*
 		* Used when parsing the scene.
 		*/
-		void accept(SceneParser *sceneParser);
+		void accept(Scene *scene);
 
 		/*
 		* Gets the color of the light.
