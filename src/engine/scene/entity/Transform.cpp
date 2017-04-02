@@ -9,11 +9,20 @@ Transform::Transform()
     _position.x = 0;
     _position.y = 0;
     _position.z = 0;
+
+	_scale.x = 1;
+	_scale.y = 1;
+	_scale.z = 1;
 }
 
 void Transform::setPosition(glm::vec3 position)
 {
 	_position = position;
+}
+
+void Transform::setScale(glm::vec3 scale)
+{
+	_scale = scale;
 }
 
 void Transform::move(glm::vec3 deltaPosition)
@@ -52,6 +61,7 @@ glm::mat4 Transform::getMatrix()
 {
 	glm::mat4 translate = glm::translate(glm::mat4(), _position);
 	glm::mat4 rotate = glm::toMat4(_orientation);
+	glm::mat4 scale = glm::scale(glm::mat4(), _scale);
 
-	return _parentTransform * translate * rotate;
+	return _parentTransform * translate * rotate * scale;
 }

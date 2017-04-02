@@ -26,9 +26,27 @@ uniform float uRoughness;
 uniform sampler2D roughnessMap;
 uniform float uMetallic;
 uniform sampler2D metallicMap;
+uniform sampler2D normalMap;
 
 uniform int nPointLights;
 uniform PointLight pointLights[5];
+
+vec3 getNormalFromMap()
+{
+    vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = dFdx(Position);
+    vec3 Q2  = dFdy(Position);
+    vec2 st1 = dFdx(TexCoords);
+    vec2 st2 = dFdy(TexCoords);
+
+    vec3 N   = normalize(Normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
@@ -81,7 +99,7 @@ void main()
 	float roughness = uRoughness + texture(roughnessMap, TexCoords).r;
 	float metallic = uMetallic + texture(metallicMap, TexCoords).r;
 
-	vec3 N = normalize(Normal);
+	vec3 N = getNormalFromMap();
 	vec3 V = normalize(viewPos - Position);
 	vec3 R = reflect(-V, N); 
 

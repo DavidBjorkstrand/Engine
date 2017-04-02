@@ -170,6 +170,7 @@
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\materials\floor.mat" />
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\materials\red.mat" />
     <None Include="src\engine\renderer\shaders\brdf.fs" />

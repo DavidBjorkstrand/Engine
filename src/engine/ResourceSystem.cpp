@@ -139,6 +139,7 @@ void ResourceSystem::loadShaders()
 	uniforms->insert(pair<string, string>("albedoMap", "texture"));
 	uniforms->insert(pair<string, string>("roughnessMap", "texture"));
 	uniforms->insert(pair<string, string>("metallicMap", "texture"));
+	uniforms->insert(pair<string, string>("normalMap", "texture"));
 	uniforms->insert(pair<string, string>("irradianceMap", "samplerCube"));
 	uniforms->insert(pair<string, string>("preFilterEnvMap", "samplerCube"));
 	uniforms->insert(pair<string, string>("brdfLUT", "sampler2D"));

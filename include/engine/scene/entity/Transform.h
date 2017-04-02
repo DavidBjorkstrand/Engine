@@ -15,6 +15,8 @@ class Transform
 		*/
 		void setPosition(glm::vec3 position);
 
+		void setScale(glm::vec3 scale);
+
 		/*
 		* Moves the transform
 		*/
@@ -54,5 +56,6 @@ class Transform
     private: 
         glm::vec3 _position;
 		glm::quat _orientation;
+		glm::vec3 _scale;
 		glm::mat4 _parentTransform;
 };

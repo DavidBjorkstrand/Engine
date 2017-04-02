@@ -84,7 +84,15 @@ int main(int argc, char *argv[])
 	Scene *scene = new Scene("TheScene");
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("red");
+	entity->getComponent<Mesh>()->setMaterial("rustediron");
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 5.5f, 0.0f));
+	entity->getTransform()->setScale(glm::vec3(5.0f, 5.0f, 5.0f));
+	scene->addEntity(entity);
+
+	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
+	entity->getComponent<Mesh>()->setMaterial("floor");
+	entity->getTransform()->rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	entity->getTransform()->setScale(glm::vec3(50.0f, 50.0f, 1.0f));
 	scene->addEntity(entity);
 
 	Camera *camera = new Camera(45.0f, 0.1f, 100.0f);
@@ -92,14 +100,14 @@ int main(int argc, char *argv[])
 	Entity *cameraEntity = new Entity();
 	cameraEntity->addComponent(camera);
 	cameraEntity->addComponent(cameraController);
-	cameraEntity->getTransform()->setPosition(glm::vec3(0.0f, 3.0f, 5.0f));
+	cameraEntity->getTransform()->setPosition(glm::vec3(0.0f, 8.0f, 5.0f));
 	cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	scene->addEntity(cameraEntity);
 
 	PointLight *pointLight = new PointLight(glm::vec3(300.0f, 300.0f, 300.0f));
 	Entity *lightEntity = new Entity();
 	lightEntity->addComponent(pointLight);
-	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
 	/*map<string, string> *pathMap = new map<string, string>();

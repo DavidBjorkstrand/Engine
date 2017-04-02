@@ -119,15 +119,21 @@ void RenderSystem::draw()
 				{
 					CubeMap *value = material->getCubeMap(name);
 
-					shader->bindCubeMap(value, textureUnit, name);
-					textureUnit++;
+					if (value)
+					{
+						shader->bindCubeMap(value, textureUnit, name);
+						textureUnit++;
+					}
 				}
 				else if (type == "texture")
 				{
 					Texture *value = material->getTexture(name);
 
-					shader->bindTexture(value, textureUnit, name);
-					textureUnit++;
+					if (value)
+					{
+						shader->bindTexture(value, textureUnit, name);
+						textureUnit++;
+					}
 				}
 			}
 
@@ -142,6 +148,13 @@ void RenderSystem::draw()
 			glBindVertexArray(VAO);
 			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
+
+			for (GLuint i = GL_TEXTURE0; i < textureUnit; ++i)
+			{
+				glActiveTexture(i);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+			}
 		}
 	}
 }

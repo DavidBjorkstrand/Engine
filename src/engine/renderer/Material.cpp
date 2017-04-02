@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <stdexcept>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -72,20 +73,51 @@ Shader *Material::getShader()
 
 glm::vec3 Material::getVec3(string name)
 {
-	return _vec3->at(name);
+	try 
+	{
+		return _vec3->at(name);
+	} 
+	catch (const out_of_range& oor)
+	{
+		return glm::vec3(0.0f);
+	}
+	
 }
 
 float Material::getFloat(string name)
 {
-	return _float->at(name);
+	try 
+	{
+		return _float->at(name);
+	}
+	catch (const out_of_range& oor)
+	{
+		return 0.0f;
+	}
+	
 }
 
 Texture *Material::getTexture(string name)
 {
-	return _texture->at(name);
+	try
+	{
+		return _texture->at(name);
+	}
+	catch (const out_of_range& oor)
+	{
+		return nullptr;
+	}
+	
 }
 
 CubeMap *Material::getCubeMap(string name)
 {
-	return _cubeMap->at(name);
+	try
+	{
+		return _cubeMap->at(name);
+	}
+	catch (const out_of_range& oor)
+	{
+		return nullptr;
+	}
 }

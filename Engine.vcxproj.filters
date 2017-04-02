@@ -182,5 +182,6 @@
     <None Include="src\engine\renderer\shaders\brdf.fs" />
     <None Include="src\engine\renderer\shaders\equi.vs" />
     <None Include="src\engine\renderer\shaders\equi.fs" />
+    <None Include="resources\materials\floor.mat" />
   </ItemGroup>
 </Project>
