@@ -1,0 +1,16 @@
+{
+	"name": "floor",
+	"shader": "default",
+	"albedoMap": {
+		"type":"texture",
+		"value": "resources\\textures\\floor\\albedo.png"
+	},
+	"roughnessMap": {
+		"type":"texture",
+		"value": "resources\\textures\\floor\\roughness.png"
+	},
+	"normalMap": {
+		"type":"texture",
+		"value": "resources\\textures\\floor\\normal.png"
+	}
+}

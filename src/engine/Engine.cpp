@@ -7,6 +7,7 @@
 #include "engine/interface/Input.h"
 #include "engine/interface/Window.h"
 #include "engine/renderer/RenderSystem.h"
+#include "engine/physics/PhysicsSystem.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
@@ -15,10 +16,13 @@
 #include "engine/scene/entity/component/Camera.h"
 #include "engine/scene/entity/component/PointLight.h"
 #include "engine/scene/entity/component/Behaviour.h"
+#include "engine/scene/entity/component/ParticleEmitter.h"
 #include "behaviour/CameraController.h"
 
 #include <map>
 #include <vector>
+#include <windows.h>
+#include <iostream>
 
 #include <GLFW\glfw3.h>
 
@@ -36,6 +40,8 @@ Engine::Engine()
 	_scenes = new map<string, Scene *>();
 
 	_renderSystem = new RenderSystem();
+
+	_physicsSystem = new PhysicsSystem();
 }
 
 Engine::~Engine()
@@ -57,12 +63,27 @@ void Engine::addScene(Scene *scene)
 	_scenes->insert(pair<string, Scene *>(scene->getName(), scene));
 
 	_renderSystem->setScene(_activeScene);
+
+	_physicsSystem->setScene(_activeScene);
 }
 
 void Engine::run() 
 {
+	SYSTEMTIME time;
+	GetSystemTime(&time);
+	long currentTime = (time.wSecond * 1000) + time.wMilliseconds;
+	long newTime;
+	float dt;
+
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
+		GetSystemTime(&time);
+		newTime = (time.wSecond * 1000) + time.wMilliseconds;
+		dt = static_cast <float>(newTime - currentTime) / 1000.0f;
+		currentTime = newTime;
+
+		//cout << dt << endl;
+
         _inputSystem->pollEvents();
 
 		_activeScene->traverse();
@@ -70,6 +91,8 @@ void Engine::run()
 		{
 			behaviour->update();
 		}
+
+		_physicsSystem->update(dt);
 
 		_renderSystem->draw();
 
@@ -85,8 +108,8 @@ int main(int argc, char *argv[])
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 5.5f, 0.0f));
-	entity->getTransform()->setScale(glm::vec3(5.0f, 5.0f, 5.0f));
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, -5.5f));
+	entity->getTransform()->setScale(glm::vec3(3.0f, 3.0f, 3.0f));
 	scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
@@ -109,6 +132,11 @@ int main(int argc, char *argv[])
 	lightEntity->addComponent(pointLight);
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
+
+	ParticleEmitter *particleEmitter = new ParticleEmitter();
+	Entity *particleEnity = new Entity();
+	particleEnity->addComponent(particleEmitter);
+	scene->addEntity(particleEnity);
 
 	/*map<string, string> *pathMap = new map<string, string>();
 	pathMap->insert(pair < string, string>("BACK", "resources\\textures\\skybox\\back.jpg"));

@@ -72,6 +72,10 @@
     <IncludePath>D:\Projects\Engine\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Projects\Engine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>D:\Projects\Engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Projects\Engine\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -100,6 +104,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;glew32s.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -121,7 +126,9 @@
     <ClCompile Include="src\engine\interface\Input.cpp" />
     <ClCompile Include="src\engine\InputSystem.cpp" />
     <ClCompile Include="src\engine\interface\Resources.cpp" />
+    <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
+    <ClCompile Include="src\engine\renderer\TextureGenerator.cpp" />
     <ClCompile Include="src\engine\renderer\stb_image.cpp" />
     <ClCompile Include="src\engine\ResourceSystem.cpp" />
     <ClCompile Include="src\engine\interface\Window.cpp" />
@@ -133,6 +140,7 @@
     <ClCompile Include="src\engine\scene\entity\component\Component.cpp" />
     <ClCompile Include="src\engine\renderer\Material.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Mesh.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\ParticleEmitter.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\PointLight.cpp" />
     <ClCompile Include="src\engine\scene\MatrixStack.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
@@ -147,7 +155,9 @@
     <ClInclude Include="include\engine\interface\Input.h" />
     <ClInclude Include="include\engine\InputSystem.h" />
     <ClInclude Include="include\engine\interface\Resources.h" />
+    <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\renderer\CubeMap.h" />
+    <ClInclude Include="include\engine\renderer\TextureGenerator.h" />
     <ClInclude Include="include\engine\ResourceSystem.h" />
     <ClInclude Include="include\engine\interface\Window.h" />
     <ClInclude Include="include\engine\renderer\RenderSystem.h" />
@@ -157,6 +167,7 @@
     <ClInclude Include="include\engine\scene\entity\component\Camera.h" />
     <ClInclude Include="include\engine\renderer\Material.h" />
     <ClInclude Include="include\engine\scene\entity\component\Mesh.h" />
+    <ClInclude Include="include\engine\scene\entity\component\ParticleEmitter.h" />
     <ClInclude Include="include\engine\scene\entity\component\PointLight.h" />
     <ClInclude Include="include\engine\scene\MatrixStack.h" />
     <ClInclude Include="include\engine\scene\entity\Transform.h" />
@@ -171,17 +182,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\materials\floor.mat" />
+    <None Include="resources\materials\particle.mat" />
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\materials\red.mat" />
+    <None Include="src\engine\renderer\shaders\bilateralFilter.fs" />
+    <None Include="src\engine\renderer\shaders\bilateralFilter.vs" />
     <None Include="src\engine\renderer\shaders\brdf.fs" />
     <None Include="src\engine\renderer\shaders\brdf.vs" />
+    <None Include="src\engine\renderer\shaders\depth.fs" />
+    <None Include="src\engine\renderer\shaders\depth.vs" />
     <None Include="src\engine\renderer\shaders\equi.fs" />
     <None Include="src\engine\renderer\shaders\equi.vs" />
     <None Include="src\engine\renderer\shaders\irradiance.fs" />
     <None Include="src\engine\renderer\shaders\irradiance.vs" />
+    <None Include="src\engine\renderer\shaders\particle.fs" />
+    <None Include="src\engine\renderer\shaders\particle.vs" />
+    <None Include="src\engine\renderer\shaders\particlePbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.vs" />
     <None Include="src\engine\renderer\shaders\preFilterEnvMap.fs" />
+    <None Include="src\engine\renderer\shaders\screenAlignedQuad.fs" />
+    <None Include="src\engine\renderer\shaders\screenAlignedQuad.vs" />
     <None Include="src\engine\renderer\shaders\skybox.fs" />
     <None Include="src\engine\renderer\shaders\skybox.vs" />
   </ItemGroup>

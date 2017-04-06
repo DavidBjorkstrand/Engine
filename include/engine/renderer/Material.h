@@ -4,6 +4,7 @@
 #include <map>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <GL\glew.h>
 
 class Texture;
 class CubeMap;
@@ -30,6 +31,14 @@ class Material
 
 		void setCubeMap(string name, CubeMap *cubeMap);
 
+		void setBlend(GLboolean blend);
+		void setBlendSrc(GLenum blendSrc);
+		void setBlendDst(GLenum blendDst);
+
+		GLboolean getBlend();
+		GLenum getBlendSrc();
+		GLenum getBlendDst();
+
 		/*
 		* Gets the name of the material
 		*/
@@ -54,4 +63,9 @@ class Material
 		map<string, float> *_float;
 		map<string, Texture *> *_texture;
 		map<string, CubeMap *> *_cubeMap;
+
+		GLboolean _blend;
+		GLenum _blendSrc;
+		GLenum _blendDst;
+
 };

@@ -10,6 +10,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
+GLuint Shader::idCounter = 0;
+
 Shader::Shader(string vertex_shader_path, string fragment_shader_path, map<string, string> *uniforms)
 {
 	string vertex_shader_source = parseShaderSource(vertex_shader_path);
@@ -21,6 +23,9 @@ Shader::Shader(string vertex_shader_path, string fragment_shader_path, map<strin
 
 	_program = createShaderProgram(vertex_shader, fragment_shader);
 	_uniforms = uniforms;
+
+	_id = Shader::idCounter;
+	Shader::idCounter++;
 }
 
 Shader::Shader(string vertex_shader_path, string fragment_shader_path)
@@ -33,11 +38,20 @@ Shader::Shader(string vertex_shader_path, string fragment_shader_path)
 		fragment_shader_source);
 
 	_program = createShaderProgram(vertex_shader, fragment_shader);
+	_uniforms = new map<string, string>();
+
+	_id = Shader::idCounter;
+	Shader::idCounter++;
 }
 
 void Shader::use()
 {
 	glUseProgram(_program);
+}
+
+GLuint Shader::getID()
+{
+	return _id;
 }
 
 map<string, string> *Shader::getUniforms()
@@ -77,6 +91,16 @@ void Shader::setUniform3fv(string name, glm::vec3 value)
 	if (loc >= 0)
 	{
 		glUniform3f(loc, value.x, value.y, value.z);
+	}
+}
+
+void Shader::setUniform2fv(string name, glm::vec2 values)
+{
+	GLint loc = glGetUniformLocation(_program, (const GLchar *)name.c_str());
+
+	if (loc >= 0)
+	{
+		glUniform2f(loc, values.x, values.y);
 	}
 }
 

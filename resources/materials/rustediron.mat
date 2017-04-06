@@ -1,0 +1,36 @@
+{
+  "name": "rustediron",
+  "shader": "default",
+  "uAlbedo": {
+    "type": "vec3",
+    "value": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "albedoMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\albedo.png"
+  },
+  "roughnessMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\roughness.png"
+  },
+  "metallicMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\metallic.png"
+  },
+  "normalMap": {
+    "type": "texture",
+    "value": "resources\\textures\\rustediron\\normal.png"
+  },
+  "uRoughness": {
+    "type": "float",
+    "value": 0.0
+  },
+  "uMetallic": {
+    "type": "float",
+    "value": 0.0
+  }
+}

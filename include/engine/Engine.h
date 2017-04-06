@@ -10,6 +10,7 @@ class InputSystem;
 class ResourceSystem;
 class Scene;
 class RenderSystem;
+class PhysicsSystem;
 
 /* Main class for the engine */
 class Engine
@@ -40,6 +41,7 @@ class Engine
         InputSystem *_inputSystem;
 		ResourceSystem *_resourceSystem;
 		RenderSystem *_renderSystem;
+		PhysicsSystem *_physicsSystem;
 		Scene *_activeScene;
 		map<string, Scene *> *_scenes;
 		

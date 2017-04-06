@@ -10,7 +10,7 @@ class Texture
 {
 	public:
 		Texture(string path, GLint wrap, GLint internalFormat, GLenum format, GLenum type);
-		Texture();
+		Texture(GLuint width, GLuint height, GLint internalFormat, GLint wrap, GLint filter);
 
 		GLuint getTextureID();
 
@@ -19,5 +19,6 @@ class Texture
 		void unbind();
 
 	private:
+		GLenum internalFormatToFormat(GLint internalFormat);
 		GLuint _texture;
 };

@@ -6,7 +6,9 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Behaviour.h"
 #include "engine/scene/entity/component/Mesh.h"
+#include "engine/scene/entity/component/ParticleEmitter.h"
 #include "engine/renderer/RenderSystem.h"
+#include "engine/physics/PhysicsSystem.h"
 
 #include <string>
 #include <vector>
@@ -24,6 +26,7 @@ Scene::Scene(string sceneName)
 	_cameras = new vector<Camera *>();
 	_pointLights = new vector<PointLight *>();
 	_renderCommands = new vector<RenderCommand>();
+	_rigidbodies = new vector<Rigidbody *>();
 }
 
 Scene::~Scene()
@@ -36,6 +39,7 @@ Scene::~Scene()
 	delete _cameras;
 	delete _pointLights;
 	delete _renderCommands;
+	delete _rigidbodies;
 }
 
 string Scene::getName()
@@ -77,7 +81,7 @@ vector<RenderCommand> *Scene::getRenderCommands()
 {
 	if (_skyBox != nullptr)
 	{
-		RenderCommand renderCommand;
+		RenderCommand renderCommand = RenderCommand();
 
 		renderCommand.mesh =_skyBox->getMesh();
 		renderCommand.modelMatrix = glm::mat4();
@@ -88,12 +92,18 @@ vector<RenderCommand> *Scene::getRenderCommands()
 	return _renderCommands;
 }
 
+vector<Rigidbody *> *Scene::getRigidbodies()
+{
+	return _rigidbodies;
+}
+
 void Scene::traverse()
 {
 	_behaviours->clear();
 	_cameras->clear();
 	_pointLights->clear();
 	_renderCommands->clear();
+	_rigidbodies->clear();
 
 	depthFirst(_entities);
 }
@@ -110,7 +120,7 @@ void Scene::visit(Camera *camera)
 
 void Scene::visit(Mesh *mesh)
 {
-	RenderCommand renderCommand;
+	RenderCommand renderCommand = RenderCommand();
 
 	renderCommand.mesh = mesh;
 	renderCommand.modelMatrix = mesh->getEntity()->getTransform()->getMatrix();
@@ -121,6 +131,25 @@ void Scene::visit(Mesh *mesh)
 void Scene::visit(PointLight *pointLight)
 {
 	_pointLights->push_back(pointLight);
+}
+
+void Scene::visit(ParticleEmitter *particleEmitter)
+{
+	vector<RenderCommand> renderCommands = particleEmitter->getRenderCommands();
+
+	for (RenderCommand renderCommand : renderCommands)
+	{
+		_renderCommands->push_back(renderCommand);
+	}
+
+	vector<Rigidbody *> rigidbodies = particleEmitter->getRigidBodies();
+
+	for (Rigidbody *rigidbody : rigidbodies)
+	{
+		_rigidbodies->push_back(rigidbody);
+	}
+
+	_behaviours->push_back(particleEmitter);
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

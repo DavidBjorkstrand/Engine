@@ -37,6 +37,8 @@ class Shader
 		//************************************
 		void use();
 
+		GLuint getID();
+
 		map<string, string> *getUniforms();
 
 		bool hasUniform(string name);
@@ -73,6 +75,8 @@ class Shader
 		// Parameter: GLfloat f2 - Third value.
 		//************************************
 		void setUniform3fv(string name, glm::vec3 values);
+
+		void setUniform2fv(string name, glm::vec2 values);
 
 		//************************************
 		// Method:    Sets int uniforms in the shader program.
@@ -122,4 +126,7 @@ class Shader
 
 		GLuint _program;
 		map<string, string> *_uniforms;
+		GLuint _id;
+
+		static GLuint idCounter;
 };

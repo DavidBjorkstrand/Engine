@@ -45,7 +45,14 @@ vec3 getNormalFromMap()
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
 
-    return normalize(TBN * tangentNormal);
+	if (length(tangentNormal) < 0.01)
+	{
+		return normalize(Normal);
+	}
+	else 
+	{
+		return normalize(TBN * tangentNormal);
+	}
 }
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
@@ -99,7 +106,7 @@ void main()
 	float roughness = uRoughness + texture(roughnessMap, TexCoords).r;
 	float metallic = uMetallic + texture(metallicMap, TexCoords).r;
 
-	vec3 N = getNormalFromMap();
+	vec3 N = normalize(Normal);//getNormalFromMap();
 	vec3 V = normalize(viewPos - Position);
 	vec3 R = reflect(-V, N); 
 

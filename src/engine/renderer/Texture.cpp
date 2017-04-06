@@ -52,17 +52,17 @@ Texture::Texture(string path, GLint wrap, GLint internalFormat, GLenum format, G
 	unbind();
 }
 
-Texture::Texture()
+Texture::Texture(GLuint width, GLuint height, GLint internalFormat, GLint wrap, GLint filter)
 {
 	glGenTextures(1, &_texture);
 	bind();
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, internalFormatToFormat(internalFormat), GL_FLOAT, 0);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 
 	unbind();
 }
@@ -80,4 +80,28 @@ void Texture::bind()
 void Texture::unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+GLenum Texture::internalFormatToFormat(GLint internalFormat)
+{
+	if ((internalFormat == GL_RED) || (internalFormat == GL_R16F) || (internalFormat == GL_R32F))
+	{
+		return GL_RED;
+	}
+	else if ((internalFormat == GL_RG) || (internalFormat == GL_RG16F) || (internalFormat == GL_RG32F))
+	{
+		return GL_RG;
+	}
+	else if ((internalFormat == GL_RGB) || (internalFormat == GL_RGB16F) || (internalFormat == GL_RGB32F))
+	{
+		return GL_RGB;
+	}
+	else if ((internalFormat == GL_RGBA) || (internalFormat == GL_RGBA16F) || (internalFormat == GL_RGBA32F))
+	{
+		return GL_RGBA;
+	}
+	else if ((internalFormat == GL_DEPTH_COMPONENT) || (internalFormat == GL_DEPTH_COMPONENT24) || (internalFormat == GL_DEPTH_COMPONENT32))
+	{
+		return GL_DEPTH_COMPONENT;
+	}
 }

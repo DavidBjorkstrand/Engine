@@ -1,0 +1,8 @@
+{
+	"name": "particle",
+	"shader":"particle",
+  "sprite": {
+    "type": "texture",
+    "value": "resources\\textures\\particle.png"
+  }
+}

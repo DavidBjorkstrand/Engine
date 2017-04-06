@@ -10,6 +10,7 @@
 #include <stdexcept>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <GL\glew.h>
 
 Material::Material()
 {
@@ -17,6 +18,10 @@ Material::Material()
 	_float = new map<string, float>();
 	_texture = new map<string, Texture*>();
 	_cubeMap = new map<string, CubeMap*>();
+
+	_blend = false;
+	_blendSrc = GL_SRC_ALPHA;
+	_blendDst = GL_ONE_MINUS_SRC_ALPHA;
 }
 
 Material::~Material()
@@ -38,7 +43,8 @@ void Material::setShader(string shaderName)
 
 void Material::setVec3(string name, glm::vec3 vec3)
 {
-	_vec3->insert(pair<string, glm::vec3>(name, vec3));
+	//_vec3->insert(pair<string, glm::vec3>(name, vec3));
+	(*_vec3)[name] = vec3;
 }
 
 void Material::setFloat(string name, float f)
@@ -54,6 +60,21 @@ void Material::setTexture(string name, Texture *texture)
 void Material::setCubeMap(string name, CubeMap *cubeMap)
 {
 	_cubeMap->insert(pair<string, CubeMap*>(name, cubeMap));
+}
+
+void Material::setBlend(GLboolean blend)
+{
+	_blend = blend;
+}
+
+void Material::setBlendSrc(GLenum blendSrc)
+{
+	_blendSrc = blendSrc;
+}
+
+void Material::setBlendDst(GLenum blendDst)
+{
+	_blendDst = blendDst;
 }
 
 string Material::getName()
@@ -120,4 +141,19 @@ CubeMap *Material::getCubeMap(string name)
 	{
 		return nullptr;
 	}
+}
+
+GLboolean Material::getBlend()
+{
+	return _blend;
+}
+
+GLenum Material::getBlendSrc()
+{
+	return _blendSrc;
+}
+
+GLenum Material::getBlendDst()
+{
+	return _blendDst;
 }

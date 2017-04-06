@@ -56,14 +56,13 @@ void ResourceSystem::loadMaterials()
 	Material *material = new Material();
 	material->setName("default");
 	material->setShader("default");
-	material->setVec3("uAlbedo", glm::vec3(1.0f, 0.0f, 0.0f));
+	material->setVec3("uAlbedo", glm::vec3(1.0f, 1.0f, 1.0f));
 	material->setFloat("uRoughness", 1.0f);
 	material->setFloat("uMetallic", 0.0f);
 	_materials->insert(pair<string, Material*>("default", material));
 
 	material = new Material();
 	material->setName("skybox");
-	//material->setShader("skybox");
 
 	hFind = FindFirstFile("resources\\materials\\*.mat", &data);
 	if (hFind != INVALID_HANDLE_VALUE)
@@ -142,7 +141,7 @@ void ResourceSystem::loadShaders()
 	uniforms->insert(pair<string, string>("normalMap", "texture"));
 	uniforms->insert(pair<string, string>("irradianceMap", "samplerCube"));
 	uniforms->insert(pair<string, string>("preFilterEnvMap", "samplerCube"));
-	uniforms->insert(pair<string, string>("brdfLUT", "sampler2D"));
+	uniforms->insert(pair<string, string>("brdfLUT", "texture"));
 
 	Shader *shader = new Shader("src/engine/renderer/shaders/pbr.vs", "src/engine/renderer/shaders/pbr.fs", uniforms);
 
@@ -170,4 +169,19 @@ void ResourceSystem::loadShaders()
 	shader = new Shader("src/engine/renderer/shaders/equi.vs", "src/engine/renderer/shaders/equi.fs");
 
 	_shaders->insert(pair<string, Shader*>("equi", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/particle.vs", "src/engine/renderer/shaders/particle.fs");
+	_shaders->insert(pair<string, Shader *>("particle", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/depth.vs", "src/engine/renderer/shaders/depth.fs");
+	_shaders->insert(pair<string, Shader *>("depth", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/screenAlignedQuad.vs", "src/engine/renderer/shaders/screenAlignedQuad.fs");
+	_shaders->insert(pair<string, Shader *>("screenAlignedQuad", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/bilateralFilter.vs", "src/engine/renderer/shaders/bilateralFilter.fs");
+	_shaders->insert(pair<string, Shader *>("bilateralFilter", shader));
+
+	shader = new Shader("src/engine/renderer/shaders/screenAlignedQuad.vs", "src/engine/renderer/shaders/particlePbr.fs");
+	_shaders->insert(pair<string, Shader *>("particlePbr", shader));
 }

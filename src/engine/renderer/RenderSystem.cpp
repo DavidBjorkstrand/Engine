@@ -4,6 +4,7 @@
 #include "engine/renderer/Material.h"
 #include "engine/renderer/Texture.h"
 #include "engine/renderer/CubeMap.h"
+#include "engine/renderer/TextureGenerator.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
@@ -25,10 +26,15 @@
 
 RenderSystem::RenderSystem()
 {
+	_screenAlignedQuad = Mesh::createPlane();
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glEnable(GL_MULTISAMPLE);
+
+	_fluidDepthMapGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_DEPTH_COMPONENT, GL_NEAREST);
+	_pingpongGenerators[0] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_NONE, GL_DEPTH_COMPONENT, GL_NEAREST);
+	_pingpongGenerators[1] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_NONE, GL_DEPTH_COMPONENT, GL_NEAREST);
 }
 
 RenderSystem::~RenderSystem()
@@ -45,97 +51,146 @@ void RenderSystem::setScene(Scene *scene)
 
 void RenderSystem::draw()
 {
+	GLuint currentShader = -1;
+	string currentMaterial = "";
+	GLuint textureUnit = GL_TEXTURE3;
+
 	_scene->traverse();
 
 	vector<Camera *> *cameras = _scene->getCameras();
 	vector<PointLight *> *pointLights = _scene->getPointLights();
 	vector<RenderCommand> *renderCommands = _scene->getRenderCommands();
+	vector<RenderCommand> fluidCommands;
 	GLuint nPointLights = pointLights->size();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (Camera *camera : *cameras)
 	{
+
 		for (RenderCommand renderCommand : *renderCommands)
 		{
+			if (renderCommand.fluid)
+			{
+				fluidCommands.push_back(renderCommand);
+				continue;
+			}
 			Mesh *mesh = renderCommand.mesh;
 			Material *material = mesh->getMaterial();
 			Shader *shader = material->getShader();
+			GLboolean newShader = false;
 
-			shader->use();
-
-			shader->setUniform1i("nPointLights", nPointLights);
-			for (GLuint i = 0; i < nPointLights; i++)
+			// If new shader
+			if (shader->getID() != currentShader)
 			{
-				glm::vec3 position = (*pointLights)[i]->getEntity()->getTransform()->getWorldPosition();
-				glm::vec3 color = (*pointLights)[i]->getColor();
+				currentShader = shader->getID();
+				newShader = true;
 
-				shader->setUniform3fv("pointLights[" + std::to_string(i) + "].position", position);
-				shader->setUniform3fv("pointLights[" + std::to_string(i) + "].color", color);
-			}
+				shader->use();
 
-			shader->setUniformMat4("proj", camera->getProjectionMatrix());
-			shader->setUniformMat4("view", camera->getViewMatrix());
-			shader->setUniform3fv("viewPos", camera->getEntity()->getTransform()->getWorldPosition());
-
-			GLuint textureUnit = GL_TEXTURE0;
-			if (shader->hasUniform("irradianceMap"))
-			{
-				shader->bindCubeMap(_irradianceMap, textureUnit, "irradianceMap");
-				textureUnit++;
-			}
-
-			if (shader->hasUniform("preFilterEnvMap"))
-			{
-				shader->bindCubeMap(_preFilterEnvMap, textureUnit, "preFilterEnvMap");
-				textureUnit++;
-			}
-
-			if (shader->hasUniform("brdfLUT"))
-			{
-				shader->bindTexture(_brdfLut, textureUnit, "brdfLUT");
-				textureUnit++;
-			}
-
-			map<string, string> *uniforms = shader->getUniforms();
-			for (map<string, string>::iterator it = uniforms->begin(); it != uniforms->end(); ++it)
-			{
-				string name = it->first;
-				string type = it->second;
-
-				if (type == "vec3")
+				shader->setUniform1i("nPointLights", nPointLights);
+				for (GLuint i = 0; i < nPointLights; i++)
 				{
-					glm::vec3 value = material->getVec3(name);
+					glm::vec3 position = (*pointLights)[i]->getEntity()->getTransform()->getWorldPosition();
+					glm::vec3 color = (*pointLights)[i]->getColor();
 
-					shader->setUniform3fv(name, value);
+					shader->setUniform3fv("pointLights[" + std::to_string(i) + "].position", position);
+					shader->setUniform3fv("pointLights[" + std::to_string(i) + "].color", color);
 				}
-				else if (type == "float")
-				{
-					float value = material->getFloat(name);
 
-					shader->setUniform1f(name, value);
+				shader->setUniformMat4("proj", camera->getProjectionMatrix());
+				shader->setUniformMat4("view", camera->getViewMatrix());
+				shader->setUniform3fv("viewPos", camera->getEntity()->getTransform()->getWorldPosition());
+
+				if (shader->hasUniform("irradianceMap"))
+				{
+					shader->bindCubeMap(_irradianceMap, GL_TEXTURE0, "irradianceMap");
 				}
-				else if (type == "samplerCube" && name != "irradianceMap" && name != "preFilterEnvMap")
-				{
-					CubeMap *value = material->getCubeMap(name);
 
-					if (value)
+				if (shader->hasUniform("preFilterEnvMap"))
+				{
+					shader->bindCubeMap(_preFilterEnvMap, GL_TEXTURE1, "preFilterEnvMap");
+				}
+
+				if (shader->hasUniform("brdfLUT"))
+				{
+					shader->bindTexture(_brdfLut, GL_TEXTURE2, "brdfLUT");
+				}
+			}
+
+			// If new material or new shader
+			if (material->getName() != currentMaterial || newShader)
+			{
+				// If new material and old shader unbind textures.
+				if (material->getName() != currentMaterial && !newShader)
+				{
+					for (GLuint i = GL_TEXTURE3; i < textureUnit; ++i)
 					{
-						shader->bindCubeMap(value, textureUnit, name);
-						textureUnit++;
+						glActiveTexture(i);
+						glBindTexture(GL_TEXTURE_2D, 0);
+						glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+					}
+
+					textureUnit = GL_TEXTURE3;
+				}
+
+				//If new material
+				if (material->getName() != currentMaterial)
+				{
+					if (material->getBlend())
+					{
+						glEnable(GL_BLEND);
+					} 
+					else {
+						glDisable(GL_BLEND);
+					}
+
+					glBlendFunc(material->getBlendSrc(), material->getBlendDst());
+				}
+
+				currentMaterial = material->getName();
+
+				map<string, string> *uniforms = shader->getUniforms();
+				for (map<string, string>::iterator it = uniforms->begin(); it != uniforms->end(); ++it)
+				{
+					string name = it->first;
+					string type = it->second;
+
+					if (type == "vec3")
+					{
+						glm::vec3 value = material->getVec3(name);
+
+						shader->setUniform3fv(name, value);
+					}
+					else if (type == "float")
+					{
+						float value = material->getFloat(name);
+
+						shader->setUniform1f(name, value);
+					}
+					else if (type == "samplerCube" && name != "irradianceMap" && name != "preFilterEnvMap")
+					{
+						CubeMap *value = material->getCubeMap(name);
+
+						if (value)
+						{
+							shader->bindCubeMap(value, textureUnit, name);
+							textureUnit++;
+						}
+					}
+					else if (type == "texture")
+					{
+						Texture *value = material->getTexture(name);
+
+						if (value)
+						{
+							shader->bindTexture(value, textureUnit, name);
+							textureUnit++;
+						}
 					}
 				}
-				else if (type == "texture")
-				{
-					Texture *value = material->getTexture(name);
-
-					if (value)
-					{
-						shader->bindTexture(value, textureUnit, name);
-						textureUnit++;
-					}
-				}
 			}
+			
 
 			glDepthFunc(renderCommand.mesh->getDepthFunc());
 
@@ -148,14 +203,96 @@ void RenderSystem::draw()
 			glBindVertexArray(VAO);
 			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
-
-			for (GLuint i = GL_TEXTURE0; i < textureUnit; ++i)
-			{
-				glActiveTexture(i);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-			}
 		}
+
+		//glDepthFunc(GL_LESS);
+		glDepthFunc(GL_ALWAYS);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		Shader *shader = Resources::findShader("particle");
+		shader->use();
+		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniformMat4("view", camera->getViewMatrix());
+
+
+		_fluidDepthMapGenerator->bind(true);
+		for (RenderCommand renderCommand : fluidCommands)
+		{
+			Mesh *mesh = renderCommand.mesh;
+
+			glm::mat4 modelMatrix = renderCommand.modelMatrix;
+			glm::vec4 position = modelMatrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			glm::vec3 eye = glm::vec3(camera->getViewMatrix() * position);
+			shader->setUniformMat4("model", modelMatrix);
+			shader->setUniform3fv("eye", eye);
+
+			GLuint VAO = mesh->getVAO();
+			GLuint nIndices = mesh->getNIndices();
+
+			glBindVertexArray(VAO);
+			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+		}
+		_fluidDepthMapGenerator->unbind();
+		glDepthFunc(GL_LESS);
+		glDisable(GL_BLEND);
+
+		shader = Resources::findShader("bilateralFilter");
+		shader->use();
+		shader->setUniform1f("distanceNormalizationFactor", 0.1f);
+
+		GLboolean horizontal = true;
+		GLboolean first = true;
+		for (GLuint i = 0; i < 100; i++)
+		{
+			_pingpongGenerators[horizontal]->bind(true);
+
+			shader->setUniform1i("horizontal", horizontal);
+
+			if (first)
+			{
+				shader->bindTexture(_fluidDepthMapGenerator->getDepthTarget(), GL_TEXTURE0, "depthImage");
+				first = false;
+			}
+			else
+			{
+				shader->bindTexture(_pingpongGenerators[!horizontal]->getDepthTarget(), GL_TEXTURE0, "depthImage");
+			}
+
+			GLuint VAO = _screenAlignedQuad->getVAO();
+			GLuint nIndices = _screenAlignedQuad->getNIndices();
+
+			glBindVertexArray(VAO);
+			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+			horizontal = !horizontal;
+
+		}
+
+		_pingpongGenerators[1]->unbind();
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		shader = Resources::findShader("particlePbr");
+		shader->use();
+		shader->bindCubeMap(_irradianceMap, GL_TEXTURE0, "irradianceMap");
+		shader->bindCubeMap(_preFilterEnvMap, GL_TEXTURE1, "preFilterEnvMap");
+		shader->bindTexture(_brdfLut, GL_TEXTURE2, "brdfLUT");
+		shader->bindTexture(_pingpongGenerators[1]->getDepthTarget(), GL_TEXTURE3, "particleDepth");
+		shader->bindTexture(_fluidDepthMapGenerator->getColorTarget(), GL_TEXTURE4, "particleThickness");
+		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniform3fv("viewPos", camera->getEntity()->getTransform()->getWorldPosition());
+
+		GLuint VAO = _screenAlignedQuad->getVAO();
+		GLuint nIndices = _screenAlignedQuad->getNIndices();
+
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+
+		glDisable(GL_BLEND);
 	}
 }
 
@@ -287,7 +424,7 @@ void RenderSystem::createPreFilterEnvMap()
 	Mesh *plane = Mesh::createPlane();
 	GLuint planeVAO = plane->getVAO();
 	GLuint planeNIndices = plane->getNIndices();
-	_brdfLut = new Texture();
+	_brdfLut = new Texture(512, 512, GL_RG16F, GL_CLAMP_TO_EDGE, GL_LINEAR);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);

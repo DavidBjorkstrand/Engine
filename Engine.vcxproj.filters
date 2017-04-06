@@ -87,6 +87,15 @@
     <ClCompile Include="src\engine\renderer\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scene\entity\component\ParticleEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\PhysicsSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\TextureGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\renderer\Material.h">
@@ -167,6 +176,15 @@
     <ClInclude Include="include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\physics\PhysicsSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\scene\entity\component\ParticleEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\renderer\TextureGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\shaders\pbr.vs" />
@@ -183,5 +201,15 @@
     <None Include="src\engine\renderer\shaders\equi.vs" />
     <None Include="src\engine\renderer\shaders\equi.fs" />
     <None Include="resources\materials\floor.mat" />
+    <None Include="resources\materials\particle.mat" />
+    <None Include="src\engine\renderer\shaders\particle.vs" />
+    <None Include="src\engine\renderer\shaders\particle.fs" />
+    <None Include="src\engine\renderer\shaders\depth.vs" />
+    <None Include="src\engine\renderer\shaders\depth.fs" />
+    <None Include="src\engine\renderer\shaders\screenAlignedQuad.vs" />
+    <None Include="src\engine\renderer\shaders\screenAlignedQuad.fs" />
+    <None Include="src\engine\renderer\shaders\bilateralFilter.fs" />
+    <None Include="src\engine\renderer\shaders\bilateralFilter.vs" />
+    <None Include="src\engine\renderer\shaders\particlePbr.fs" />
   </ItemGroup>
 </Project>

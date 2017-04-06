@@ -11,6 +11,8 @@ class Behaviour;
 class Camera;
 class Mesh;
 class PointLight;
+class ParticleEmitter;
+struct Rigidbody;
 
 struct RenderCommand;
 
@@ -54,6 +56,8 @@ class Scene
 
 		vector<RenderCommand> *getRenderCommands();
 
+		vector<Rigidbody *> *getRigidbodies();
+
 		/*
 		* Parse functions
 		*/
@@ -67,6 +71,8 @@ class Scene
 
 		void visit(PointLight *pointLight);
 
+		void visit(ParticleEmitter *particleEmitter);
+
     private:
 		void depthFirst(vector<Entity*> *entities);
 
@@ -79,4 +85,5 @@ class Scene
 		vector<Camera *> *_cameras;
 		vector<RenderCommand> *_renderCommands;
 		vector<PointLight *> *_pointLights;
+		vector<Rigidbody *> *_rigidbodies;
 };

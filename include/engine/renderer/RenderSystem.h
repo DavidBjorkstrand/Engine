@@ -3,18 +3,21 @@
 #include <vector>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
 
 class Mesh;
 class Shader;
 class Scene;
 class CubeMap;
 class Texture;
+class TextureGenerator;
 
 using namespace std;
 
 struct RenderCommand
 {
 	Mesh *mesh;
+	GLboolean fluid;
 	glm::mat4 modelMatrix;
 };
 
@@ -58,7 +61,11 @@ class RenderSystem
 		void createPreFilterEnvMap();
 
 		Scene *_scene;
+		Mesh *_screenAlignedQuad;
 		CubeMap *_irradianceMap;
 		CubeMap *_preFilterEnvMap;
 		Texture *_brdfLut;
+
+		TextureGenerator *_fluidDepthMapGenerator;
+		TextureGenerator *_pingpongGenerators[2];
 };
