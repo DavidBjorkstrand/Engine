@@ -11,7 +11,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 
-Rigidbody PhysicsSystem::_rigidbodies[10000];
+Rigidbody PhysicsSystem::_rigidbodies[20000];
 GLuint PhysicsSystem::_idCounter = 0;
 
 void PhysicsSystem::setScene(Scene *scene)
@@ -32,7 +32,7 @@ void PhysicsSystem::update(float dt)
 
 	for (Rigidbody *rigbody : *rigidbodies)
 	{
-		glm::vec3 sphere = glm::vec3(0.0f, 6.0f, -5.5f);
+		glm::vec3 sphere = glm::vec3(0.0f, 6.0f, -6.0f);
 		glm::vec3 n = rigbody->position - sphere;
 
 		if (glm::length(n) < 1.5f)
@@ -45,7 +45,7 @@ void PhysicsSystem::update(float dt)
 		}
 	}
 
-	/*for (Rigidbody *rigbody : *rigidbodies)
+	for (Rigidbody *rigbody : *rigidbodies)
 	{
 		glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -57,7 +57,46 @@ void PhysicsSystem::update(float dt)
 			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
 			rigbody->position += 0.05f * n;
 		}
-	}*/
+
+		/*n = glm::vec3(-1.0f, 0.0f, 0.0f);
+		if (rigbody->position.x >= 2.0f)
+		{
+			glm::vec3 v = rigbody->velocity;
+			glm::vec3 pv = rigbody->predictedVelocity;
+
+			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
+			rigbody->position += 0.05f * n;
+		}
+
+		n = glm::vec3(1.0f, 0.0f, 0.0f);
+		if (rigbody->position.x <= -2.0f)
+		{
+			glm::vec3 v = rigbody->velocity;
+			glm::vec3 pv = rigbody->predictedVelocity;
+
+			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
+			rigbody->position += 0.05f * n;
+		}
+
+		n = glm::vec3(0.0f, 0.0f, 1.0f);
+		if (rigbody->position.z <= -15.0f)
+		{
+			glm::vec3 v = rigbody->velocity;
+			glm::vec3 pv = rigbody->predictedVelocity;
+
+			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
+			rigbody->position += 0.05f * n;
+		}
+		n = glm::vec3(0.0f, 0.0f, -1.0f);
+		if (rigbody->position.z >= 1.0f)
+		{
+			glm::vec3 v = rigbody->velocity;
+			glm::vec3 pv = rigbody->predictedVelocity;
+
+			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
+			rigbody->position += 0.05f * n;
+		}*/
+	}
 
 	for (Rigidbody *rigidbody : *rigidbodies)
 	{
@@ -66,8 +105,8 @@ void PhysicsSystem::update(float dt)
 	}
 
 
-	float L = 0.25f;
-	float kS = 5.0f;
+	/*float L = 0.3f;
+	float kS = 50.0f;
 	float kD = 1;
 
 	vector<Interaction> interactions;
@@ -107,7 +146,7 @@ void PhysicsSystem::update(float dt)
 
 		PhysicsSystem::_rigidbodies[interaction.ri].force += force;
 		PhysicsSystem::_rigidbodies[interaction.rj].force +- force;
-	}
+	}*/
 
 
 	for (Rigidbody *rigidbody : *rigidbodies)

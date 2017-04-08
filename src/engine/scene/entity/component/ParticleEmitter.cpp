@@ -23,7 +23,7 @@ ParticleEmitter::ParticleEmitter()
 	_activeParticles = new vector<Particle>();
 	_particleMeshes = new vector<Mesh *>();
 
-	for (int i = 0; i < 3000; ++i)
+	for (int i = 0; i < 5000; ++i)
 	{
 		Particle particle;
 
@@ -57,7 +57,7 @@ void ParticleEmitter::update()
 	for (GLuint i = 0; i < _activeParticles->size(); ++i)
 	{
 		Particle particle = _activeParticles->at(i);
-		if (currentTime - particle.startTime > 4000)
+		if (currentTime - particle.startTime > 10000)
 		{
 			toRemove.push_back(i);
 		}
@@ -77,7 +77,7 @@ void ParticleEmitter::update()
 	}
 
 	
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		if (!_inActiveParticles->empty())
 		{
@@ -94,7 +94,7 @@ void ParticleEmitter::update()
 			randomX = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 20.0f - 10.0f;
 			float randomY = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 35.0f + 45.0f;
 			randomZ = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 20.0f - 10.f;
-			glm::vec3 velocity = glm::vec3(0.0f, randomY, 0.0f);
+			glm::vec3 velocity = glm::vec3(0.0f, 50.0f, -10.0f);
 
 			Particle particle = _inActiveParticles->at(0);
 
@@ -133,6 +133,7 @@ vector<RenderCommand> ParticleEmitter::getRenderCommands()
 		renderCommand.mesh = _particleMeshes->at(0);
 		renderCommand.modelMatrix = glm::translate(glm::mat4(), _activeParticles->at(i).rigidbody->position) * glm::scale(glm::mat4(), glm::vec3(0.2f, 0.2f, 0.2f));
 		renderCommand.fluid = true;
+		renderCommand.index = _activeParticles->at(i).rigidbody->index;
 
 		renderCommands.push_back(renderCommand);
 	}

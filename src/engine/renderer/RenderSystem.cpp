@@ -5,6 +5,7 @@
 #include "engine/renderer/Texture.h"
 #include "engine/renderer/CubeMap.h"
 #include "engine/renderer/TextureGenerator.h"
+#include "engine/renderer/FluidRenderer.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
@@ -32,9 +33,16 @@ RenderSystem::RenderSystem()
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glEnable(GL_MULTISAMPLE);
 
-	_fluidDepthMapGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_DEPTH_COMPONENT, GL_NEAREST);
-	_pingpongGenerators[0] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_NONE, GL_DEPTH_COMPONENT, GL_NEAREST);
-	_pingpongGenerators[1] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_NONE, GL_DEPTH_COMPONENT, GL_NEAREST);
+	_fluidRenderer = new FluidRenderer();
+
+	_sceneGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_DEPTH_COMPONENT, GL_NEAREST);
+	_fluidDepthMapGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_fluidThicknessMapGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_fluidNoiseGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_pingpongGenerators[0] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_pingpongGenerators[1] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_thicknessSmooth[0] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
+	_thicknessSmooth[1] = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
 }
 
 RenderSystem::~RenderSystem()
@@ -68,6 +76,7 @@ void RenderSystem::draw()
 	for (Camera *camera : *cameras)
 	{
 
+		_sceneGenerator->bind(true);
 		for (RenderCommand renderCommand : *renderCommands)
 		{
 			if (renderCommand.fluid)
@@ -204,12 +213,11 @@ void RenderSystem::draw()
 			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 		}
+		_sceneGenerator->unbind();
+		glDepthFunc(GL_LESS);
+		
 
-		//glDepthFunc(GL_LESS);
-		glDepthFunc(GL_ALWAYS);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
-		Shader *shader = Resources::findShader("particle");
+		/*Shader *shader = Resources::findShader("particle");
 		shader->use();
 		shader->setUniformMat4("proj", camera->getProjectionMatrix());
 		shader->setUniformMat4("view", camera->getViewMatrix());
@@ -235,12 +243,73 @@ void RenderSystem::draw()
 
 		}
 		_fluidDepthMapGenerator->unbind();
+		
+		
+		shader = Resources::findShader("thickness");
+		shader->use();
+		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniformMat4("view", camera->getViewMatrix());
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		glDepthFunc(GL_ALWAYS);
+		_fluidThicknessMapGenerator->bind(true);
+		for (RenderCommand renderCommand : fluidCommands)
+		{
+			Mesh *mesh = renderCommand.mesh;
+
+			glm::mat4 modelMatrix = renderCommand.modelMatrix;
+			glm::vec4 position = modelMatrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			glm::vec3 eye = glm::vec3(camera->getViewMatrix() * position);
+			shader->setUniformMat4("model", modelMatrix);
+			shader->setUniform3fv("eye", eye);
+
+			GLuint VAO = mesh->getVAO();
+			GLuint nIndices = mesh->getNIndices();
+
+			glBindVertexArray(VAO);
+			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+		}
+		_fluidThicknessMapGenerator->unbind();
+		glDepthFunc(GL_LESS);
+		glDisable(GL_BLEND);
+
+		shader = Resources::findShader("noise");
+		shader->use();
+		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniformMat4("view", camera->getViewMatrix());
+
+		_fluidNoiseGenerator->bind(true);
+		for (RenderCommand renderCommand : fluidCommands)
+		{
+			Mesh *mesh = renderCommand.mesh;
+
+			glm::mat4 modelMatrix = renderCommand.modelMatrix;
+			glm::vec4 position = modelMatrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			glm::vec3 eye = glm::vec3(camera->getViewMatrix() * position);
+			shader->setUniformMat4("model", modelMatrix);
+			shader->setUniform3fv("eye", eye);
+			shader->setUniform1i("index", renderCommand.index);
+
+			GLuint VAO = mesh->getVAO();
+			GLuint nIndices = mesh->getNIndices();
+
+			glBindVertexArray(VAO);
+			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+		}
+		_fluidNoiseGenerator->unbind();
+
 		glDepthFunc(GL_LESS);
 		glDisable(GL_BLEND);
 
 		shader = Resources::findShader("bilateralFilter");
 		shader->use();
-		shader->setUniform1f("distanceNormalizationFactor", 0.1f);
+		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniformMat4("view", camera->getViewMatrix());
 
 		GLboolean horizontal = true;
 		GLboolean first = true;
@@ -252,12 +321,12 @@ void RenderSystem::draw()
 
 			if (first)
 			{
-				shader->bindTexture(_fluidDepthMapGenerator->getDepthTarget(), GL_TEXTURE0, "depthImage");
+				shader->bindTexture(_fluidDepthMapGenerator->getColorTarget(), GL_TEXTURE0, "depthImage");
 				first = false;
 			}
 			else
 			{
-				shader->bindTexture(_pingpongGenerators[!horizontal]->getDepthTarget(), GL_TEXTURE0, "depthImage");
+				shader->bindTexture(_pingpongGenerators[!horizontal]->getColorTarget(), GL_TEXTURE0, "depthImage");
 			}
 
 			GLuint VAO = _screenAlignedQuad->getVAO();
@@ -273,16 +342,55 @@ void RenderSystem::draw()
 
 		_pingpongGenerators[1]->unbind();
 
+
+		horizontal = true;
+		first = true;
+		for (GLuint i = 0; i < 60; i++)
+		{
+			_thicknessSmooth[horizontal]->bind(true);
+
+			shader->setUniform1i("horizontal", horizontal);
+
+			if (first)
+			{
+				shader->bindTexture(_fluidThicknessMapGenerator->getColorTarget(), GL_TEXTURE0, "depthImage");
+				first = false;
+			}
+			else
+			{
+				shader->bindTexture(_thicknessSmooth[!horizontal]->getColorTarget(), GL_TEXTURE0, "depthImage");
+			}
+
+			GLuint VAO = _screenAlignedQuad->getVAO();
+			GLuint nIndices = _screenAlignedQuad->getNIndices();
+
+			glBindVertexArray(VAO);
+			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+			horizontal = !horizontal;
+
+		}
+		_thicknessSmooth[1]->unbind();
+
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+
+		_fluidRenderer->draw(camera, fluidCommands);
+
+		Shader *shader;
 		shader = Resources::findShader("particlePbr");
 		shader->use();
 		shader->bindCubeMap(_irradianceMap, GL_TEXTURE0, "irradianceMap");
 		shader->bindCubeMap(_preFilterEnvMap, GL_TEXTURE1, "preFilterEnvMap");
 		shader->bindTexture(_brdfLut, GL_TEXTURE2, "brdfLUT");
-		shader->bindTexture(_pingpongGenerators[1]->getDepthTarget(), GL_TEXTURE3, "particleDepth");
-		shader->bindTexture(_fluidDepthMapGenerator->getColorTarget(), GL_TEXTURE4, "particleThickness");
+		shader->bindTexture(_sceneGenerator->getColorTarget(), GL_TEXTURE3, "sceneColor");
+		shader->bindTexture(_sceneGenerator->getDepthTarget(), GL_TEXTURE4, "sceneDepth");
+		shader->bindTexture(_fluidRenderer->getDepthMap(), GL_TEXTURE5, "particleDepth");
+		shader->bindTexture(_fluidRenderer->getThicknessMap(), GL_TEXTURE6, "particleThickness");
+		shader->bindTexture(_fluidRenderer->getNoiseMap(), GL_TEXTURE7, "noise");
 		shader->setUniformMat4("proj", camera->getProjectionMatrix());
+		shader->setUniformMat4("view", camera->getViewMatrix());
 		shader->setUniform3fv("viewPos", camera->getEntity()->getTransform()->getWorldPosition());
 
 		GLuint VAO = _screenAlignedQuad->getVAO();

@@ -128,6 +128,7 @@
     <ClCompile Include="src\engine\interface\Resources.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
+    <ClCompile Include="src\engine\renderer\FluidRenderer.cpp" />
     <ClCompile Include="src\engine\renderer\TextureGenerator.cpp" />
     <ClCompile Include="src\engine\renderer\stb_image.cpp" />
     <ClCompile Include="src\engine\ResourceSystem.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="include\engine\interface\Resources.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\renderer\CubeMap.h" />
+    <ClInclude Include="include\engine\renderer\FluidRenderer.h" />
     <ClInclude Include="include\engine\renderer\TextureGenerator.h" />
     <ClInclude Include="include\engine\ResourceSystem.h" />
     <ClInclude Include="include\engine\interface\Window.h" />
@@ -185,18 +187,20 @@
     <None Include="resources\materials\particle.mat" />
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\materials\red.mat" />
-    <None Include="src\engine\renderer\shaders\bilateralFilter.fs" />
-    <None Include="src\engine\renderer\shaders\bilateralFilter.vs" />
+    <None Include="src\engine\renderer\shaders\fluid\bilateralFilter.fs" />
+    <None Include="src\engine\renderer\shaders\fluid\bilateralFilter.vs" />
     <None Include="src\engine\renderer\shaders\brdf.fs" />
     <None Include="src\engine\renderer\shaders\brdf.vs" />
     <None Include="src\engine\renderer\shaders\depth.fs" />
     <None Include="src\engine\renderer\shaders\depth.vs" />
     <None Include="src\engine\renderer\shaders\equi.fs" />
     <None Include="src\engine\renderer\shaders\equi.vs" />
+    <None Include="src\engine\renderer\shaders\fluid\curvatureFlow.fs" />
     <None Include="src\engine\renderer\shaders\irradiance.fs" />
     <None Include="src\engine\renderer\shaders\irradiance.vs" />
-    <None Include="src\engine\renderer\shaders\particle.fs" />
-    <None Include="src\engine\renderer\shaders\particle.vs" />
+    <None Include="src\engine\renderer\shaders\fluid\noise.fs" />
+    <None Include="src\engine\renderer\shaders\fluid\particleDepth.fs" />
+    <None Include="src\engine\renderer\shaders\fluid\particle.vs" />
     <None Include="src\engine\renderer\shaders\particlePbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.fs" />
     <None Include="src\engine\renderer\shaders\pbr.vs" />
@@ -205,6 +209,7 @@
     <None Include="src\engine\renderer\shaders\screenAlignedQuad.vs" />
     <None Include="src\engine\renderer\shaders\skybox.fs" />
     <None Include="src\engine\renderer\shaders\skybox.vs" />
+    <None Include="src\engine\renderer\shaders\fluid\thickness.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

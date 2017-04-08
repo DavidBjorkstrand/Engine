@@ -167,20 +167,13 @@ void ResourceSystem::loadShaders()
 	_shaders->insert(pair<string, Shader*>("brdf", shader));
 
 	shader = new Shader("src/engine/renderer/shaders/equi.vs", "src/engine/renderer/shaders/equi.fs");
-
 	_shaders->insert(pair<string, Shader*>("equi", shader));
-
-	shader = new Shader("src/engine/renderer/shaders/particle.vs", "src/engine/renderer/shaders/particle.fs");
-	_shaders->insert(pair<string, Shader *>("particle", shader));
 
 	shader = new Shader("src/engine/renderer/shaders/depth.vs", "src/engine/renderer/shaders/depth.fs");
 	_shaders->insert(pair<string, Shader *>("depth", shader));
 
 	shader = new Shader("src/engine/renderer/shaders/screenAlignedQuad.vs", "src/engine/renderer/shaders/screenAlignedQuad.fs");
 	_shaders->insert(pair<string, Shader *>("screenAlignedQuad", shader));
-
-	shader = new Shader("src/engine/renderer/shaders/bilateralFilter.vs", "src/engine/renderer/shaders/bilateralFilter.fs");
-	_shaders->insert(pair<string, Shader *>("bilateralFilter", shader));
 
 	shader = new Shader("src/engine/renderer/shaders/screenAlignedQuad.vs", "src/engine/renderer/shaders/particlePbr.fs");
 	_shaders->insert(pair<string, Shader *>("particlePbr", shader));

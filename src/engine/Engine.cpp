@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, -5.5f));
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, -6.0f));
 	entity->getTransform()->setScale(glm::vec3(3.0f, 3.0f, 3.0f));
 	scene->addEntity(entity);
 

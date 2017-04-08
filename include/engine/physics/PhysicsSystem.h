@@ -39,6 +39,6 @@ class PhysicsSystem
 	private:
 		Scene *_scene;
 
-		static Rigidbody _rigidbodies[10000];
+		static Rigidbody _rigidbodies[20000];
 		static GLuint _idCounter;
 };

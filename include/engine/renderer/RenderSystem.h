@@ -11,6 +11,7 @@ class Scene;
 class CubeMap;
 class Texture;
 class TextureGenerator;
+class FluidRenderer;
 
 using namespace std;
 
@@ -19,6 +20,7 @@ struct RenderCommand
 	Mesh *mesh;
 	GLboolean fluid;
 	glm::mat4 modelMatrix;
+	GLuint index;
 };
 
 /*
@@ -66,6 +68,12 @@ class RenderSystem
 		CubeMap *_preFilterEnvMap;
 		Texture *_brdfLut;
 
+		FluidRenderer *_fluidRenderer;
+
+		TextureGenerator *_sceneGenerator;
 		TextureGenerator *_fluidDepthMapGenerator;
+		TextureGenerator *_fluidThicknessMapGenerator;
+		TextureGenerator *_fluidNoiseGenerator;
 		TextureGenerator *_pingpongGenerators[2];
+		TextureGenerator *_thicknessSmooth[2];
 };
