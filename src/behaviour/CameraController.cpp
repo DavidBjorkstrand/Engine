@@ -6,7 +6,7 @@
 
 #include <GLFW\glfw3.h>
 
-void CameraController::update()
+void CameraController::update(float dt)
 {
 	Transform *transform = getEntity()->getTransform();
 	glm::vec3 right = glm::mat3(transform->getMatrix()) * glm::vec3(1.0f, 0.0f, 0.0f);

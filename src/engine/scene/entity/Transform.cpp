@@ -49,7 +49,7 @@ glm::quat Transform::getWorldOrientation()
 
 glm::vec3 Transform::getWorldDirection()
 {
-	return glm::mat3(getMatrix()) * glm::vec3(0.0f, 0.0f, -1.0f);
+	return glm::normalize(glm::mat3(getMatrix()) * glm::vec3(0.0f, 0.0f, -1.0f));
 }
 
 void Transform::setParentTransform(glm::mat4 parentTransform)

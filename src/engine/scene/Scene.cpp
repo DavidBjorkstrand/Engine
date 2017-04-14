@@ -26,7 +26,7 @@ Scene::Scene(string sceneName)
 	_cameras = new vector<Camera *>();
 	_pointLights = new vector<PointLight *>();
 	_renderCommands = new vector<RenderCommand>();
-	_rigidbodies = new vector<Rigidbody *>();
+	_particles = new vector<vector<Particle> *>();
 }
 
 Scene::~Scene()
@@ -39,7 +39,7 @@ Scene::~Scene()
 	delete _cameras;
 	delete _pointLights;
 	delete _renderCommands;
-	delete _rigidbodies;
+	delete _particles;
 }
 
 string Scene::getName()
@@ -92,9 +92,9 @@ vector<RenderCommand> *Scene::getRenderCommands()
 	return _renderCommands;
 }
 
-vector<Rigidbody *> *Scene::getRigidbodies()
+vector<vector<Particle>*> *Scene::getParticles()
 {
-	return _rigidbodies;
+	return _particles;
 }
 
 void Scene::traverse()
@@ -103,7 +103,7 @@ void Scene::traverse()
 	_cameras->clear();
 	_pointLights->clear();
 	_renderCommands->clear();
-	_rigidbodies->clear();
+	_particles->clear();
 
 	depthFirst(_entities);
 }
@@ -135,19 +135,16 @@ void Scene::visit(PointLight *pointLight)
 
 void Scene::visit(ParticleEmitter *particleEmitter)
 {
-	vector<RenderCommand> renderCommands = particleEmitter->getRenderCommands();
+	vector<RenderCommand> *renderCommands = particleEmitter->getRenderCommands();
 
-	for (RenderCommand renderCommand : renderCommands)
+	for (RenderCommand renderCommand : *renderCommands)
 	{
 		_renderCommands->push_back(renderCommand);
 	}
 
-	vector<Rigidbody *> rigidbodies = particleEmitter->getRigidBodies();
-
-	for (Rigidbody *rigidbody : rigidbodies)
-	{
-		_rigidbodies->push_back(rigidbody);
-	}
+	vector<Particle> *particles = particleEmitter->getParticles();
+	
+	_particles->push_back(particles);
 
 	_behaviours->push_back(particleEmitter);
 }

@@ -15,18 +15,18 @@ class FluidRenderer
 {
 	public: 
 		FluidRenderer();
-		void draw(Camera *camera, vector<RenderCommand> renderCommands);
+		void draw(Camera *camera, vector<RenderCommand> *renderCommands);
 
 		Texture *getDepthMap();
 		Texture *getThicknessMap();
 		Texture *getNoiseMap();
 
 	private:
-		void drawDepth(Camera *camera, vector<RenderCommand> renderCommands);
+		void drawDepth(Camera *camera, vector<RenderCommand> *renderCommands);
 		void smoothDepth(Camera *camera);
-		void drawThickness(Camera *camera, vector<RenderCommand> renderCommands);
+		void drawThickness(Camera *camera, vector<RenderCommand> *renderCommands);
 		void smoothThickness(Camera *camera);
-		void drawNoise(Camera *camera, vector<RenderCommand> renderCommands);
+		void drawNoise(Camera *camera, vector<RenderCommand> *renderCommands);
 		void smoothNoise();
 
 		Mesh *_screenAlignedQuad;

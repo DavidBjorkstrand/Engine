@@ -165,6 +165,10 @@ void main()
 	{
 		FragColor = vec4(texture(sceneColor, TexCoords).rgb, 1.0f);
 	}
+	else if (bufferDepth > texture(sceneDepth, TexCoords).r)
+	{
+		FragColor = vec4(texture(sceneColor, TexCoords).rgb, 1.0f);
+	}
 	else
 	{
 		float w = proj[0][0];

@@ -16,29 +16,49 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-ParticleEmitter::ParticleEmitter()
+ParticleEmitter::ParticleEmitter(float particleRadius, glm::vec2 spawnArea, float spawnRate, float mass, float velocity, 
+	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {
-	_inActiveParticles = new vector<Particle>();
-	_activeParticles = new vector<Particle>();
-	_particleMeshes = new vector<Mesh *>();
+	_spawnArea = spawnArea;
+	_sphereSpawn = false;
+	init(particleRadius, spawnRate, mass, velocity, velocityDeviation, maxParticles, maxLifeTime);
+}
 
-	for (int i = 0; i < 5000; ++i)
+ParticleEmitter::ParticleEmitter(float particleRadius, float spawnRadius, float spawnRate, float mass,
+	float velocity, float velocityDeviation, GLuint maxParticles, float maxLifeTime)
+{
+	_spawnRadius = spawnRadius;
+	_sphereSpawn = true;
+	init(particleRadius, spawnRate, mass, velocity, velocityDeviation, maxParticles, maxLifeTime);
+}
+
+ParticleEmitter::~ParticleEmitter()
+{
+	delete _particles;
+	delete _freeIndexes;
+	delete _lifeTime;
+	delete _renderCommands;
+}
+
+vector<Particle> *ParticleEmitter::getParticles()
+{
+	return _particles;
+}
+
+vector<RenderCommand> *ParticleEmitter::getRenderCommands()
+{
+	for (GLuint i = 0; i < _particles->size(); i++)
 	{
-		Particle particle;
+		Particle particle = _particles->at(i);
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(), particle.position);
 
-		particle.rigidbody = PhysicsSystem::createRigidbody();
-
-		_inActiveParticles->push_back(particle);
-
-		Mesh *mesh = Mesh::createPlane();
-		mesh->setMaterial("particle");
-		mesh->getMaterial()->setShader("particle");
-		mesh->getMaterial()->setBlend(true);
-		mesh->getMaterial()->setBlendSrc(GL_SRC_ALPHA);
-		mesh->getMaterial()->setBlendDst(GL_ONE);
-		_particleMeshes->push_back(mesh);
+		_renderCommands->at(i).mesh = _particleMesh;
+		_renderCommands->at(i).modelMatrix = modelMatrix;
 	}
+
+	return _renderCommands;
 }
 
 void ParticleEmitter::accept(Scene *scene)
@@ -46,111 +66,147 @@ void ParticleEmitter::accept(Scene *scene)
 	scene->visit(this);
 }
 
-void ParticleEmitter::update()
+void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, float velocity,
+	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {
-	
-	SYSTEMTIME time;
-	GetSystemTime(&time);
-	long currentTime = (time.wSecond * 1000) + time.wMilliseconds;
-	vector<GLuint> toRemove;
-
-	for (GLuint i = 0; i < _activeParticles->size(); ++i)
-	{
-		Particle particle = _activeParticles->at(i);
-		if (currentTime - particle.startTime > 10000)
-		{
-			toRemove.push_back(i);
-		}
-		else if (particle.rigidbody->position.y < 0)
-		{
-			toRemove.push_back(i);
-		}
-	}
-
-	for (int i = toRemove.size()-1; i >= 0; i--)
-	{
-		GLuint removeIndex = toRemove.at(i);
-		Particle particle = _activeParticles->at(removeIndex);
-
-		_inActiveParticles->push_back(particle);
-		_activeParticles->erase(_activeParticles->begin() + removeIndex);
-	}
-
-	
-	for (int i = 0; i < 20; i++)
-	{
-		if (!_inActiveParticles->empty())
-		{
-			glm::vec3 position = getEntity()->getTransform()->getWorldPosition();
-			float randomR = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))*0.5f;
-			float randomPiX = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2.0f*3.14f -3.14f;
-			float randomPiZ = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 2.0f*3.14f - 3.14f;
-
-			float randomX = randomR*glm::sin(randomPiX);
-			float randomZ = randomR*glm::cos(randomPiZ);
-
-			position += glm::vec3(randomX, 1.0f, randomZ);
-
-			randomX = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 20.0f - 10.0f;
-			float randomY = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 35.0f + 45.0f;
-			randomZ = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 20.0f - 10.f;
-			glm::vec3 velocity = glm::vec3(0.0f, 50.0f, -10.0f);
-
-			Particle particle = _inActiveParticles->at(0);
-
-			particle.rigidbody->position = position;
-			particle.rigidbody->velocity = velocity;
-			particle.rigidbody->acceleration = glm::vec3(0.0);
-			particle.startTime = currentTime;
-
-			_inActiveParticles->erase(_inActiveParticles->begin());
-			_activeParticles->push_back(particle);
-
-		}
-		
-
-	//cout << _activeParticles->size() << endl;
-	} 
-
-	
-	
+	_particleMesh = Mesh::createPlane();
+	_particleMesh->getMaterial()->setShader("fluid");
+	_particleMesh->getMaterial()->setFloat("radius", particleRadius);
+	_particleRadius = _particleRadius;
+	_spawnRate = spawnRate;
+	_spawnRest = 0.0f;
+	_mass = mass;
+	_inverseMass = 1.0f / _mass;
+	_velocity = velocity;
+	_velocityDeviation = velocityDeviation;
+	_maxParticles = maxParticles;
+	_nrParticles = 0.0f;
+	_maxLifeTime = maxLifeTime;
+	_lifeTime = new float[maxParticles];
+	_particles = new vector<Particle>();
+	_particles->reserve(maxParticles);
+	_freeIndexes = new vector<GLuint>();
+	_renderCommands = new vector<RenderCommand>();
 }
 
-vector<RenderCommand> ParticleEmitter::getRenderCommands()
+void ParticleEmitter::update(float dt)
 {
-	vector<RenderCommand> renderCommands;
+	// Removes particles that has exceded their lifetimes. 
+	destroyParticles(dt);
 
-	/*if (!_activeParticles->empty())
-	{
-		cout << glm::to_string(_activeParticles->at(0).rigidbody->position) << endl;
-	}*/
-	
+	// Spawns new particles at constant rate. 
+	spawnParticles(dt);
 
-	for (GLuint i = 0; i < _activeParticles->size(); i++)
-	{
-		RenderCommand renderCommand;
-
-		renderCommand.mesh = _particleMeshes->at(0);
-		renderCommand.modelMatrix = glm::translate(glm::mat4(), _activeParticles->at(i).rigidbody->position) * glm::scale(glm::mat4(), glm::vec3(0.2f, 0.2f, 0.2f));
-		renderCommand.fluid = true;
-		renderCommand.index = _activeParticles->at(i).rigidbody->index;
-
-		renderCommands.push_back(renderCommand);
-	}
-
-	return renderCommands;
 }
 
-vector<Rigidbody *> ParticleEmitter::getRigidBodies()
+void ParticleEmitter::destroyParticles(float dt)
 {
-	vector<Rigidbody *> rigidbodies;
-
-	for (GLuint i = 0; i < _activeParticles->size(); i++)
+	vector<Particle>::iterator it;
+	for (it = _particles->begin(); it != _particles->end();)
 	{
-		Rigidbody *rigidbody = _activeParticles->at(i).rigidbody;
+		float lifeTime = _lifeTime[it->index];
+		lifeTime += dt;
 
-		rigidbodies.push_back(rigidbody);
+		if (lifeTime >= _maxLifeTime)
+		{
+			_freeIndexes->push_back(it->index);
+
+			it = _particles->erase(it);
+			_nrParticles--;
+
+			_renderCommands->erase(_renderCommands->begin());
+		}
+		else
+		{
+			_lifeTime[it->index] = lifeTime;
+			it++;
+		}
+	}
+}
+
+void ParticleEmitter::spawnParticles(float dt)
+{
+	_spawnRest += dt;
+	glm::vec3 entityDirection = getEntity()->getTransform()->getWorldDirection();
+	glm::vec3 entityPosition = getEntity()->getTransform()->getWorldPosition();
+
+	while ((_spawnRest >= _spawnRate) && (_nrParticles < _maxParticles))
+	{
+		glm::vec3 velocity = random(_velocity - (_velocityDeviation / 2.0f), _velocity + (_velocityDeviation / 2.0f))*entityDirection;
+		float x;
+		float z;
+		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 t1 = glm::cross(entityDirection, forward);
+		glm::vec3 t2 = glm::cross(entityDirection, up);
+		glm::vec3 tangent;
+		glm::vec3 tangent2;
+		glm::vec3 position;
+
+		if (_sphereSpawn)
+		{
+			float radian = random(0.0f, 2.0f*3.14f);
+			float radius = random(0.0f, _spawnRadius);
+			x = radius*glm::cos(radian);
+			z = radius*glm::sin(radian);
+		}
+		else
+		{
+			x = random(-_spawnArea.x / 2.0f, _spawnArea.x / 2.0f);
+			z = random(-_spawnArea.y / 2.0f, _spawnArea.y / 2.0f);
+		}
+
+		if (glm::length(t1) > glm::length(t2))
+		{
+			tangent = t1;
+		}
+		else
+		{
+			tangent = t2;
+		}
+
+		tangent = glm::normalize(tangent);
+		tangent2 = glm::normalize(glm::cross(entityDirection, tangent));
+		position = x*tangent + z*tangent2;
+
+		createParticle(position, velocity);
+
+		_spawnRest -= _spawnRate;
+	}
+}
+
+void ParticleEmitter::createParticle(glm::vec3 position, glm::vec3 velocity)
+{
+	Particle particle;
+
+	if (_freeIndexes->empty())
+	{
+		particle.index = _particles->size();
+	}
+	else
+	{
+		particle.index = _freeIndexes->at(0);
+		_freeIndexes->erase(_freeIndexes->begin());
 	}
 
-	return rigidbodies;
+	particle.mass = _mass;
+	particle.inverseMass = _inverseMass;
+	particle.position = position;
+	particle.velocity = velocity;
+	particle.predictedVelocity = velocity;
+	particle.acceleration = glm::vec3(0.0f);
+	particle.force = glm::vec3(0.0f);
+
+	_particles->push_back(particle);
+
+	_lifeTime[particle.index] = 0.0f;
+
+	_nrParticles++;
+
+	_renderCommands->push_back(RenderCommand());
+}
+
+float ParticleEmitter::random(float min, float max)
+{
+	return (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))*(max - min) + min;
 }

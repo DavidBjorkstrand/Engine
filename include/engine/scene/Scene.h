@@ -12,7 +12,7 @@ class Camera;
 class Mesh;
 class PointLight;
 class ParticleEmitter;
-struct Rigidbody;
+struct Particle;
 
 struct RenderCommand;
 
@@ -56,7 +56,7 @@ class Scene
 
 		vector<RenderCommand> *getRenderCommands();
 
-		vector<Rigidbody *> *getRigidbodies();
+		vector<vector<Particle> *> *getParticles();
 
 		/*
 		* Parse functions
@@ -85,5 +85,5 @@ class Scene
 		vector<Camera *> *_cameras;
 		vector<RenderCommand> *_renderCommands;
 		vector<PointLight *> *_pointLights;
-		vector<Rigidbody *> *_rigidbodies;
+		vector<vector<Particle> *> *_particles;
 };

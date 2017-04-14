@@ -92,6 +92,11 @@ Shader *Material::getShader()
 	return _shader;
 }
 
+string Material::getShaderName()
+{
+	return _shaderName;
+}
+
 glm::vec3 Material::getVec3(string name)
 {
 	try 

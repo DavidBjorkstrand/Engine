@@ -10,9 +10,20 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+PhysicsSystem::PhysicsSystem()
+{
+	_timeStep = 1.0f / 60.0f;
+	_dtRest = 0.0f;
 
-Rigidbody PhysicsSystem::_rigidbodies[20000];
-GLuint PhysicsSystem::_idCounter = 0;
+	_g = glm::vec3(0.0f, -9.82f, 0.0f);
+	_k = 0.01f;
+	_c = 0.01f;
+}
+
+PhysicsSystem::~PhysicsSystem()
+{
+
+}
 
 void PhysicsSystem::setScene(Scene *scene)
 {
@@ -21,172 +32,57 @@ void PhysicsSystem::setScene(Scene *scene)
 
 void PhysicsSystem::update(float dt)
 {
-
-	if (dt > 1.0f / 60.0f)
-	{
-		dt = 1.0f / 60.0f;
-	}
-
 	_scene->traverse();
-	vector<Rigidbody *> *rigidbodies = _scene->getRigidbodies();
+	_dtRest += dt;
 
-	for (Rigidbody *rigbody : *rigidbodies)
+	while (_dtRest >= _timeStep)
 	{
-		glm::vec3 sphere = glm::vec3(0.0f, 6.0f, -6.0f);
-		glm::vec3 n = rigbody->position - sphere;
-
-		if (glm::length(n) < 1.5f)
+		vector<vector<Particle>*> *particles = _scene->getParticles();
+		for (vector<Particle> *particleVector : *particles)
 		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}
-	}
-
-	for (Rigidbody *rigbody : *rigidbodies)
-	{
-		glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
-
-		if (rigbody->position.y <= 0.2f)
-		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}
-
-		/*n = glm::vec3(-1.0f, 0.0f, 0.0f);
-		if (rigbody->position.x >= 2.0f)
-		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}
-
-		n = glm::vec3(1.0f, 0.0f, 0.0f);
-		if (rigbody->position.x <= -2.0f)
-		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}
-
-		n = glm::vec3(0.0f, 0.0f, 1.0f);
-		if (rigbody->position.z <= -15.0f)
-		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}
-		n = glm::vec3(0.0f, 0.0f, -1.0f);
-		if (rigbody->position.z >= 1.0f)
-		{
-			glm::vec3 v = rigbody->velocity;
-			glm::vec3 pv = rigbody->predictedVelocity;
-
-			rigbody->velocity = v - (1.0f + 0.0f)*glm::dot(v, n)*n;
-			rigbody->position += 0.05f * n;
-		}*/
-	}
-
-	for (Rigidbody *rigidbody : *rigidbodies)
-	{
-		rigidbody->position = rigidbody->position + rigidbody->velocity*dt + 0.5f*rigidbody->acceleration*dt*dt;
-		rigidbody->predictedVelocity = rigidbody->velocity + rigidbody->acceleration*dt;
-	}
-
-
-	/*float L = 0.3f;
-	float kS = 50.0f;
-	float kD = 1;
-
-	vector<Interaction> interactions;
-
-	for (GLuint i = 0; i < rigidbodies->size(); i++)
-	{
-		for (GLuint j = i+1; j < rigidbodies->size(); j++)
-		{
-			Rigidbody *ri = (*rigidbodies)[i];
-			Rigidbody *rj = (*rigidbodies)[j];
-
-			glm::vec3 rij = ri->position - rj->position;
-			float drij = glm::length(rij);
-
-			if (drij < L)
+			for (GLuint i = 0; i < particleVector->size(); i++)
 			{
-				Interaction interaction;
+				Particle particle = particleVector->at(i);
+				//r_(n+1)
+				(*particleVector)[i].position = particle.position + particle.velocity*_timeStep + 0.5f*particle.acceleration*_timeStep*_timeStep;
+				(*particleVector)[i].predictedVelocity = particle.velocity + particle.acceleration*_timeStep;
 
-				interaction.ri = ri->index;
-				interaction.rj = rj->index;
-				interaction.drij = drij;
-				interaction.rij = rij;
-				interaction.rvij = ri->predictedVelocity - rj->predictedVelocity;
+				applyGravity(&(*particleVector)[i]);
+				applyViscousFriction(&(*particleVector)[i]);
+				applyAirFriction(&(*particleVector)[i]);
 
-				interactions.push_back(interaction);
+				//a_(n+1)
+				glm::vec3 newAcceleration = (*particleVector)[i].force * particle.inverseMass;
+
+				//v_(n+1)
+				(*particleVector)[i].velocity = particle.velocity + 0.5f*(particle.acceleration + newAcceleration)*_timeStep;
+
+				(*particleVector)[i].acceleration = newAcceleration;
+				(*particleVector)[i].force = glm::vec3(0.0f);
 			}
 		}
-	}
 
-	
-
-	for (Interaction interaction : interactions)
-	{
-		float lhs = kS*(interaction.drij - L);
-		float damping = kD*((glm::dot(interaction.rvij, interaction.rij)) / interaction.drij);
-		glm::vec3 force = -(lhs + damping)*glm::normalize(interaction.rij);
-
-		PhysicsSystem::_rigidbodies[interaction.ri].force += force;
-		PhysicsSystem::_rigidbodies[interaction.rj].force +- force;
-	}*/
-
-
-	for (Rigidbody *rigidbody : *rigidbodies)
-	{
-		glm::vec3 uHat = glm::normalize(rigidbody->predictedVelocity);
-		float u = glm::length(rigidbody->predictedVelocity);
-		rigidbody->force += glm::vec3(0.0f, -rigidbody->mass * 9.82f, 0.0f);
-		rigidbody->force -= 0.01f * u*uHat;
-		rigidbody->force -= 0.01f * u*u*uHat;
-	}
-
-	for (Rigidbody *rigidbody : *rigidbodies)
-	{
-		glm::vec3 acceleration = rigidbody->force * rigidbody->inverseMass;
-		glm::vec3 velocity = rigidbody->velocity + 0.5f*(rigidbody->acceleration + acceleration)*dt;
-
-		rigidbody->force = glm::vec3(0.0);
-		rigidbody->velocity = velocity;
-		rigidbody->acceleration = acceleration;
+		_dtRest -= _timeStep;
 	}
 }
 
-Rigidbody *PhysicsSystem::createRigidbody()
+void PhysicsSystem::applyGravity(Particle *particle)
 {
-	Rigidbody rigidbody;
-	Rigidbody *returnValue;
+	particle->force += _g * particle->mass;
+}
 
-	rigidbody.index = _idCounter;
-	rigidbody.mass = 0.1f;
-	rigidbody.inverseMass = 1.0f / 0.1f;
-	rigidbody.position = glm::vec3(0.0f);
-	rigidbody.velocity = glm::vec3(0.0f);
-	rigidbody.acceleration = glm::vec3(0.0f);
-	rigidbody.force = glm::vec3(0.0f);
+void PhysicsSystem::applyViscousFriction(Particle *particle)
+{
+	glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
+	float u = glm::length(particle->predictedVelocity);
 
-	_rigidbodies[_idCounter] = rigidbody;
+	particle->force += -_k*u*uHat;
+}
 
-	returnValue = &_rigidbodies[_idCounter];
+void PhysicsSystem::applyAirFriction(Particle *particle)
+{
+	glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
+	float u = glm::length(particle->predictedVelocity);
 
-	_idCounter++;
-
-	return returnValue;
+	particle->force += -_c*u*u*uHat;
 }

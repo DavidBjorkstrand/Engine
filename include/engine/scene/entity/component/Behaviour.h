@@ -8,5 +8,5 @@ class Behaviour : public Component
 {
 	public:
 		void accept(Scene *scene);
-		virtual void update() = 0;
+		virtual void update(float dt) = 0;
 };

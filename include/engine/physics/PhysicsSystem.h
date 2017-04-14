@@ -7,7 +7,7 @@
 
 class Scene;
 
-struct Rigidbody
+struct Particle
 {
 	GLuint index;
 	float mass;
@@ -19,26 +19,30 @@ struct Rigidbody
 	glm::vec3 force;
 };
 
-struct Interaction
-{
-	GLuint ri;
-	GLuint rj;
-	glm::vec3 rij;
-	glm::vec3 rvij;
-	float drij;
-};
-
 class PhysicsSystem
 {
-	public: 
+	private:
+		Scene *_scene;
+		float _timeStep;
+		float _dtRest;
+
+		// Gravity constant
+		glm::vec3 _g;
+
+		// Viscous friction constant
+		float _k;
+
+		// Air friction constant
+		float _c;
+
+	public:
+		PhysicsSystem();
+		~PhysicsSystem();
 		void setScene(Scene *scene);
 		void update(float dt);
 
-		static Rigidbody *createRigidbody();
-
 	private:
-		Scene *_scene;
-
-		static Rigidbody _rigidbodies[20000];
-		static GLuint _idCounter;
+		void applyGravity(Particle *particle);
+		void applyViscousFriction(Particle *particle);
+		void applyAirFriction(Particle *particle);
 };

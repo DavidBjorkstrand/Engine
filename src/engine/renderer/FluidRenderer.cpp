@@ -4,6 +4,7 @@
 #include "engine/renderer/TextureGenerator.h"
 #include "engine/renderer/Shader.h"
 #include "engine/renderer/Texture.h"
+#include "engine/renderer/Material.h"
 #include "engine/scene/entity/component/Camera.h"
 #include "engine/scene/entity/component/Mesh.h"
 #include "engine/interface/Window.h"
@@ -36,7 +37,7 @@ FluidRenderer::FluidRenderer()
 	_fluidNoiseMapGenerator = new TextureGenerator(Window::getWindowWidth(), Window::getWindowHeight(), GL_RGB32F, GL_NONE, GL_NEAREST);
 }
 
-void FluidRenderer::draw(Camera *camera, vector<RenderCommand> renderCommands)
+void FluidRenderer::draw(Camera *camera, vector<RenderCommand> *renderCommands)
 {
 	drawDepth(camera, renderCommands);
 	smoothDepth(camera);
@@ -59,21 +60,22 @@ Texture *FluidRenderer::getNoiseMap()
 	return _fluidNoiseMapSmoother[1]->getColorTarget();
 }
 
-void FluidRenderer::drawDepth(Camera *camera, vector<RenderCommand> renderCommands)
+void FluidRenderer::drawDepth(Camera *camera, vector<RenderCommand> *renderCommands)
 {
 	_depthShader->use();
 	_depthShader->setUniformMat4("proj", camera->getProjectionMatrix());
 	_depthShader->setUniformMat4("view", camera->getViewMatrix());
-	_depthShader->setUniform1f("radius", 1.0f);
+	
 
 	_fluidDepthMapGenerator->bind(true);
-	for (RenderCommand renderCommand : renderCommands)
+	for (RenderCommand renderCommand : *renderCommands)
 	{
 		Mesh *mesh = renderCommand.mesh;
 		GLuint VAO = mesh->getVAO();
 		GLuint nIndices = mesh->getNIndices();
 		glm::mat4 modelMatrix = renderCommand.modelMatrix;
 
+		_depthShader->setUniform1f("radius", mesh->getMaterial()->getFloat("radius"));
 		_depthShader->setUniformMat4("model", modelMatrix);
 
 		glBindVertexArray(VAO);
@@ -119,7 +121,7 @@ void FluidRenderer::smoothDepth(Camera *camera)
 	_fluidDepthMapSmoother[1]->unbind();
 }
 
-void FluidRenderer::drawThickness(Camera *camera, vector<RenderCommand> renderCommands)
+void FluidRenderer::drawThickness(Camera *camera, vector<RenderCommand> *renderCommands)
 {
 	_thicknessShader->use();
 	_thicknessShader->setUniformMat4("proj", camera->getProjectionMatrix());
@@ -130,7 +132,7 @@ void FluidRenderer::drawThickness(Camera *camera, vector<RenderCommand> renderCo
 	glDepthFunc(GL_ALWAYS);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
-	for (RenderCommand renderCommand : renderCommands)
+	for (RenderCommand renderCommand : *renderCommands)
 	{
 		Mesh *mesh = renderCommand.mesh;
 		GLuint VAO = mesh->getVAO();
@@ -184,7 +186,7 @@ void FluidRenderer::smoothThickness(Camera *camera)
 	_fluidThicknessMapSmoother[1]->unbind();
 }
 
-void FluidRenderer::drawNoise(Camera *camera, vector<RenderCommand> renderCommands)
+void FluidRenderer::drawNoise(Camera *camera, vector<RenderCommand> *renderCommands)
 {
 	_noiseShader->use();
 	_noiseShader->setUniformMat4("proj", camera->getProjectionMatrix());
@@ -192,7 +194,7 @@ void FluidRenderer::drawNoise(Camera *camera, vector<RenderCommand> renderComman
 	_noiseShader->setUniform1f("radius", 0.2f);
 
 	_fluidNoiseMapGenerator->bind(true);
-	for (RenderCommand renderCommand : renderCommands)
+	for (RenderCommand renderCommand : *renderCommands)
 	{
 		Mesh *mesh = renderCommand.mesh;
 		GLuint VAO = mesh->getVAO();
@@ -200,7 +202,6 @@ void FluidRenderer::drawNoise(Camera *camera, vector<RenderCommand> renderComman
 		glm::mat4 modelMatrix = renderCommand.modelMatrix;
 
 		_noiseShader->setUniformMat4("model", modelMatrix);
-		_noiseShader->setUniform1i("index", renderCommand.index);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);

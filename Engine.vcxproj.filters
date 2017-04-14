@@ -191,6 +191,9 @@
     <ClInclude Include="include\engine\renderer\FluidRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\physics\Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\shaders\pbr.vs" />

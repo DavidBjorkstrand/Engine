@@ -89,7 +89,7 @@ void Engine::run()
 		_activeScene->traverse();
 		for (Behaviour *behaviour : *_activeScene->getBehaviours())
 		{
-			behaviour->update();
+			behaviour->update(dt);
 		}
 
 		_physicsSystem->update(dt);
@@ -133,18 +133,12 @@ int main(int argc, char *argv[])
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	ParticleEmitter *particleEmitter = new ParticleEmitter();
+	ParticleEmitter *particleEmitter = new ParticleEmitter(0.5f, 1.0f, 0.01f, 0.1f, 50.0f, 10.0f, 1000, 5.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
+	particleEnity->getTransform()->rotate(45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	scene->addEntity(particleEnity);
 
-	/*map<string, string> *pathMap = new map<string, string>();
-	pathMap->insert(pair < string, string>("BACK", "resources\\textures\\skybox\\back.jpg"));
-	pathMap->insert(pair < string, string>("BOTTOM", "resources\\textures\\skybox\\bottom.jpg"));
-	pathMap->insert(pair < string, string>("FRONT", "resources\\textures\\skybox\\front.jpg"));
-	pathMap->insert(pair < string, string>("LEFT", "resources\\textures\\skybox\\left.jpg"));
-	pathMap->insert(pair < string, string>("RIGHT", "resources\\textures\\skybox\\right.jpg"));
-	pathMap->insert(pair < string, string>("TOP", "resources\\textures\\skybox\\top.jpg"));*/
 	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");
 
 	scene->setSkyBox(skyBox);

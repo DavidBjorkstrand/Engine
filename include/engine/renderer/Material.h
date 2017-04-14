@@ -32,19 +32,22 @@ class Material
 		void setCubeMap(string name, CubeMap *cubeMap);
 
 		void setBlend(GLboolean blend);
+
 		void setBlendSrc(GLenum blendSrc);
+
 		void setBlendDst(GLenum blendDst);
 
 		GLboolean getBlend();
+
 		GLenum getBlendSrc();
+
 		GLenum getBlendDst();
 
-		/*
-		* Gets the name of the material
-		*/
 		string getName();
 
 		Shader *getShader();
+
+		string getShaderName();
 
 		glm::vec3 getVec3(string name);
 

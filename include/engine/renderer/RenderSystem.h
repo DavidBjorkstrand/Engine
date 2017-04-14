@@ -18,9 +18,7 @@ using namespace std;
 struct RenderCommand
 {
 	Mesh *mesh;
-	GLboolean fluid;
 	glm::mat4 modelMatrix;
-	GLuint index;
 };
 
 /*
@@ -38,6 +36,17 @@ struct Vertex
 */
 class RenderSystem
 {
+	private:
+		Scene *_scene;
+		Mesh *_screenAlignedQuad;
+		CubeMap *_irradianceMap;
+		CubeMap *_preFilterEnvMap;
+		Texture *_brdfLut;
+
+		FluidRenderer *_fluidRenderer;
+
+		TextureGenerator *_sceneGenerator;
+
 	public:
 		/*
 		* Constructor.
@@ -56,24 +65,7 @@ class RenderSystem
 		*/
 		void draw();
 
-		
-
 	private:
 		void createIrradianceMap();
 		void createPreFilterEnvMap();
-
-		Scene *_scene;
-		Mesh *_screenAlignedQuad;
-		CubeMap *_irradianceMap;
-		CubeMap *_preFilterEnvMap;
-		Texture *_brdfLut;
-
-		FluidRenderer *_fluidRenderer;
-
-		TextureGenerator *_sceneGenerator;
-		TextureGenerator *_fluidDepthMapGenerator;
-		TextureGenerator *_fluidThicknessMapGenerator;
-		TextureGenerator *_fluidNoiseGenerator;
-		TextureGenerator *_pingpongGenerators[2];
-		TextureGenerator *_thicknessSmooth[2];
 };
