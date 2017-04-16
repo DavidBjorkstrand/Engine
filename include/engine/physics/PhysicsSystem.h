@@ -6,10 +6,12 @@
 #include <GL/glew.h>
 
 class Scene;
+class Collider;
 
 struct Particle
 {
 	GLuint index;
+	float radius;
 	float mass;
 	float inverseMass;
 	glm::vec3 position;
@@ -18,6 +20,8 @@ struct Particle
 	glm::vec3 acceleration;
 	glm::vec3 force;
 };
+
+using namespace std;
 
 class PhysicsSystem
 {
@@ -42,7 +46,11 @@ class PhysicsSystem
 		void update(float dt);
 
 	private:
+		void applyExternalForces(vector<vector<Particle> *> *particles);
 		void applyGravity(Particle *particle);
 		void applyViscousFriction(Particle *particle);
 		void applyAirFriction(Particle *particle);
+		void collisionResolution(vector<vector<Particle> *> *particles, vector<Collider *> *colliders);
+		void integrate(vector<vector<Particle> *> *particles);
+		
 };

@@ -30,8 +30,9 @@ glm::mat4 Camera::getProjectionMatrix()
 glm::mat4 Camera::getViewMatrix()
 {
 	glm::vec3 position = getEntity()->getTransform()->getWorldPosition();
+	glm::vec3 right = glm::cross(getEntity()->getTransform()->getWorldDirection(), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 lookAt = position + getEntity()->getTransform()->getWorldDirection();
-	glm::vec3 up = getEntity()->getTransform()->getWorldOrientation() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * glm::conjugate(getEntity()->getTransform()->getWorldOrientation());
+	glm::vec3 up = glm::cross(right, getEntity()->getTransform()->getWorldDirection());
 
 	return glm::lookAt(position, lookAt, up);
 }

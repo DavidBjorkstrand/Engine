@@ -10,6 +10,9 @@ class Component
 {
 	friend class Entity;
 
+	private:
+		Entity *_entity;
+
 	public:
 		/*
 		* Used for scene parsing. 
@@ -22,6 +25,4 @@ class Component
 		*/
 		Entity* getEntity();
 
-	private:
-		Entity *_entity;
 };

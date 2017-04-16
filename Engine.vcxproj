@@ -126,7 +126,10 @@
     <ClCompile Include="src\engine\interface\Input.cpp" />
     <ClCompile Include="src\engine\InputSystem.cpp" />
     <ClCompile Include="src\engine\interface\Resources.cpp" />
+    <ClCompile Include="src\engine\physics\Collider.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
+    <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
+    <ClCompile Include="src\engine\physics\SphereCollider.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
     <ClCompile Include="src\engine\renderer\FluidRenderer.cpp" />
     <ClCompile Include="src\engine\renderer\TextureGenerator.cpp" />
@@ -156,8 +159,10 @@
     <ClInclude Include="include\engine\interface\Input.h" />
     <ClInclude Include="include\engine\InputSystem.h" />
     <ClInclude Include="include\engine\interface\Resources.h" />
-    <ClInclude Include="include\engine\physics\Physics.h" />
+    <ClInclude Include="include\engine\physics\Collider.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
+    <ClInclude Include="include\engine\physics\PlaneCollider.h" />
+    <ClInclude Include="include\engine\physics\SphereCollider.h" />
     <ClInclude Include="include\engine\renderer\CubeMap.h" />
     <ClInclude Include="include\engine\renderer\FluidRenderer.h" />
     <ClInclude Include="include\engine\renderer\TextureGenerator.h" />

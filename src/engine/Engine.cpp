@@ -8,6 +8,7 @@
 #include "engine/interface/Window.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/SphereCollider.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
@@ -71,18 +72,37 @@ void Engine::run()
 {
 	SYSTEMTIME time;
 	GetSystemTime(&time);
-	long currentTime = (time.wSecond * 1000) + time.wMilliseconds;
-	long newTime;
+	float currentTime = time.wSecond + time.wMilliseconds / 1000.0f;
+	float newTime;
 	float dt;
+	float printFps = 0.0f;
+	int samples = 0;
+	float totalFps = 0.0f;
 
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
 		GetSystemTime(&time);
-		newTime = (time.wSecond * 1000) + time.wMilliseconds;
-		dt = static_cast <float>(newTime - currentTime) / 1000.0f;
+		newTime = time.wSecond + time.wMilliseconds / 1000.0f;
+		dt = (newTime - currentTime);
 		currentTime = newTime;
 
-		//cout << dt << endl;
+		if (dt < 0.0f)
+		{
+			dt = 0.0f;
+		}
+
+
+		printFps += dt;
+		totalFps += (1.0f / dt);
+		samples++;
+
+		if (printFps >= 1.0f)
+		{
+			cout << totalFps / samples << " fps" << endl;
+			printFps = 0.0f;
+			totalFps = 0.0f;
+			samples = 0;
+		}
 
         _inputSystem->pollEvents();
 
@@ -108,14 +128,15 @@ int main(int argc, char *argv[])
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 6.0f, -6.0f));
-	entity->getTransform()->setScale(glm::vec3(3.0f, 3.0f, 3.0f));
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 7.0f, -15.0f));
+	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
+	entity->getComponent<SphereCollider>()->setRadius(5.0f);
 	scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
 	entity->getComponent<Mesh>()->setMaterial("floor");
 	entity->getTransform()->rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	entity->getTransform()->setScale(glm::vec3(50.0f, 50.0f, 1.0f));
+	entity->getTransform()->setScale(glm::vec3(60.0f, 60.0f, 1.0f));
 	scene->addEntity(entity);
 
 	Camera *camera = new Camera(45.0f, 0.1f, 100.0f);
@@ -124,7 +145,7 @@ int main(int argc, char *argv[])
 	cameraEntity->addComponent(camera);
 	cameraEntity->addComponent(cameraController);
 	cameraEntity->getTransform()->setPosition(glm::vec3(0.0f, 8.0f, 5.0f));
-	cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	scene->addEntity(cameraEntity);
 
 	PointLight *pointLight = new PointLight(glm::vec3(300.0f, 300.0f, 300.0f));
@@ -133,10 +154,11 @@ int main(int argc, char *argv[])
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	ParticleEmitter *particleEmitter = new ParticleEmitter(0.5f, 1.0f, 0.01f, 0.1f, 50.0f, 10.0f, 1000, 5.0f);
+	ParticleEmitter *particleEmitter = new ParticleEmitter(0.4f, 0.3f, 0.001f, 0.1f, 80.0f, 10.0f, 10000.0f, 10.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
-	particleEnity->getTransform()->rotate(45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	particleEnity->getTransform()->rotate(60.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
 	scene->addEntity(particleEnity);
 
 	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");

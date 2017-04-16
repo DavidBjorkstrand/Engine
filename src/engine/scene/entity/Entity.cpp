@@ -3,6 +3,8 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Component.h"
 #include "engine/scene/entity/component/Mesh.h" 
+#include "engine/physics/SphereCollider.h"
+#include "engine/physics/PlaneCollider.h"
 
 #include <vector>
 
@@ -61,14 +63,18 @@ Entity *Entity::createPrimitive(PrimitiveTypes type)
 	if (type == PrimitiveTypes::Plane) 
 	{
 		Mesh *mesh = Mesh::createPlane();
+		PlaneCollider *planeCollider = new PlaneCollider(glm::vec3(0.0f), 1.0f, 1.0f);
 
 		entity->addComponent(mesh);
+		entity->addComponent(planeCollider);
 	}
 	else if (type == PrimitiveTypes::Sphere)
 	{
 		Mesh *mesh = Mesh::createSphere();
+		SphereCollider *sphereCollider = new SphereCollider(1.0f);
 
 		entity->addComponent(mesh);
+		entity->addComponent(sphereCollider);
 	}
 	else if (type == PrimitiveTypes::Cube)
 	{

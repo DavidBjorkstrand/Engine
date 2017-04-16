@@ -9,6 +9,8 @@
 #include "engine/scene/entity/component/ParticleEmitter.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/SphereCollider.h"
+#include "engine/physics/Collider.h"
 
 #include <string>
 #include <vector>
@@ -27,6 +29,7 @@ Scene::Scene(string sceneName)
 	_pointLights = new vector<PointLight *>();
 	_renderCommands = new vector<RenderCommand>();
 	_particles = new vector<vector<Particle> *>();
+	_colliders = new vector<Collider *>();
 }
 
 Scene::~Scene()
@@ -40,6 +43,7 @@ Scene::~Scene()
 	delete _pointLights;
 	delete _renderCommands;
 	delete _particles;
+	delete _colliders;
 }
 
 string Scene::getName()
@@ -97,6 +101,11 @@ vector<vector<Particle>*> *Scene::getParticles()
 	return _particles;
 }
 
+vector<Collider *> *Scene::getColliders()
+{
+	return _colliders;
+}
+
 void Scene::traverse()
 {
 	_behaviours->clear();
@@ -104,6 +113,7 @@ void Scene::traverse()
 	_pointLights->clear();
 	_renderCommands->clear();
 	_particles->clear();
+	_colliders->clear();
 
 	depthFirst(_entities);
 }
@@ -147,6 +157,11 @@ void Scene::visit(ParticleEmitter *particleEmitter)
 	_particles->push_back(particles);
 
 	_behaviours->push_back(particleEmitter);
+}
+
+void Scene::visit(Collider *collider)
+{
+	_colliders->push_back(collider);
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

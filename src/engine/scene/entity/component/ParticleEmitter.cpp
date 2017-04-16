@@ -72,7 +72,7 @@ void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, fl
 	_particleMesh = Mesh::createPlane();
 	_particleMesh->getMaterial()->setShader("fluid");
 	_particleMesh->getMaterial()->setFloat("radius", particleRadius);
-	_particleRadius = _particleRadius;
+	_particleRadius = particleRadius;
 	_spawnRate = spawnRate;
 	_spawnRest = 0.0f;
 	_mass = mass;
@@ -167,7 +167,7 @@ void ParticleEmitter::spawnParticles(float dt)
 
 		tangent = glm::normalize(tangent);
 		tangent2 = glm::normalize(glm::cross(entityDirection, tangent));
-		position = x*tangent + z*tangent2;
+		position = x*tangent + z*tangent2 + entityPosition;
 
 		createParticle(position, velocity);
 
@@ -190,6 +190,7 @@ void ParticleEmitter::createParticle(glm::vec3 position, glm::vec3 velocity)
 	}
 
 	particle.mass = _mass;
+	particle.radius = _particleRadius;
 	particle.inverseMass = _inverseMass;
 	particle.position = position;
 	particle.velocity = velocity;

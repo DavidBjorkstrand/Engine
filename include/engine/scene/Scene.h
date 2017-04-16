@@ -12,6 +12,8 @@ class Camera;
 class Mesh;
 class PointLight;
 class ParticleEmitter;
+class SphereCollider;
+class Collider;
 struct Particle;
 
 struct RenderCommand;
@@ -23,6 +25,19 @@ using namespace std;
 */
 class Scene
 {
+	private:
+		string _name;
+		vector<Entity*> *_entities;
+		SkyBox *_skyBox;
+
+		MatrixStack *_matrixStack;
+		vector<Behaviour *> *_behaviours;
+		vector<Camera *> *_cameras;
+		vector<RenderCommand> *_renderCommands;
+		vector<PointLight *> *_pointLights;
+		vector<vector<Particle> *> *_particles;
+		vector<Collider *> *_colliders;
+
     public:
 		/*
 		* Constructor. Creates a empty scene. 
@@ -58,6 +73,8 @@ class Scene
 
 		vector<vector<Particle> *> *getParticles();
 
+		vector<Collider *> *getColliders();
+
 		/*
 		* Parse functions
 		*/
@@ -73,17 +90,8 @@ class Scene
 
 		void visit(ParticleEmitter *particleEmitter);
 
+		void visit(Collider *collider);
+
     private:
 		void depthFirst(vector<Entity*> *entities);
-
-		string _name;
-        vector<Entity*> *_entities;
-		SkyBox *_skyBox;
-
-		MatrixStack *_matrixStack;
-		vector<Behaviour *> *_behaviours;
-		vector<Camera *> *_cameras;
-		vector<RenderCommand> *_renderCommands;
-		vector<PointLight *> *_pointLights;
-		vector<vector<Particle> *> *_particles;
 };

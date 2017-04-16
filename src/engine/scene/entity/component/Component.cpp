@@ -2,7 +2,6 @@
 
 #include "engine/scene/entity/Entity.h"
 
-
 Entity *Component::getEntity()
 {
 	return _entity;
