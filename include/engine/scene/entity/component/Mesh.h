@@ -19,12 +19,24 @@ class Material;
 */
 class Mesh : public Component
 {
+	private:
+		vector<Vertex> *_vertices;
+		vector<GLuint> *_indices;
+		Material *_material;
+		GLuint _VAO;
+		GLuint _EBO;
+		GLuint _VBO;
+		GLenum _depthFunc;
+		GLenum _usage;
+
 	public:
 
 		/*
 		* Constructor. Takes a vector of vertices and a list of indices.
 		*/
 		Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName);
+
+		Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName, GLenum usage);
 
 		/*
 		* Deconstructor. 
@@ -53,6 +65,8 @@ class Mesh : public Component
 
 		GLenum getDepthFunc();
 
+		void updateBuffers(vector<Vertex> *vertices, vector<GLuint> *indices);
+
 		/*
 		* Factory function that creates a Plane mesh. 
 		*/
@@ -71,12 +85,6 @@ class Mesh : public Component
 	private:
 		void initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices);
 
-		vector<Vertex> *_vertices;
-		vector<GLuint> *_indices;
-		Material *_material;
-		GLuint _VAO;
-		GLuint _EBO;
-		GLuint _VBO;
-		GLenum _depthFunc;
+
 
 };

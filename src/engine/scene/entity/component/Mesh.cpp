@@ -19,6 +19,19 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 
 	_depthFunc = GL_LESS;
 
+	_usage = GL_STATIC_DRAW;
+
+	initBuffers(vertices, indices);
+}
+
+Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName, GLenum usage)
+{
+	_material = Resources::findMaterial(materialName);
+
+	_depthFunc = GL_LESS;
+
+	_usage = usage;
+
 	initBuffers(vertices, indices);
 }
 
@@ -68,19 +81,18 @@ GLenum Mesh::getDepthFunc()
 	return _depthFunc;
 }
 
-void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
+void Mesh::updateBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
 {
-	glGenVertexArrays(1, &_VAO);
-	glGenBuffers(1, &_VBO);
-	glGenBuffers(1, &_EBO);
+	_vertices = vertices;
+	_indices = indices;
 
 	glBindVertexArray(_VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices->size() * sizeof(Vertex), &vertices->at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _vertices->size() * sizeof(Vertex), &vertices->at(0), _usage);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->size() * sizeof(GLuint), &indices->at(0), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices->size() * sizeof(GLuint), &indices->at(0), _usage);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)0);
@@ -94,7 +106,15 @@ void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
+}
 
+void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
+{
+	glGenVertexArrays(1, &_VAO);
+	glGenBuffers(1, &_VBO);
+	glGenBuffers(1, &_EBO);
+
+	updateBuffers(vertices, indices);
 }
 
 Mesh *Mesh::createPlane()

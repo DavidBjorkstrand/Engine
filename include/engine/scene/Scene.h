@@ -14,6 +14,8 @@ class PointLight;
 class ParticleEmitter;
 class SphereCollider;
 class Collider;
+class Cloth;
+class SpringConstraint;
 struct Particle;
 
 struct RenderCommand;
@@ -37,6 +39,7 @@ class Scene
 		vector<PointLight *> *_pointLights;
 		vector<vector<Particle> *> *_particles;
 		vector<Collider *> *_colliders;
+		vector<vector<SpringConstraint *> *> *_springConstraints;
 
     public:
 		/*
@@ -75,6 +78,8 @@ class Scene
 
 		vector<Collider *> *getColliders();
 
+		vector<vector<SpringConstraint *> *> *getSpringConstraints();
+
 		/*
 		* Parse functions
 		*/
@@ -91,6 +96,8 @@ class Scene
 		void visit(ParticleEmitter *particleEmitter);
 
 		void visit(Collider *collider);
+
+		void visit(Cloth *cloth);
 
     private:
 		void depthFirst(vector<Entity*> *entities);

@@ -18,6 +18,7 @@
 #include "engine/scene/entity/component/PointLight.h"
 #include "engine/scene/entity/component/Behaviour.h"
 #include "engine/scene/entity/component/ParticleEmitter.h"
+#include "engine/scene/entity/component/Cloth.h"
 #include "behaviour/CameraController.h"
 
 #include <map>
@@ -144,8 +145,8 @@ int main(int argc, char *argv[])
 	Entity *cameraEntity = new Entity();
 	cameraEntity->addComponent(camera);
 	cameraEntity->addComponent(cameraController);
-	cameraEntity->getTransform()->setPosition(glm::vec3(0.0f, 8.0f, 5.0f));
-	//cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	cameraEntity->getTransform()->setPosition(glm::vec3(0.0f, 30.0f, 20.0f));
+	cameraEntity->getTransform()->rotate(-30.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	scene->addEntity(cameraEntity);
 
 	PointLight *pointLight = new PointLight(glm::vec3(300.0f, 300.0f, 300.0f));
@@ -154,12 +155,17 @@ int main(int argc, char *argv[])
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	ParticleEmitter *particleEmitter = new ParticleEmitter(0.4f, 0.3f, 0.001f, 0.1f, 80.0f, 10.0f, 10000.0f, 10.0f);
+	/*ParticleEmitter *particleEmitter = new ParticleEmitter(0.4f, 0.3f, 0.001f, 0.1f, 80.0f, 10.0f, 10000.0f, 10.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
 	particleEnity->getTransform()->rotate(60.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	scene->addEntity(particleEnity);
+	scene->addEntity(particleEnity);*/
+
+	Cloth *cloth = new Cloth();
+	Entity *clothEntity = new Entity();
+	clothEntity->addComponent(cloth);
+	scene->addEntity(clothEntity);
 
 	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");
 

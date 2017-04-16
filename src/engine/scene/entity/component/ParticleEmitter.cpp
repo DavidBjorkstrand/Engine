@@ -70,8 +70,10 @@ void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, fl
 	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {
 	_particleMesh = Mesh::createPlane();
-	_particleMesh->getMaterial()->setShader("fluid");
-	_particleMesh->getMaterial()->setFloat("radius", particleRadius);
+	Material *material = new Material();
+	material->setShader("fluid");
+	material->setFloat("radius", particleRadius);
+	_particleMesh->setMaterial(material);
 	_particleRadius = particleRadius;
 	_spawnRate = spawnRate;
 	_spawnRest = 0.0f;

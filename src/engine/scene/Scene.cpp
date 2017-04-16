@@ -7,10 +7,12 @@
 #include "engine/scene/entity/component/Behaviour.h"
 #include "engine/scene/entity/component/Mesh.h"
 #include "engine/scene/entity/component/ParticleEmitter.h"
+#include "engine/scene/entity/component/Cloth.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/Collider.h"
+#include "engine/physics/SpringConstraint.h"
 
 #include <string>
 #include <vector>
@@ -30,6 +32,7 @@ Scene::Scene(string sceneName)
 	_renderCommands = new vector<RenderCommand>();
 	_particles = new vector<vector<Particle> *>();
 	_colliders = new vector<Collider *>();
+	_springConstraints = new vector<vector<SpringConstraint *> *>();
 }
 
 Scene::~Scene()
@@ -44,6 +47,7 @@ Scene::~Scene()
 	delete _renderCommands;
 	delete _particles;
 	delete _colliders;
+	delete _springConstraints;
 }
 
 string Scene::getName()
@@ -106,6 +110,11 @@ vector<Collider *> *Scene::getColliders()
 	return _colliders;
 }
 
+vector<vector<SpringConstraint *> *> *Scene::getSpringConstraints()
+{
+	return _springConstraints;
+}
+
 void Scene::traverse()
 {
 	_behaviours->clear();
@@ -114,6 +123,7 @@ void Scene::traverse()
 	_renderCommands->clear();
 	_particles->clear();
 	_colliders->clear();
+	_springConstraints->clear();
 
 	depthFirst(_entities);
 }
@@ -162,6 +172,15 @@ void Scene::visit(ParticleEmitter *particleEmitter)
 void Scene::visit(Collider *collider)
 {
 	_colliders->push_back(collider);
+}
+
+void Scene::visit(Cloth *cloth)
+{
+	_renderCommands->push_back(cloth->getRenderCommand());
+
+	_particles->push_back(cloth->getParticles());
+
+	_springConstraints->push_back(cloth->getSpringConstraints());
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

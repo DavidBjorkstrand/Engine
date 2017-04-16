@@ -7,6 +7,7 @@
 
 class Scene;
 class Collider;
+class SpringConstraint;
 
 struct Particle
 {
@@ -46,6 +47,7 @@ class PhysicsSystem
 		void update(float dt);
 
 	private:
+		void applyConstraints(vector<vector<SpringConstraint *> *> *springConstraints);
 		void applyExternalForces(vector<vector<Particle> *> *particles);
 		void applyGravity(Particle *particle);
 		void applyViscousFriction(Particle *particle);

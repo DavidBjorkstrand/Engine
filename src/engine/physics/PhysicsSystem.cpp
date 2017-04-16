@@ -1,6 +1,7 @@
 #include "engine/physics/PhysicsSystem.h"
 
 #include "engine/physics/Collider.h"
+#include "engine/physics/SpringConstraint.h"
 #include "engine/scene/Scene.h"
 
 #include <vector>
@@ -13,7 +14,7 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	_timeStep = 1.0f / 60.0f;
+	_timeStep = 1.0f / 480.0f;
 	_dtRest = 0.0f;
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
@@ -40,12 +41,25 @@ void PhysicsSystem::update(float dt)
 	{
 		vector<vector<Particle>*> *particles = _scene->getParticles();
 		vector<Collider *> *colliders = _scene->getColliders();
+		vector<vector<SpringConstraint *> *> *springConstraints = _scene->getSpringConstraints();
 
+		applyConstraints(springConstraints);
 		applyExternalForces(particles);
 		collisionResolution(particles, colliders);
 		integrate(particles);
 
 		_dtRest -= _timeStep;
+	}
+}
+
+void PhysicsSystem::applyConstraints(vector<vector<SpringConstraint *> *> *springConstraints)
+{
+	for (vector<SpringConstraint *> *constraintVector : *springConstraints)
+	{
+		for (SpringConstraint *springConstraint : *constraintVector)
+		{
+			springConstraint->updateForces();
+		}
 	}
 }
 
@@ -69,18 +83,24 @@ void PhysicsSystem::applyGravity(Particle *particle)
 
 void PhysicsSystem::applyViscousFriction(Particle *particle)
 {
-	glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
-	float u = glm::length(particle->predictedVelocity);
+	if (particle->predictedVelocity != glm::vec3(0.0f, 0.0f, 0.0f))
+	{
+		glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
+		float u = glm::length(particle->predictedVelocity);
 
-	particle->force += -_k*u*uHat;
+		particle->force += -_k*u*uHat;
+	}
 }
 
 void PhysicsSystem::applyAirFriction(Particle *particle)
 {
-	glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
-	float u = glm::length(particle->predictedVelocity);
+	if (particle->predictedVelocity != glm::vec3(0.0f, 0.0f, 0.0f))
+	{
+		glm::vec3 uHat = glm::normalize(particle->predictedVelocity);
+		float u = glm::length(particle->predictedVelocity);
 
-	particle->force += -_c*u*u*uHat;
+		particle->force += -_c*u*u*uHat;
+	}
 }
 
 void PhysicsSystem::collisionResolution(vector<vector<Particle> *> *particles, vector<Collider *> *colliders)
