@@ -1,0 +1,20 @@
+{
+  "name": "cloth",
+  "shader": "default",
+  "uAlbedo": {
+    "type": "vec3",
+    "value": {
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "uRoughness": {
+    "type": "float",
+    "value": 0.04
+  },
+  "uMetallic": {
+    "type": "float",
+    "value": 1.0
+  }
+}

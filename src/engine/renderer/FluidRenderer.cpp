@@ -94,7 +94,7 @@ void FluidRenderer::smoothDepth(Camera *camera)
 	_curvatureFlow->setUniformMat4("proj", camera->getProjectionMatrix());
 	_curvatureFlow->setUniform1f("dt", 0.005f);
 
-	for (GLuint i = 0; i < 25; i++)
+	for (GLuint i = 0; i < 50; i++)
 	{
 		_fluidDepthMapSmoother[horizontal]->bind(true);
 

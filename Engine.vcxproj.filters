@@ -250,5 +250,6 @@
     <None Include="src\engine\renderer\shaders\fluid\thickness.fs" />
     <None Include="src\engine\renderer\shaders\fluid\noise.fs" />
     <None Include="src\engine\renderer\shaders\fluid\curvatureFlow.fs" />
+    <None Include="resources\materials\cloth.mat" />
   </ItemGroup>
 </Project>

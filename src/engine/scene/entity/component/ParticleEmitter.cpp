@@ -73,6 +73,8 @@ void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, fl
 	Material *material = new Material();
 	material->setShader("fluid");
 	material->setFloat("radius", particleRadius);
+	material->setFloat("uRoughness", 1.0f);
+	material->setFloat("uMetallic", 0.0f);
 	_particleMesh->setMaterial(material);
 	_particleRadius = particleRadius;
 	_spawnRate = spawnRate;

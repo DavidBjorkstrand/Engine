@@ -14,12 +14,12 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	_timeStep = 1.0f / 480.0f;
+	_timeStep = 1.0f / 1000.0f;
 	_dtRest = 0.0f;
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
-	_k = 0.01f;
-	_c = 0.01f;
+	_k = 0.005f;
+	_c = 0.005f;
 }
 
 PhysicsSystem::~PhysicsSystem()

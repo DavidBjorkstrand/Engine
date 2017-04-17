@@ -23,14 +23,14 @@ Cloth::Cloth()
 	_particles = new vector<Particle>();
 	_springConstraints = new vector<SpringConstraint *>();
 
-	float springForce = 100.0f;
+	float springForce = 500.0f;
 
 	for (float x = -5.0f; x <= 5.0f; x+= 0.25f)
 	{
 		for (float z = -5.0f; z <= 5.0f; z+= 0.25f)
 		{
 			Vertex vertex;
-			vertex.position = glm::vec3(x, 0.0f, z) + glm::vec3(0.0f, 20.0f, -15.0f);
+			vertex.position = glm::vec3(x, 0.0f, z) + glm::vec3(0.0f, 15.0f, -15.0f);
 			vertex.normal = glm::vec3(0.0f, 0.0f, 0.0f);
 			vertex.texCoords = glm::vec2((x + 5.0f) / 10.0f, 1.0f - ((z + 5.0f) / 10.0f));
 
@@ -155,11 +155,11 @@ Cloth::Cloth()
 				_springConstraints->push_back(springConstraint);
 			}
 
-			if (x <= 38)
+			/*if (x <= 38)
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 2];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, 10.0f, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, springForce, 1.0f);
 
 				_springConstraints->push_back(springConstraint);
 			}
@@ -168,14 +168,14 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 2*41];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, 10.0f, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, springForce, 1.0f);
 
 				_springConstraints->push_back(springConstraint);
-			}
+			}*/
 		}
 	}
 
-	_mesh = new Mesh(_vertices, _indices, "default", GL_DYNAMIC_DRAW);
+	_mesh = new Mesh(_vertices, _indices, "cloth", GL_DYNAMIC_DRAW);
 }
 
 void Cloth::accept(Scene *scene)

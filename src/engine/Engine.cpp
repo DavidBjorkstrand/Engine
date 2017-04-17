@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
 	entity->getComponent<Mesh>()->setMaterial("floor");
 	entity->getTransform()->rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	entity->getTransform()->setScale(glm::vec3(60.0f, 60.0f, 1.0f));
+	entity->getTransform()->setScale(glm::vec3(100.0f, 100.0f, 1.0f));
 	scene->addEntity(entity);
 
 	Camera *camera = new Camera(45.0f, 0.1f, 100.0f);
@@ -155,12 +155,12 @@ int main(int argc, char *argv[])
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	/*ParticleEmitter *particleEmitter = new ParticleEmitter(0.4f, 0.3f, 0.001f, 0.1f, 80.0f, 10.0f, 10000.0f, 10.0f);
+	ParticleEmitter *particleEmitter = new ParticleEmitter(1.0f, 0.3f, 0.01f, 0.1f, 80.0f, 10.0f, 5000.0f, 10.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
-	particleEnity->getTransform()->rotate(60.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	particleEnity->getTransform()->rotate(77.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-	scene->addEntity(particleEnity);*/
+	scene->addEntity(particleEnity);
 
 	Cloth *cloth = new Cloth();
 	Entity *clothEntity = new Entity();

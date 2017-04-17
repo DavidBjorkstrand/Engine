@@ -181,7 +181,7 @@ void main()
 
 		float thickness = texture(particleThickness, TexCoords).x;
 		float transparancy = 1.0f - exp(-0.5*thickness);
-		vec3 albedo =   mix(vec3(0.0f, 0.7f, 0.7f), texture(sceneColor, TexCoords + N.xy * thickness).rgb, transparancy);
+		vec3 albedo =   mix(texture(sceneColor, TexCoords + N.xy * thickness).rgb, vec3(0.0f, 0.7f, 0.7f), transparancy);
 		float roughness = 0.1f;
 		float metallic = 0.0f;
 		
