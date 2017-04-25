@@ -99,50 +99,47 @@ string Material::getShaderName()
 
 glm::vec3 Material::getVec3(string name)
 {
-	try 
+	if (_vec3->find(name) != _vec3->end())
 	{
 		return _vec3->at(name);
-	} 
-	catch (const out_of_range& oor)
+	}
+	else
 	{
 		return glm::vec3(0.0f);
 	}
-	
 }
 
 float Material::getFloat(string name)
 {
-	try 
+	if (_float->find(name) != _float->end())
 	{
 		return _float->at(name);
 	}
-	catch (const out_of_range& oor)
+	else
 	{
 		return 0.0f;
 	}
-	
 }
 
 Texture *Material::getTexture(string name)
 {
-	try
+	if (_texture->find(name) != _texture->end())
 	{
 		return _texture->at(name);
 	}
-	catch (const out_of_range& oor)
+	else
 	{
 		return nullptr;
 	}
-	
 }
 
 CubeMap *Material::getCubeMap(string name)
 {
-	try
+	if (_cubeMap->find(name) != _cubeMap->end())
 	{
 		return _cubeMap->at(name);
 	}
-	catch (const out_of_range& oor)
+	else
 	{
 		return nullptr;
 	}
