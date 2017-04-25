@@ -32,6 +32,8 @@ RenderSystem::RenderSystem()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_POINT_SPRITE);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	_fluidRenderer = new FluidRenderer();
 

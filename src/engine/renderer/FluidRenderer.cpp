@@ -79,7 +79,7 @@ void FluidRenderer::drawDepth(Camera *camera, vector<RenderCommand> *renderComma
 		_depthShader->setUniformMat4("model", modelMatrix);
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_POINTS, nIndices, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 	_fluidDepthMapGenerator->unbind();
@@ -126,7 +126,6 @@ void FluidRenderer::drawThickness(Camera *camera, vector<RenderCommand> *renderC
 	_thicknessShader->use();
 	_thicknessShader->setUniformMat4("proj", camera->getProjectionMatrix());
 	_thicknessShader->setUniformMat4("view", camera->getViewMatrix());
-	_thicknessShader->setUniform1f("radius", 1.0f);
 
 	_fluidThicknessMapGenerator->bind(true);
 	glDepthFunc(GL_ALWAYS);
@@ -140,9 +139,10 @@ void FluidRenderer::drawThickness(Camera *camera, vector<RenderCommand> *renderC
 		glm::mat4 modelMatrix = renderCommand.modelMatrix;
 
 		_thicknessShader->setUniformMat4("model", modelMatrix);
+		_thicknessShader->setUniform1f("radius", mesh->getMaterial()->getFloat("radius"));
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_POINTS, nIndices, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 	glDisable(GL_BLEND);

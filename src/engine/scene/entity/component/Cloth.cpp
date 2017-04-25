@@ -23,14 +23,14 @@ Cloth::Cloth()
 	_particles = new vector<Particle>();
 	_springConstraints = new vector<SpringConstraint *>();
 
-	float springForce = 500.0f;
+	float springForce = 50.0f;
 
-	for (float x = -5.0f; x <= 5.0f; x+= 0.25f)
+	for (float x = -20.0f; x <= 20.0f; x+= 1.0f)
 	{
-		for (float z = -5.0f; z <= 5.0f; z+= 0.25f)
+		for (float z = -20.0f; z <= 20.0f; z+= 1.0f)
 		{
 			Vertex vertex;
-			vertex.position = glm::vec3(x, 0.0f, z) + glm::vec3(0.0f, 15.0f, -15.0f);
+			vertex.position = glm::vec3(x, 0.0f, z) + glm::vec3(0.0f, 50.0f, -55.0f);
 			vertex.normal = glm::vec3(0.0f, 0.0f, 0.0f);
 			vertex.texCoords = glm::vec2((x + 5.0f) / 10.0f, 1.0f - ((z + 5.0f) / 10.0f));
 
@@ -114,6 +114,8 @@ Cloth::Cloth()
 		}
 	}
 
+	float Ks = 2.0f;
+	float distance = 1.0f;
 	for (GLuint z = 0; z < 41; z++)
 	{
 		for (GLuint x = 0; x < 41; x++)
@@ -123,7 +125,7 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index+1];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.25f, springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, distance, springForce, Ks);
 
 				_springConstraints->push_back(springConstraint);
 			}
@@ -132,7 +134,7 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 41];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.25f, springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, distance, springForce, Ks);
 
 				_springConstraints->push_back(springConstraint);
 			}
@@ -141,7 +143,7 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 42];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, glm::sqrt(0.25f*0.25f + 0.25f*0.25f), springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, glm::sqrt(distance*distance + distance*distance), springForce, Ks);
 
 				_springConstraints->push_back(springConstraint);
 			}
@@ -150,16 +152,16 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 40];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, glm::sqrt(0.25f*0.25f + 0.25f*0.25f), springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, glm::sqrt(distance*distance + distance*distance), springForce, Ks);
 
 				_springConstraints->push_back(springConstraint);
 			}
 
-			/*if (x <= 38)
+			if (x <= 38)
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 2];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, distance*2.0f, springForce, 1.0f);
 
 				_springConstraints->push_back(springConstraint);
 			}
@@ -168,10 +170,10 @@ Cloth::Cloth()
 			{
 				Particle *particlei = &(*_particles)[index];
 				Particle *particlej = &(*_particles)[index + 2*41];
-				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, 0.5f, springForce, 1.0f);
+				SpringConstraint *springConstraint = new SpringConstraint(particlei, particlej, distance*2.0f, springForce, 1.0f);
 
 				_springConstraints->push_back(springConstraint);
-			}*/
+			}
 		}
 	}
 
@@ -186,6 +188,15 @@ void Cloth::accept(Scene *scene)
 RenderCommand Cloth::getRenderCommand()
 {
 	RenderCommand renderCommand;
+
+	float count = 0.0f;
+	for (GLuint i = 0; i < 41; i++)
+	{
+		(*_particles)[i*41].position = glm::vec3(-20.0f+count, 50.0f, -55.0f);
+		(*_particles)[i*41].velocity = glm::vec3(0.0f);
+
+		count += 1.0f;
+	}
 
 	for (GLuint i = 0; i < _particles->size(); i++)
 	{

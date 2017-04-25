@@ -34,12 +34,14 @@ Collision PlaneCollider::checkCollision(Particle *particle)
 	float distanceNominator = glm::dot(planeNormal, particle->position) + _D;
 	float distanceDenominator = glm::length(planeNormal);
 	float distance = distanceNominator / distanceDenominator;
+	glm::vec3 planeProjection = glm::dot(_planeNormal, particle->position)*_planeNormal;
+	float planeDistance = glm::length(planeProjection - glm::vec3(0.0f));
 
 	if (distance > particle->radius)
 	{
 		collision.colliding = false;
 	}
-	else
+	else if (planeDistance < 50.0f)
 	{
 		collision.colliding = true;
 		collision.distance = distance - particle->radius;

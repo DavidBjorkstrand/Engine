@@ -21,7 +21,8 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 
 	_usage = GL_STATIC_DRAW;
 
-	initBuffers(vertices, indices);
+	initBuffers();
+	updateBuffers(vertices, indices);
 }
 
 Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName, GLenum usage)
@@ -32,7 +33,16 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 
 	_usage = usage;
 
-	initBuffers(vertices, indices);
+	initBuffers();
+	updateBuffers(vertices, indices);
+}
+
+Mesh::Mesh(GLenum usage)
+{
+	_depthFunc = GL_LESS;
+
+	_usage = usage;
+	initBuffers();
 }
 
 Mesh::~Mesh()
@@ -108,13 +118,13 @@ void Mesh::updateBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
 	glBindVertexArray(0);
 }
 
-void Mesh::initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)
+void Mesh::initBuffers()
 {
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	glGenBuffers(1, &_EBO);
 
-	updateBuffers(vertices, indices);
+	
 }
 
 Mesh *Mesh::createPlane()

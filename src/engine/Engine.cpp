@@ -155,11 +155,11 @@ int main(int argc, char *argv[])
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);
 
-	ParticleEmitter *particleEmitter = new ParticleEmitter(1.0f, 0.3f, 0.01f, 0.1f, 80.0f, 10.0f, 5000.0f, 10.0f);
+	ParticleEmitter *particleEmitter = new ParticleEmitter(1.0f, 0.3f, 0.01f, 0.1f, 30.0f, 1.0f, 5000.0f, 10.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
-	particleEnity->getTransform()->rotate(77.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	particleEnity->getTransform()->rotate(80.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
 	scene->addEntity(particleEnity);
 
 	Cloth *cloth = new Cloth();

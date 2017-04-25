@@ -12,12 +12,15 @@ class Mesh;
 
 struct Particle;
 struct RenderCommand;
+struct Vertex;
 
 using namespace std;
 
 class ParticleEmitter : public Behaviour
 {
 	private:
+		vector<Vertex> *_vertices;
+		vector<GLuint> *_indices;
 		Mesh *_particleMesh;
 		float _particleRadius;
 		glm::vec2 _spawnArea;
@@ -34,7 +37,6 @@ class ParticleEmitter : public Behaviour
 		float *_lifeTime;
 		vector<Particle> *_particles;
 		vector<GLuint> *_freeIndexes;
-		vector<RenderCommand> *_renderCommands;
 		GLboolean _sphereSpawn;
 		
 	public:
@@ -43,8 +45,9 @@ class ParticleEmitter : public Behaviour
 		ParticleEmitter(float particleRadius, float spawnRadius, float spawnRate, float mass,
 			float velocity, float velocityDeviation, GLuint maxParticles, float maxLifeTime);
 		~ParticleEmitter();
+		bool hasActiveParticles();
 		vector<Particle> *getParticles();
-		vector<RenderCommand> *getRenderCommands();
+		RenderCommand getRenderCommand();
 		void accept(Scene *scene);
 		void update(float dt);
 

@@ -15,6 +15,7 @@
 #include "engine/physics/SpringConstraint.h"
 
 #include <string>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -155,16 +156,15 @@ void Scene::visit(PointLight *pointLight)
 
 void Scene::visit(ParticleEmitter *particleEmitter)
 {
-	vector<RenderCommand> *renderCommands = particleEmitter->getRenderCommands();
-
-	for (RenderCommand renderCommand : *renderCommands)
+	if (particleEmitter->hasActiveParticles())
 	{
+		RenderCommand renderCommand = particleEmitter->getRenderCommand();
 		_renderCommands->push_back(renderCommand);
-	}
 
-	vector<Particle> *particles = particleEmitter->getParticles();
-	
-	_particles->push_back(particles);
+		vector<Particle> *particles = particleEmitter->getParticles();
+		_particles->push_back(particles);
+
+	}
 
 	_behaviours->push_back(particleEmitter);
 }

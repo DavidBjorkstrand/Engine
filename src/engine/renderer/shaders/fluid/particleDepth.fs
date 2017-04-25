@@ -19,7 +19,7 @@ float projectZ(float z)
 void main()
 {	
 	vec3 N;
-	N.xy = TexCoords*2.0f - 1.0f;
+	N.xy = gl_PointCoord*2.0f - 1.0f;
 	float r2 = dot(N.xy, N.xy);
 
 	if (r2 > 1.0f)

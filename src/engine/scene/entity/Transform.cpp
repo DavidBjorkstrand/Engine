@@ -13,21 +13,26 @@ Transform::Transform()
 	_scale.x = 1;
 	_scale.y = 1;
 	_scale.z = 1;
+
+	_dirty = false;
 }
 
 void Transform::setPosition(glm::vec3 position)
 {
 	_position = position;
+	_dirty = true;
 }
 
 void Transform::setScale(glm::vec3 scale)
 {
 	_scale = scale;
+	_dirty = true;
 }
 
 void Transform::move(glm::vec3 deltaPosition)
 {
 	_position += deltaPosition;
+	_dirty = true;
 }
 
 void Transform::rotate(float angle, glm::vec3 axis)
@@ -35,6 +40,7 @@ void Transform::rotate(float angle, glm::vec3 axis)
 	glm::quat rotation = glm::normalize(glm::angleAxis(glm::radians(angle), axis));
 
 	_orientation *= rotation;
+	_dirty = true;
 }
 
 glm::vec3 Transform::getWorldPosition()
@@ -55,13 +61,19 @@ glm::vec3 Transform::getWorldDirection()
 void Transform::setParentTransform(glm::mat4 parentTransform)
 {
 	_parentTransform = parentTransform;
+	_dirty = true;
 }
 
 glm::mat4 Transform::getMatrix()
 {
-	glm::mat4 translate = glm::translate(glm::mat4(), _position);
-	glm::mat4 rotate = glm::toMat4(_orientation);
-	glm::mat4 scale = glm::scale(glm::mat4(), _scale);
+	if (_dirty)
+	{
+		glm::mat4 translate = glm::translate(glm::mat4(), _position);
+		glm::mat4 rotate = glm::toMat4(_orientation);
+		glm::mat4 scale = glm::scale(glm::mat4(), _scale);
+		_modelMatrix = _parentTransform * translate * rotate * scale;
+		_dirty = false;
+	}
 
-	return _parentTransform * translate * rotate * scale;
+	return _modelMatrix;
 }

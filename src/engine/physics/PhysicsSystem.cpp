@@ -14,12 +14,12 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	_timeStep = 1.0f / 1000.0f;
+	_timeStep = 1.0f / 500.0f;
 	_dtRest = 0.0f;
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
-	_k = 0.005f;
-	_c = 0.005f;
+	_k = 0.001f;
+	_c = 0.001f;
 }
 
 PhysicsSystem::~PhysicsSystem()
@@ -124,7 +124,7 @@ void PhysicsSystem::collisionResolution(vector<vector<Particle> *> *particles, v
 					//cout << glm::to_string(normalVelocity) << endl;
 					if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
 					{
-						glm::vec3 newVelocity = particle.velocity - (1.0f + 0.4f)*normalVelocity;
+						glm::vec3 newVelocity = particle.velocity - (1.0f + 0.1f)*normalVelocity;
 						(*particleVector)[i].velocity = newVelocity;
 						//cout << "Impulse: " << glm::to_string(normalVelocity) << endl;
 					}

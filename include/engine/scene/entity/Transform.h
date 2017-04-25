@@ -58,4 +58,6 @@ class Transform
 		glm::quat _orientation;
 		glm::vec3 _scale;
 		glm::mat4 _parentTransform;
+		glm::mat4 _modelMatrix;
+		bool _dirty;
 };

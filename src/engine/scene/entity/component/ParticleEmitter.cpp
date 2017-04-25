@@ -39,7 +39,13 @@ ParticleEmitter::~ParticleEmitter()
 	delete _particles;
 	delete _freeIndexes;
 	delete _lifeTime;
-	delete _renderCommands;
+	delete _vertices;
+	delete _indices;
+}
+
+bool ParticleEmitter::hasActiveParticles()
+{
+	return _particles->size() > 0;
 }
 
 vector<Particle> *ParticleEmitter::getParticles()
@@ -47,18 +53,25 @@ vector<Particle> *ParticleEmitter::getParticles()
 	return _particles;
 }
 
-vector<RenderCommand> *ParticleEmitter::getRenderCommands()
+RenderCommand ParticleEmitter::getRenderCommand()
 {
+	RenderCommand renderCommand;
+
 	for (GLuint i = 0; i < _particles->size(); i++)
 	{
 		Particle particle = _particles->at(i);
-		glm::mat4 modelMatrix = glm::translate(glm::mat4(), particle.position);
 
-		_renderCommands->at(i).mesh = _particleMesh;
-		_renderCommands->at(i).modelMatrix = modelMatrix;
+		(*_vertices)[i].position = particle.position;
+		(*_vertices)[i].normal = glm::vec3(0.0f);
+		(*_vertices)[i].texCoords = glm::vec2(0.0f);
 	}
 
-	return _renderCommands;
+	_particleMesh->updateBuffers(_vertices, _indices);
+
+	renderCommand.mesh = _particleMesh;
+	renderCommand.modelMatrix = glm::mat4();
+
+	return renderCommand;
 }
 
 void ParticleEmitter::accept(Scene *scene)
@@ -69,7 +82,9 @@ void ParticleEmitter::accept(Scene *scene)
 void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, float velocity,
 	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {
-	_particleMesh = Mesh::createPlane();
+	_vertices = new vector<Vertex>();
+	_indices = new vector<GLuint>();
+	_particleMesh = new Mesh(GL_DYNAMIC_DRAW);
 	Material *material = new Material();
 	material->setShader("fluid");
 	material->setFloat("radius", particleRadius);
@@ -90,7 +105,6 @@ void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, fl
 	_particles = new vector<Particle>();
 	_particles->reserve(maxParticles);
 	_freeIndexes = new vector<GLuint>();
-	_renderCommands = new vector<RenderCommand>();
 }
 
 void ParticleEmitter::update(float dt)
@@ -118,7 +132,8 @@ void ParticleEmitter::destroyParticles(float dt)
 			it = _particles->erase(it);
 			_nrParticles--;
 
-			_renderCommands->erase(_renderCommands->begin());
+			_vertices->erase(_vertices->begin());
+			_indices->erase(_indices->end()-1);
 		}
 		else
 		{
@@ -208,7 +223,8 @@ void ParticleEmitter::createParticle(glm::vec3 position, glm::vec3 velocity)
 
 	_nrParticles++;
 
-	_renderCommands->push_back(RenderCommand());
+	_vertices->push_back(Vertex());
+	_indices->push_back(_indices->size());
 }
 
 float ParticleEmitter::random(float min, float max)

@@ -36,7 +36,9 @@ class Mesh : public Component
 		*/
 		Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName);
 
-		Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName, GLenum usage);
+		Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialName, GLenum usage);
+
+		Mesh(GLenum usage);
 
 		/*
 		* Deconstructor. 
@@ -83,7 +85,7 @@ class Mesh : public Component
 		static Mesh *createCube();
 
 	private:
-		void initBuffers(vector<Vertex> *vertices, vector<GLuint> *indices);
+		void initBuffers();
 
 
 
