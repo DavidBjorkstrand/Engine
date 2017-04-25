@@ -16,8 +16,6 @@ void main()
 	vec2 viewportSize = vec2(1280.0f, 720.0f);
 	mat4 modelView = view * model;
 
-	gl_PointSize = radius*0.5f;
-
 	gl_Position = proj * modelView * vec4(position, 1.0f);
 	vec2 centre = (0.5f * gl_Position.xy/gl_Position.w + 0.5f) * viewportSize;
 	gl_PointSize = viewportSize.y * proj[1][1] * radius / gl_Position.w;

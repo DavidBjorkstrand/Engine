@@ -15,30 +15,30 @@ void CameraController::update(float dt)
 
 	if (Input::checkKey(GLFW_KEY_W))
 	{
-		transform->move(0.1f * transform->getWorldDirection());
+		transform->move(dt * 10.0f * transform->getWorldDirection());
 	}
 
 	if (Input::checkKey(GLFW_KEY_S))
 	{
-		transform->move(-0.1f * transform->getWorldDirection());
+		transform->move(-dt * 10.0f * transform->getWorldDirection());
 	}
 
 	if (Input::checkKey(GLFW_KEY_D))
 	{
-		transform->move(0.1f * right);
+		transform->move(dt * 10.0f * right);
 	}
 
 	if (Input::checkKey(GLFW_KEY_A))
 	{
-		transform->move(-0.1f * right);
+		transform->move(-dt * 10.0f * right);
 	}
 
 	double deltaX = Input::getDeltaMouseX();
 
-	transform->rotate((float) deltaX/10.0f, up);
+	transform->rotate((float) deltaX*dt*2.0f, up);
 
 	double deltaY = Input::getDeltaMouseY();
 
-	transform->rotate((float)deltaY / 10.0f, right);
+	transform->rotate((float)deltaY*dt*2.0f, right);
 
 }

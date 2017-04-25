@@ -18,8 +18,8 @@ PhysicsSystem::PhysicsSystem()
 	_dtRest = 0.0f;
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
-	_k = 0.001f;
-	_c = 0.001f;
+	_k = 0.0005f;
+	_c = 0.0005f;
 }
 
 PhysicsSystem::~PhysicsSystem()
