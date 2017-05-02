@@ -1,5 +1,6 @@
 #include "engine/physics/PhysicsSystem.h"
 
+#include "engine/physics/ParticleSystem.h"
 #include "engine/physics/Collider.h"
 #include "engine/physics/SpringConstraint.h"
 #include "engine/scene/Scene.h"
@@ -39,14 +40,14 @@ void PhysicsSystem::update(float dt)
 
 	while (_dtRest >= _timeStep)
 	{
-		vector<vector<Particle>*> *particles = _scene->getParticles();
+		vector<ParticleSystem *> *particleSystems = _scene->getParticleSystems();
 		vector<Collider *> *colliders = _scene->getColliders();
 		vector<vector<SpringConstraint *> *> *springConstraints = _scene->getSpringConstraints();
 
 		applyConstraints(springConstraints);
-		applyExternalForces(particles);
-		collisionResolution(particles, colliders);
-		integrate(particles);
+		applyExternalForces(particleSystems);
+		collisionResolution(particleSystems, colliders);
+		integrate(particleSystems);
 
 		_dtRest -= _timeStep;
 	}
@@ -63,15 +64,15 @@ void PhysicsSystem::applyConstraints(vector<vector<SpringConstraint *> *> *sprin
 	}
 }
 
-void PhysicsSystem::applyExternalForces(vector<vector<Particle> *> *particles)
+void PhysicsSystem::applyExternalForces(vector<ParticleSystem *> *particleSystems)
 {
-	for (vector<Particle> *particleVector : *particles)
+	for (ParticleSystem *particleSystem : *particleSystems)
 	{
-		for (GLuint i = 0; i < particleVector->size(); i++)
+		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
 		{
-			applyGravity(&(*particleVector)[i]);
-			applyViscousFriction(&(*particleVector)[i]);
-			applyAirFriction(&(*particleVector)[i]);
+			applyGravity(&it);
+			applyViscousFriction(&it);
+			applyAirFriction(&it);
 		}
 	}
 }
@@ -103,47 +104,41 @@ void PhysicsSystem::applyAirFriction(Particle *particle)
 	}
 }
 
-void PhysicsSystem::collisionResolution(vector<vector<Particle> *> *particles, vector<Collider *> *colliders)
+void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystems, vector<Collider *> *colliders)
 {
-	for (vector<Particle> *particleVector : *particles)
+	for (ParticleSystem *particleSystem : *particleSystems)
 	{
-		for (GLuint i = 0; i < particleVector->size(); i++)
+		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
 		{
-			Particle particle = particleVector->at(i);
+			Particle *particle = &it;
 			for (Collider *collider : *colliders)
 			{
-				Collision collision = collider->checkCollision(&(*particleVector)[i]);
+				Collision collision = collider->checkCollision(particle);
 
 				if (collision.colliding)
 				{
-					//cout << glm::abs(glm::dot(-collision.normal, particle.velocity)) << endl;
-					glm::vec3 normalVelocity = glm::dot(-collision.normal, particle.velocity)*-collision.normal;
-					float NdotV = glm::dot(-collision.normal, particle.velocity);
-					//cout << NdotV << endl;
+					glm::vec3 normalVelocity = glm::dot(-collision.normal, particle->velocity)*-collision.normal;
+					float NdotV = glm::dot(-collision.normal, particle->velocity);
 
-					//cout << glm::to_string(normalVelocity) << endl;
 					if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
 					{
-						glm::vec3 newVelocity = particle.velocity - (1.0f + 0.1f)*normalVelocity;
-						(*particleVector)[i].velocity = newVelocity;
-						//cout << "Impulse: " << glm::to_string(normalVelocity) << endl;
+						glm::vec3 newVelocity = particle->velocity - (1.0f + 0.1f)*normalVelocity;
+						particle->velocity = newVelocity;
 					}
 					else if (NdotV < 0.00001f)
 					{
-						float kS = 10.0f;
+						float kS = 1000.0f;
 						float d = 5.0f;
 						float e = (4.0f / kS) / ((_timeStep*_timeStep)*(1.0f + 4.0f*d));
 						float a = (4.0f / _timeStep) / (1.0f + 4.0f*d);
 						float b = (4.0f*d) / (1.0f + 4.0f*d);
 						float q = collision.distance;
 						glm::vec3 v = normalVelocity;
-						glm::vec3 f_m = glm::dot(-collision.normal, (particle.force*particle.inverseMass))*-collision.normal;
+						glm::vec3 f_m = glm::dot(-collision.normal, (particle->force*particle->inverseMass))*-collision.normal;
 
-						glm::vec3 lambda = (-(a / _timeStep)*q*-collision.normal - b*v -_timeStep*f_m) / (1.0f + e*particle.mass);
-						
-						//cout << "SPOOK: " << glm::to_string(lambda) << endl;
+						glm::vec3 lambda = (-(a / _timeStep)*q*-collision.normal - b*v -_timeStep*f_m) / (1.0f + e*particle->mass);
 
-						(*particleVector)[i].velocity -= lambda;
+						particle->force -= lambda;
 					}
 				}
 			}
@@ -151,26 +146,26 @@ void PhysicsSystem::collisionResolution(vector<vector<Particle> *> *particles, v
 	}
 }
 
-void PhysicsSystem::integrate(vector<vector<Particle> *> *particles)
+void PhysicsSystem::integrate(vector<ParticleSystem *> *particleSystems)
 {
-	for (vector<Particle> *particleVector : *particles)
+	for (ParticleSystem *particleSystem : *particleSystems)
 	{
-		for (GLuint i = 0; i < particleVector->size(); i++)
+		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
 		{
-			Particle particle = particleVector->at(i);
+			Particle *particle = &it;
 
 			//a_(n)
-			glm::vec3 newAcceleration = (*particleVector)[i].force * particle.inverseMass;
+			glm::vec3 newAcceleration = particle->force * particle->inverseMass;
 
 			//v_(n)
-			(*particleVector)[i].velocity = particle.velocity + 0.5f*(particle.acceleration + newAcceleration)*_timeStep;
+			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_timeStep;
 
-			(*particleVector)[i].acceleration = newAcceleration;
-			(*particleVector)[i].force = glm::vec3(0.0f);
+			particle->acceleration = newAcceleration;
+			particle->force = glm::vec3(0.0f);
 
 			//r_(n+1)
-			(*particleVector)[i].position = particle.position + particle.velocity*_timeStep + 0.5f*particle.acceleration*_timeStep*_timeStep;
-			(*particleVector)[i].predictedVelocity = particle.velocity + particle.acceleration*_timeStep;
+			particle->position = particle->position + particle->velocity*_timeStep + 0.5f*particle->acceleration*_timeStep*_timeStep;
+			particle->predictedVelocity = particle->velocity + particle->acceleration*_timeStep;
 		}
 	}
 }

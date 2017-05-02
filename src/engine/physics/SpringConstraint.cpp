@@ -1,6 +1,6 @@
 #include "engine/physics/SpringConstraint.h"
 
-#include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ParticleSystem.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

@@ -8,19 +8,9 @@
 class Scene;
 class Collider;
 class SpringConstraint;
+class ParticleSystem;
 
-struct Particle
-{
-	GLuint index;
-	float radius;
-	float mass;
-	float inverseMass;
-	glm::vec3 position;
-	glm::vec3 velocity;
-	glm::vec3 predictedVelocity;
-	glm::vec3 acceleration;
-	glm::vec3 force;
-};
+struct Particle;
 
 using namespace std;
 
@@ -48,11 +38,11 @@ class PhysicsSystem
 
 	private:
 		void applyConstraints(vector<vector<SpringConstraint *> *> *springConstraints);
-		void applyExternalForces(vector<vector<Particle> *> *particles);
+		void applyExternalForces(vector<ParticleSystem *> *particleSystems);
 		void applyGravity(Particle *particle);
 		void applyViscousFriction(Particle *particle);
 		void applyAirFriction(Particle *particle);
-		void collisionResolution(vector<vector<Particle> *> *particles, vector<Collider *> *colliders);
-		void integrate(vector<vector<Particle> *> *particles);
+		void collisionResolution(vector<ParticleSystem *> *particleSystems, vector<Collider *> *colliders);
+		void integrate(vector<ParticleSystem *> *particleSystems);
 		
 };

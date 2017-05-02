@@ -201,9 +201,9 @@ Mesh *Mesh::createSphere()
 
 			float xSegment = (float)x / (float)X_SEGMENTS;
 			float ySegment = (float)y / (float)Y_SEGMENTS;
-			float xPos = 10.0f*(std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI));
-			float yPos = 10.0f*(std::cos(ySegment * PI));
-			float zPos = 10.0f*(std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI));
+			float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+			float yPos = std::cos(ySegment * PI);
+			float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
 			vertex.position = glm::vec3(xPos/2, yPos/2, zPos/2);
 			vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));

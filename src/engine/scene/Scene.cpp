@@ -10,6 +10,7 @@
 #include "engine/scene/entity/component/Cloth.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ParticleSystem.h"
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/Collider.h"
 #include "engine/physics/SpringConstraint.h"
@@ -31,7 +32,7 @@ Scene::Scene(string sceneName)
 	_cameras = new vector<Camera *>();
 	_pointLights = new vector<PointLight *>();
 	_renderCommands = new vector<RenderCommand>();
-	_particles = new vector<vector<Particle> *>();
+	_particleSystems = new vector<ParticleSystem *>();
 	_colliders = new vector<Collider *>();
 	_springConstraints = new vector<vector<SpringConstraint *> *>();
 }
@@ -46,7 +47,7 @@ Scene::~Scene()
 	delete _cameras;
 	delete _pointLights;
 	delete _renderCommands;
-	delete _particles;
+	delete _particleSystems;
 	delete _colliders;
 	delete _springConstraints;
 }
@@ -101,9 +102,9 @@ vector<RenderCommand> *Scene::getRenderCommands()
 	return _renderCommands;
 }
 
-vector<vector<Particle>*> *Scene::getParticles()
+vector<ParticleSystem *> *Scene::getParticleSystems()
 {
-	return _particles;
+	return _particleSystems;
 }
 
 vector<Collider *> *Scene::getColliders()
@@ -122,7 +123,7 @@ void Scene::traverse()
 	_cameras->clear();
 	_pointLights->clear();
 	_renderCommands->clear();
-	_particles->clear();
+	_particleSystems->clear();
 	_colliders->clear();
 	_springConstraints->clear();
 
@@ -161,8 +162,8 @@ void Scene::visit(ParticleEmitter *particleEmitter)
 		RenderCommand renderCommand = particleEmitter->getRenderCommand();
 		_renderCommands->push_back(renderCommand);
 
-		vector<Particle> *particles = particleEmitter->getParticles();
-		_particles->push_back(particles);
+		ParticleSystem *particleSystem = particleEmitter->getParticleSystem();
+		_particleSystems->push_back(particleSystem);
 
 	}
 
@@ -178,9 +179,9 @@ void Scene::visit(Cloth *cloth)
 {
 	_renderCommands->push_back(cloth->getRenderCommand());
 
-	_particles->push_back(cloth->getParticles());
+	//_particles->push_back(cloth->getParticles());
 
-	_springConstraints->push_back(cloth->getSpringConstraints());
+	//_springConstraints->push_back(cloth->getSpringConstraints());
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

@@ -3,7 +3,7 @@
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Component.h"
-#include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ParticleSystem.h"
 
 #include <glm\gtc\type_ptr.hpp>
 

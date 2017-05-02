@@ -19,7 +19,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-ParticleEmitter::ParticleEmitter(float particleRadius, glm::vec2 spawnArea, float spawnRate, float mass, float velocity, 
+ParticleEmitter::ParticleEmitter(float particleRadius, glm::vec2 spawnArea, float spawnRate, float mass, float velocity,
 	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {
 	_spawnArea = spawnArea;
@@ -47,22 +47,25 @@ bool ParticleEmitter::hasActiveParticles()
 	return _particleSystem->getNumActiveParticles() > 0;
 }
 
-vector<Particle> *ParticleEmitter::getParticles()
+ParticleSystem *ParticleEmitter::getParticleSystem()
 {
-	return _particles;
+	return _particleSystem;
 }
 
 RenderCommand ParticleEmitter::getRenderCommand()
 {
 	RenderCommand renderCommand;
 
-	for (GLuint i = 0; i < _particles->size(); i++)
+	int i = 0;
+	for (ParticleSystem::iterator it = _particleSystem->begin(); it != _particleSystem->end(); it++)
 	{
-		Particle particle = _particles->at(i);
+		Particle particle = *it;
 
 		(*_vertices)[i].position = particle.position;
 		(*_vertices)[i].normal = glm::vec3(0.0f);
 		(*_vertices)[i].texCoords = glm::vec2(0.0f);
+
+		i++;
 	}
 
 	_particleMesh->updateBuffers(_vertices, _indices);
@@ -113,16 +116,20 @@ void ParticleEmitter::update(float dt)
 
 void ParticleEmitter::destroyParticles(float dt)
 {
-	for (ParticleSystem::iterator it = _particleSystem->begin(); it != _particleSystem->end(); it++)
+	ParticleSystem::iterator it;
+	for (it = _particleSystem->begin(); it != _particleSystem->end(); it++)
 	{
-		Particle particle = *it;
-		float lifeTime = _lifeTime[particle.index];
+		float lifeTime = _lifeTime[it->index];
 		lifeTime += dt;
 
 		if (lifeTime >= _maxLifeTime)
 		{
-			_particleSystem->destroyParticle(particle.index);
+			it = _particleSystem->destroyParticle(it);
+			_vertices->erase(_vertices->end()-1);
+			_indices->erase(_indices->end()-1);
 		}
+
+		_lifeTime[it->index] = lifeTime;
 	}
 }
 
@@ -171,7 +178,10 @@ void ParticleEmitter::spawnParticles(float dt)
 		tangent2 = glm::normalize(glm::cross(entityDirection, tangent));
 		position = x*tangent + z*tangent2 + entityPosition;
 
-		_particleSystem->createParticle(position, velocity);
+		GLuint index = _particleSystem->createParticle(position, velocity);
+		_lifeTime[index] = 0.0f;
+		_vertices->push_back(Vertex());
+		_indices->push_back(_indices->size());
 
 		_spawnRest -= _spawnRate;
 	}

@@ -42,7 +42,7 @@ class ParticleEmitter : public Behaviour
 			float velocity, float velocityDeviation, GLuint maxParticles, float maxLifeTime);
 		~ParticleEmitter();
 		bool hasActiveParticles();
-		vector<Particle> *getParticles();
+		ParticleSystem *getParticleSystem();
 		RenderCommand getRenderCommand();
 		void accept(Scene *scene);
 		void update(float dt);

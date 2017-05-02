@@ -12,6 +12,7 @@ class Camera;
 class Mesh;
 class PointLight;
 class ParticleEmitter;
+class ParticleSystem;
 class SphereCollider;
 class Collider;
 class Cloth;
@@ -37,7 +38,7 @@ class Scene
 		vector<Camera *> *_cameras;
 		vector<RenderCommand> *_renderCommands;
 		vector<PointLight *> *_pointLights;
-		vector<vector<Particle> *> *_particles;
+		vector<ParticleSystem *> *_particleSystems;
 		vector<Collider *> *_colliders;
 		vector<vector<SpringConstraint *> *> *_springConstraints;
 
@@ -74,7 +75,7 @@ class Scene
 
 		vector<RenderCommand> *getRenderCommands();
 
-		vector<vector<Particle> *> *getParticles();
+		vector<ParticleSystem *> *getParticleSystems();
 
 		vector<Collider *> *getColliders();
 

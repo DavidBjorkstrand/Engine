@@ -5,7 +5,7 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Mesh.h"
 #include "engine/renderer/RenderSystem.h"
-#include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ParticleSystem.h"
 #include "engine/physics/SpringConstraint.h"
 
 #include <vector>

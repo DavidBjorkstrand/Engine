@@ -32,7 +32,7 @@ GLuint ParticleSystem::createParticle(glm::vec3 position, glm::vec3 velocity)
 
 	if (_freeIndexQueue.empty())
 	{
-		index = _validRange + 1;
+		index = _validRange;
 		_validRange++;
 	} 
 	else
@@ -57,20 +57,23 @@ GLuint ParticleSystem::createParticle(glm::vec3 position, glm::vec3 velocity)
 	return index;
 }
 
-void ParticleSystem::destroyParticle(GLuint index)
+ParticleSystem::iterator ParticleSystem::destroyParticle(iterator it)
 {
-	if (index == _validRange)
+	if (it->index == _validRange-1)
 	{
 		_validRange--;
+		it.decrementRange();
 	}
 	else 
 	{
-		_freeIndexQueue.push(index);
+		_freeIndexQueue.push(it->index);
 	}
 
-	_valid[index] = false;
+	_valid[it->index] = false;
 
 	_numActiveParticles--;
+
+	return it;
 }
 
 GLuint ParticleSystem::getNumActiveParticles()
@@ -80,15 +83,15 @@ GLuint ParticleSystem::getNumActiveParticles()
 
 GLboolean ParticleSystem::isFull()
 {
-	return _freeIndexQueue.empty && (_validRange + 1 == _numParticles);
+	return _freeIndexQueue.empty() && (_validRange == _numParticles);
 }
 
 ParticleSystem::iterator ParticleSystem::begin()
 {
-	return ParticleSystem::iterator(0, _particles, _valid);
+	return ParticleSystem::iterator(0, _particles, _valid, _validRange);
 }
 
 ParticleSystem::iterator ParticleSystem::end()
 {
-	return ParticleSystem::iterator(_validRange, _particles, _valid);
+	return ParticleSystem::iterator(_validRange, _particles, _valid, _validRange);
 }
