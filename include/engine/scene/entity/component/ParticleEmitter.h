@@ -9,6 +9,7 @@
 
 class Scene;
 class Mesh;
+class ParticleSystem;
 
 struct Particle;
 struct RenderCommand;
@@ -22,21 +23,16 @@ class ParticleEmitter : public Behaviour
 		vector<Vertex> *_vertices;
 		vector<GLuint> *_indices;
 		Mesh *_particleMesh;
-		float _particleRadius;
+		ParticleSystem *_particleSystem;
+
 		glm::vec2 _spawnArea;
 		float _spawnRadius;
 		float _spawnRate;
 		float _spawnRest;
-		float _mass;
-		float _inverseMass;
 		float _velocity;
 		float _velocityDeviation;
-		GLuint _maxParticles;
-		GLuint _nrParticles;
 		float _maxLifeTime;
 		float *_lifeTime;
-		vector<Particle> *_particles;
-		vector<GLuint> *_freeIndexes;
 		GLboolean _sphereSpawn;
 		
 	public:

@@ -1,6 +1,7 @@
 #include "engine/scene/entity/component/ParticleEmitter.h"
 
 #include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ParticleSystem.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/renderer/Material.h"
 #include "engine/scene/Scene.h"
@@ -36,8 +37,6 @@ ParticleEmitter::ParticleEmitter(float particleRadius, float spawnRadius, float 
 
 ParticleEmitter::~ParticleEmitter()
 {
-	delete _particles;
-	delete _freeIndexes;
 	delete _lifeTime;
 	delete _vertices;
 	delete _indices;
@@ -45,7 +44,7 @@ ParticleEmitter::~ParticleEmitter()
 
 bool ParticleEmitter::hasActiveParticles()
 {
-	return _particles->size() > 0;
+	return _particleSystem->getNumActiveParticles() > 0;
 }
 
 vector<Particle> *ParticleEmitter::getParticles()
@@ -91,20 +90,15 @@ void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, fl
 	material->setFloat("uRoughness", 1.0f);
 	material->setFloat("uMetallic", 0.0f);
 	_particleMesh->setMaterial(material);
-	_particleRadius = particleRadius;
+
+	_particleSystem = new ParticleSystem(maxParticles, mass, particleRadius);
+
 	_spawnRate = spawnRate;
 	_spawnRest = 0.0f;
-	_mass = mass;
-	_inverseMass = 1.0f / _mass;
 	_velocity = velocity;
 	_velocityDeviation = velocityDeviation;
-	_maxParticles = maxParticles;
-	_nrParticles = 0.0f;
 	_maxLifeTime = maxLifeTime;
 	_lifeTime = new float[maxParticles];
-	_particles = new vector<Particle>();
-	_particles->reserve(maxParticles);
-	_freeIndexes = new vector<GLuint>();
 }
 
 void ParticleEmitter::update(float dt)
@@ -119,26 +113,15 @@ void ParticleEmitter::update(float dt)
 
 void ParticleEmitter::destroyParticles(float dt)
 {
-	vector<Particle>::iterator it;
-	for (it = _particles->begin(); it != _particles->end();)
+	for (ParticleSystem::iterator it = _particleSystem->begin(); it != _particleSystem->end(); it++)
 	{
-		float lifeTime = _lifeTime[it->index];
+		Particle particle = *it;
+		float lifeTime = _lifeTime[particle.index];
 		lifeTime += dt;
 
 		if (lifeTime >= _maxLifeTime)
 		{
-			_freeIndexes->push_back(it->index);
-
-			it = _particles->erase(it);
-			_nrParticles--;
-
-			_vertices->erase(_vertices->begin());
-			_indices->erase(_indices->end()-1);
-		}
-		else
-		{
-			_lifeTime[it->index] = lifeTime;
-			it++;
+			_particleSystem->destroyParticle(particle.index);
 		}
 	}
 }
@@ -149,7 +132,7 @@ void ParticleEmitter::spawnParticles(float dt)
 	glm::vec3 entityDirection = getEntity()->getTransform()->getWorldDirection();
 	glm::vec3 entityPosition = getEntity()->getTransform()->getWorldPosition();
 
-	while ((_spawnRest >= _spawnRate) && (_nrParticles < _maxParticles))
+	while ((_spawnRest >= _spawnRate) && !_particleSystem->isFull())
 	{
 		glm::vec3 velocity = random(_velocity - (_velocityDeviation / 2.0f), _velocity + (_velocityDeviation / 2.0f))*entityDirection;
 		float x;
@@ -188,43 +171,10 @@ void ParticleEmitter::spawnParticles(float dt)
 		tangent2 = glm::normalize(glm::cross(entityDirection, tangent));
 		position = x*tangent + z*tangent2 + entityPosition;
 
-		createParticle(position, velocity);
+		_particleSystem->createParticle(position, velocity);
 
 		_spawnRest -= _spawnRate;
 	}
-}
-
-void ParticleEmitter::createParticle(glm::vec3 position, glm::vec3 velocity)
-{
-	Particle particle;
-
-	if (_freeIndexes->empty())
-	{
-		particle.index = _particles->size();
-	}
-	else
-	{
-		particle.index = _freeIndexes->at(0);
-		_freeIndexes->erase(_freeIndexes->begin());
-	}
-
-	particle.mass = _mass;
-	particle.radius = _particleRadius;
-	particle.inverseMass = _inverseMass;
-	particle.position = position;
-	particle.velocity = velocity;
-	particle.predictedVelocity = velocity;
-	particle.acceleration = glm::vec3(0.0f);
-	particle.force = glm::vec3(0.0f);
-
-	_particles->push_back(particle);
-
-	_lifeTime[particle.index] = 0.0f;
-
-	_nrParticles++;
-
-	_vertices->push_back(Vertex());
-	_indices->push_back(_indices->size());
 }
 
 float ParticleEmitter::random(float min, float max)
