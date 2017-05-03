@@ -76,6 +76,11 @@ ParticleSystem::iterator ParticleSystem::destroyParticle(iterator it)
 	return it;
 }
 
+Particle *ParticleSystem::getParticle(GLuint index)
+{
+	return &_particles[index];
+}
+
 GLuint ParticleSystem::getNumActiveParticles()
 {
 	return _numActiveParticles;

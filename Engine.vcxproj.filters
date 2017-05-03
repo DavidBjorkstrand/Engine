@@ -111,10 +111,10 @@
     <ClCompile Include="src\engine\scene\entity\component\Cloth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\SpringConstraint.cpp">
+    <ClCompile Include="src\engine\physics\ParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\ParticleSystem.cpp">
+    <ClCompile Include="src\engine\physics\SoftBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,10 +221,10 @@
     <ClInclude Include="include\engine\scene\entity\component\Cloth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\SpringConstraint.h">
+    <ClInclude Include="include\engine\physics\ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\ParticleSystem.h">
+    <ClInclude Include="include\engine\physics\SoftBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

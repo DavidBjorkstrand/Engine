@@ -111,6 +111,7 @@ class ParticleSystem
 		~ParticleSystem();
 		GLuint createParticle(glm::vec3 position, glm::vec3 velocity);
 		iterator destroyParticle(iterator iterator);
+		Particle *getParticle(GLuint index);
 		GLuint getNumActiveParticles();
 		GLboolean isFull();
 		iterator begin();

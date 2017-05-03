@@ -130,8 +130,8 @@
     <ClCompile Include="src\engine\physics\ParticleSystem.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
+    <ClCompile Include="src\engine\physics\SoftBody.cpp" />
     <ClCompile Include="src\engine\physics\SphereCollider.cpp" />
-    <ClCompile Include="src\engine\physics\SpringConstraint.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
     <ClCompile Include="src\engine\renderer\FluidRenderer.cpp" />
     <ClCompile Include="src\engine\renderer\TextureGenerator.cpp" />
@@ -166,8 +166,8 @@
     <ClInclude Include="include\engine\physics\ParticleSystem.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\physics\PlaneCollider.h" />
+    <ClInclude Include="include\engine\physics\SoftBody.h" />
     <ClInclude Include="include\engine\physics\SphereCollider.h" />
-    <ClInclude Include="include\engine\physics\SpringConstraint.h" />
     <ClInclude Include="include\engine\renderer\CubeMap.h" />
     <ClInclude Include="include\engine\renderer\FluidRenderer.h" />
     <ClInclude Include="include\engine\renderer\TextureGenerator.h" />

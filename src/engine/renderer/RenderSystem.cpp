@@ -70,7 +70,6 @@ void RenderSystem::draw()
 
 	for (Camera *camera : *cameras)
 	{
-
 		_sceneGenerator->bind(true);
 		for (RenderCommand renderCommand : *renderCommands)
 		{

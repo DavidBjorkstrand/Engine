@@ -2,7 +2,7 @@
 
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/Collider.h"
-#include "engine/physics/SpringConstraint.h"
+#include "engine/physics/SoftBody.h"
 #include "engine/scene/Scene.h"
 
 #include <vector>
@@ -42,24 +42,36 @@ void PhysicsSystem::update(float dt)
 	{
 		vector<ParticleSystem *> *particleSystems = _scene->getParticleSystems();
 		vector<Collider *> *colliders = _scene->getColliders();
-		vector<vector<SpringConstraint *> *> *springConstraints = _scene->getSpringConstraints();
+		vector<SoftBody *> *softBodies = _scene->getSoftBodies();
 
-		applyConstraints(springConstraints);
+		applyConstraints(softBodies);
 		applyExternalForces(particleSystems);
+		applyExternalForces(softBodies);
 		collisionResolution(particleSystems, colliders);
 		integrate(particleSystems);
+		integrate(softBodies);
 
 		_dtRest -= _timeStep;
 	}
 }
 
-void PhysicsSystem::applyConstraints(vector<vector<SpringConstraint *> *> *springConstraints)
+void PhysicsSystem::applyConstraints(vector<SoftBody *> *softBodies)
 {
-	for (vector<SpringConstraint *> *constraintVector : *springConstraints)
+	for (SoftBody *softBody : *softBodies)
 	{
-		for (SpringConstraint *springConstraint : *constraintVector)
+		vector<SpringConstraint> *constraints = softBody->getConstraints();
+		for (SpringConstraint s : *constraints)
 		{
-			springConstraint->updateForces();
+			glm::vec3 r_ij = s.i->position - s.j->position;
+			glm::vec3 v_ij = s.i->velocity - s.j->velocity;
+			glm::vec3 dir = glm::normalize(r_ij);
+			float length = glm::length(r_ij);
+
+			glm::vec3 f_i = -(s.ks*(length - s.length) + s.kd*(glm::dot(v_ij, r_ij) / length))*dir;
+			glm::vec3 f_j = -f_i;
+
+			s.i->force += f_i;
+			s.j->force += f_j;
 		}
 	}
 }
@@ -69,6 +81,19 @@ void PhysicsSystem::applyExternalForces(vector<ParticleSystem *> *particleSystem
 	for (ParticleSystem *particleSystem : *particleSystems)
 	{
 		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
+		{
+			applyGravity(&it);
+			applyViscousFriction(&it);
+			applyAirFriction(&it);
+		}
+	}
+}
+
+void PhysicsSystem::applyExternalForces(vector<SoftBody *> *softBodies)
+{
+	for (SoftBody *softBody : *softBodies)
+	{
+		for (ParticleSystem::iterator it = softBody->begin(); it != softBody->end(); it++)
 		{
 			applyGravity(&it);
 			applyViscousFriction(&it);
@@ -151,6 +176,30 @@ void PhysicsSystem::integrate(vector<ParticleSystem *> *particleSystems)
 	for (ParticleSystem *particleSystem : *particleSystems)
 	{
 		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
+		{
+			Particle *particle = &it;
+
+			//a_(n)
+			glm::vec3 newAcceleration = particle->force * particle->inverseMass;
+
+			//v_(n)
+			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_timeStep;
+
+			particle->acceleration = newAcceleration;
+			particle->force = glm::vec3(0.0f);
+
+			//r_(n+1)
+			particle->position = particle->position + particle->velocity*_timeStep + 0.5f*particle->acceleration*_timeStep*_timeStep;
+			particle->predictedVelocity = particle->velocity + particle->acceleration*_timeStep;
+		}
+	}
+}
+
+void PhysicsSystem::integrate(vector<SoftBody *> *softBodies)
+{
+	for (SoftBody *softBody : *softBodies)
+	{
+		for (ParticleSystem::iterator it = softBody->begin(); it != softBody->end(); it++)
 		{
 			Particle *particle = &it;
 

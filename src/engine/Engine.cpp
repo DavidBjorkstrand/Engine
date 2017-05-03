@@ -113,8 +113,11 @@ void Engine::run()
 		{
 			behaviour->update(dt);
 		}
-
-		_physicsSystem->update(dt);
+		
+		if (Input::checkKey(GLFW_KEY_SPACE))
+		{
+			_physicsSystem->update(dt);
+		}
 
 		_renderSystem->draw();
 
@@ -163,8 +166,9 @@ int main(int argc, char *argv[])
 	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 2.0f, 0.0f));
 	scene->addEntity(particleEnity);
 
-	Cloth *cloth = new Cloth();
+	Cloth *cloth = new Cloth(41, 41, 1.0f);
 	Entity *clothEntity = new Entity();
+	clothEntity->getTransform()->setPosition(glm::vec3(0.0f, 50.0f, 0.0f));
 	clothEntity->addComponent(cloth);
 	scene->addEntity(clothEntity);
 

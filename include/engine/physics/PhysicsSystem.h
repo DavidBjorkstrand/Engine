@@ -7,12 +7,21 @@
 
 class Scene;
 class Collider;
-class SpringConstraint;
+class SoftBody;
 class ParticleSystem;
 
 struct Particle;
 
 using namespace std;
+
+struct SpringConstraint
+{
+	Particle *i;
+	Particle *j;
+	float ks;
+	float kd;
+	float length;
+};
 
 class PhysicsSystem
 {
@@ -37,12 +46,14 @@ class PhysicsSystem
 		void update(float dt);
 
 	private:
-		void applyConstraints(vector<vector<SpringConstraint *> *> *springConstraints);
+		void applyConstraints(vector<SoftBody *> *softBodies);
 		void applyExternalForces(vector<ParticleSystem *> *particleSystems);
+		void applyExternalForces(vector<SoftBody *> *softBodies);
 		void applyGravity(Particle *particle);
 		void applyViscousFriction(Particle *particle);
 		void applyAirFriction(Particle *particle);
 		void collisionResolution(vector<ParticleSystem *> *particleSystems, vector<Collider *> *colliders);
 		void integrate(vector<ParticleSystem *> *particleSystems);
+		void integrate(vector<SoftBody *> *softBodies);
 		
 };

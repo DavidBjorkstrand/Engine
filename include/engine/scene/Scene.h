@@ -16,9 +16,9 @@ class ParticleSystem;
 class SphereCollider;
 class Collider;
 class Cloth;
-class SpringConstraint;
-struct Particle;
+class SoftBody;
 
+struct Particle;
 struct RenderCommand;
 
 using namespace std;
@@ -40,7 +40,7 @@ class Scene
 		vector<PointLight *> *_pointLights;
 		vector<ParticleSystem *> *_particleSystems;
 		vector<Collider *> *_colliders;
-		vector<vector<SpringConstraint *> *> *_springConstraints;
+		vector<SoftBody *> *_softBodies;
 
     public:
 		/*
@@ -79,7 +79,7 @@ class Scene
 
 		vector<Collider *> *getColliders();
 
-		vector<vector<SpringConstraint *> *> *getSpringConstraints();
+		vector<SoftBody *> *getSoftBodies();
 
 		/*
 		* Parse functions

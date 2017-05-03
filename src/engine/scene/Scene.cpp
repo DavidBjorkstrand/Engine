@@ -13,7 +13,7 @@
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/Collider.h"
-#include "engine/physics/SpringConstraint.h"
+#include "engine/physics/SoftBody.h"
 
 #include <string>
 #include <iostream>
@@ -34,7 +34,7 @@ Scene::Scene(string sceneName)
 	_renderCommands = new vector<RenderCommand>();
 	_particleSystems = new vector<ParticleSystem *>();
 	_colliders = new vector<Collider *>();
-	_springConstraints = new vector<vector<SpringConstraint *> *>();
+	_softBodies = new vector<SoftBody *>();
 }
 
 Scene::~Scene()
@@ -49,7 +49,7 @@ Scene::~Scene()
 	delete _renderCommands;
 	delete _particleSystems;
 	delete _colliders;
-	delete _springConstraints;
+	delete _softBodies;
 }
 
 string Scene::getName()
@@ -112,9 +112,9 @@ vector<Collider *> *Scene::getColliders()
 	return _colliders;
 }
 
-vector<vector<SpringConstraint *> *> *Scene::getSpringConstraints()
+vector<SoftBody *> *Scene::getSoftBodies()
 {
-	return _springConstraints;
+	return _softBodies;
 }
 
 void Scene::traverse()
@@ -125,7 +125,7 @@ void Scene::traverse()
 	_renderCommands->clear();
 	_particleSystems->clear();
 	_colliders->clear();
-	_springConstraints->clear();
+	_softBodies->clear();
 
 	depthFirst(_entities);
 }
@@ -179,9 +179,7 @@ void Scene::visit(Cloth *cloth)
 {
 	_renderCommands->push_back(cloth->getRenderCommand());
 
-	//_particles->push_back(cloth->getParticles());
-
-	//_springConstraints->push_back(cloth->getSpringConstraints());
+	_softBodies->push_back(cloth->getSoftBody());
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)
