@@ -9,6 +9,7 @@ class Scene;
 class Collider;
 class SoftBody;
 class ParticleSystem;
+class ConstraintSolver;
 
 struct Particle;
 
@@ -27,6 +28,7 @@ class PhysicsSystem
 {
 	private:
 		Scene *_scene;
+		ConstraintSolver *_constraintSolver;
 		float _timeStep;
 		float _dtRest;
 

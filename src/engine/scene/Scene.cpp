@@ -8,6 +8,7 @@
 #include "engine/scene/entity/component/Mesh.h"
 #include "engine/scene/entity/component/ParticleEmitter.h"
 #include "engine/scene/entity/component/Cloth.h"
+#include "engine/scene/entity/component/Rope.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
 #include "engine/physics/ParticleSystem.h"
@@ -180,6 +181,13 @@ void Scene::visit(Cloth *cloth)
 	_renderCommands->push_back(cloth->getRenderCommand());
 
 	_softBodies->push_back(cloth->getSoftBody());
+}
+
+void Scene::visit(Rope *rope)
+{
+	_renderCommands->push_back(rope->getRenderCommand());
+
+	_softBodies->push_back(rope->getSoftBody());
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

@@ -173,32 +173,32 @@ void Cloth::setConstraints()
 			GLuint index = c + (r * _width);
 			if (c != _width - 1)
 			{
-				_softBody->addConstraint(index, index + 1, distance, springForce, kd);
+				_softBody->addSpringConstraint(index, index + 1, distance, springForce, kd);
 			}
 
 			if (r != _height - 1)
 			{
-				_softBody->addConstraint(index, index + _width, distance, springForce, kd);
+				_softBody->addSpringConstraint(index, index + _width, distance, springForce, kd);
 			}
 
 			if ((c != _width - 1) && (r != _height - 1))
 			{
-				_softBody->addConstraint(index, index + _width + 1, glm::sqrt(distance * distance + distance * distance), springForce, kd);
+				_softBody->addSpringConstraint(index, index + _width + 1, glm::sqrt(distance * distance + distance * distance), springForce, kd);
 			}
 
 			if ((c != 0) && (r != _height - 1))
 			{
-				_softBody->addConstraint(index, index + _width - 1, glm::sqrt(distance * distance + distance * distance), springForce, kd);
+				_softBody->addSpringConstraint(index, index + _width - 1, glm::sqrt(distance * distance + distance * distance), springForce, kd);
 			}
 
 			if (c <= _width - 1 - 2)
 			{
-				_softBody->addConstraint(index, index + 2, distance*2.0f, springForce, kd);
+				_softBody->addSpringConstraint(index, index + 2, distance*2.0f, springForce, kd);
 			}
 
 			if (r <= _height - 1 - 2)
 			{
-				_softBody->addConstraint(index, index + _width * 2, distance*2.0f, springForce, kd);
+				_softBody->addSpringConstraint(index, index + _width * 2, distance*2.0f, springForce, kd);
 			}
 		}
 	}

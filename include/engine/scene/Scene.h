@@ -17,6 +17,7 @@ class SphereCollider;
 class Collider;
 class Cloth;
 class SoftBody;
+class Rope;
 
 struct Particle;
 struct RenderCommand;
@@ -99,6 +100,8 @@ class Scene
 		void visit(Collider *collider);
 
 		void visit(Cloth *cloth);
+
+		void visit(Rope *rope);
 
     private:
 		void depthFirst(vector<Entity*> *entities);

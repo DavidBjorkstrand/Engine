@@ -117,6 +117,12 @@
     <ClCompile Include="src\engine\physics\SoftBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\physics\ConstraintSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scene\entity\component\Rope.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\renderer\Material.h">
@@ -225,6 +231,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\physics\SoftBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\ConstraintSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\scene\entity\component\Rope.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

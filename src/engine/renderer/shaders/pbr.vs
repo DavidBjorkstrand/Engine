@@ -13,6 +13,7 @@ out vec2 TexCoords;
 
 void main()
 {
+	gl_PointSize = 10.0f;
 	gl_Position = proj * view * model * vec4(position, 1.0f);
 
 	Position = vec3(model * vec4(position, 1.0f));

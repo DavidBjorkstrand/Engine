@@ -18,6 +18,7 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 	_material = Resources::findMaterial(materialName);
 
 	_depthFunc = GL_LESS;
+	_drawMode = GL_TRIANGLE_STRIP;
 
 	_usage = GL_STATIC_DRAW;
 
@@ -30,6 +31,7 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 	_material = Resources::findMaterial(materialName);
 
 	_depthFunc = GL_LESS;
+	_drawMode = GL_TRIANGLE_STRIP;
 
 	_usage = usage;
 
@@ -40,6 +42,7 @@ Mesh::Mesh(vector<Vertex> *vertices, vector<GLuint> *indices, string materialNam
 Mesh::Mesh(GLenum usage)
 {
 	_depthFunc = GL_LESS;
+	_drawMode = GL_TRIANGLE_STRIP;
 
 	_usage = usage;
 	initBuffers();
@@ -71,6 +74,11 @@ void Mesh::setDepthFunc(GLenum depthFunc)
 	_depthFunc = depthFunc;
 }
 
+void Mesh::setDrawMode(GLenum drawMode)
+{
+	_drawMode = drawMode;
+}
+
 Material *Mesh::getMaterial()
 {
 	return _material;
@@ -89,6 +97,11 @@ GLuint Mesh::getNIndices()
 GLenum Mesh::getDepthFunc()
 {
 	return _depthFunc;
+}
+
+GLenum Mesh::getDrawMode()
+{
+	return _drawMode;
 }
 
 void Mesh::updateBuffers(vector<Vertex> *vertices, vector<GLuint> *indices)

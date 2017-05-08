@@ -2,6 +2,7 @@
 
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/PhysicsSystem.h"
+#include "engine/physics/ConstraintSolver.h"
 
 #include <GL/glew.h>
 
@@ -9,7 +10,8 @@ SoftBody::SoftBody(glm::vec3 position, GLint numParticles, float particleMass)
 	: ParticleSystem(numParticles, particleMass, 0.1f)
 {
 	_position = position;
-	_constraints = new vector<SpringConstraint>();
+	_springConstraints = new vector<SpringConstraint>();
+	_distanceConstraints = new vector<DistanceConstraint>();
 }
 
 void SoftBody::setPosition(glm::vec3 position)
@@ -28,10 +30,10 @@ void SoftBody::setPosition(glm::vec3 position)
 
 SoftBody::~SoftBody()
 {
-	delete _constraints;
+	delete _springConstraints;
 }
 
-void SoftBody::addConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length, float ks, float kd)
+void SoftBody::addSpringConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length, float ks, float kd)
 {
 	SpringConstraint constraint;
 	Particle *i = getParticle(particleIndexI);
@@ -43,10 +45,28 @@ void SoftBody::addConstraint(GLuint particleIndexI, GLuint particleIndexJ, float
 	constraint.ks = ks;
 	constraint.kd = kd;
 
-	_constraints->push_back(constraint);
+	_springConstraints->push_back(constraint);
 }
 
-vector<SpringConstraint> *SoftBody::getConstraints()
+void SoftBody::addDistanceConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length)
 {
-	return _constraints;
+	DistanceConstraint distanceConstraint;
+	Particle *i = getParticle(particleIndexI);
+	Particle *j = getParticle(particleIndexJ);
+
+	distanceConstraint.i = i;
+	distanceConstraint.j = j;
+	distanceConstraint.length = length;
+
+	_distanceConstraints->push_back(distanceConstraint);
+}
+
+vector<SpringConstraint> *SoftBody::getSpringConstraints()
+{
+	return _springConstraints;
+}
+
+vector<DistanceConstraint> *SoftBody::getDistanceConstraints()
+{
+	return _distanceConstraints;
 }

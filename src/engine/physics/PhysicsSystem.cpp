@@ -1,6 +1,7 @@
 #include "engine/physics/PhysicsSystem.h"
 
 #include "engine/physics/ParticleSystem.h"
+#include "engine/physics/ConstraintSolver.h"
 #include "engine/physics/Collider.h"
 #include "engine/physics/SoftBody.h"
 #include "engine/scene/Scene.h"
@@ -17,6 +18,8 @@ PhysicsSystem::PhysicsSystem()
 {
 	_timeStep = 1.0f / 500.0f;
 	_dtRest = 0.0f;
+
+	_constraintSolver = new ConstraintSolver(_timeStep);
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
 	_k = 0.0005f;
@@ -59,7 +62,7 @@ void PhysicsSystem::applyConstraints(vector<SoftBody *> *softBodies)
 {
 	for (SoftBody *softBody : *softBodies)
 	{
-		vector<SpringConstraint> *constraints = softBody->getConstraints();
+		vector<SpringConstraint> *constraints = softBody->getSpringConstraints();
 		for (SpringConstraint s : *constraints)
 		{
 			glm::vec3 r_ij = s.i->position - s.j->position;
@@ -211,6 +214,17 @@ void PhysicsSystem::integrate(vector<SoftBody *> *softBodies)
 
 			particle->acceleration = newAcceleration;
 			particle->force = glm::vec3(0.0f);
+
+		}
+
+		if (!softBody->getDistanceConstraints()->empty())
+		{
+			_constraintSolver->solveConstraints(softBody->getDistanceConstraints());
+		}
+
+		for (ParticleSystem::iterator it = softBody->begin(); it != softBody->end(); it++)
+		{
+			Particle *particle = &it;
 
 			//r_(n+1)
 			particle->position = particle->position + particle->velocity*_timeStep + 0.5f*particle->acceleration*_timeStep*_timeStep;

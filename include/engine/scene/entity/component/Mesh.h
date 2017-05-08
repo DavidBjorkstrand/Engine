@@ -28,6 +28,7 @@ class Mesh : public Component
 		GLuint _VBO;
 		GLenum _depthFunc;
 		GLenum _usage;
+		GLenum _drawMode;
 
 	public:
 
@@ -59,6 +60,8 @@ class Mesh : public Component
 
 		void setDepthFunc(GLenum depthFunc);
 
+		void setDrawMode(GLenum drawMode);
+
 		Material *getMaterial();
 
 		GLuint getVAO();
@@ -66,6 +69,8 @@ class Mesh : public Component
 		GLuint getNIndices();
 
 		GLenum getDepthFunc();
+
+		GLenum getDrawMode();
 
 		void updateBuffers(vector<Vertex> *vertices, vector<GLuint> *indices);
 

@@ -127,6 +127,7 @@
     <ClCompile Include="src\engine\InputSystem.cpp" />
     <ClCompile Include="src\engine\interface\Resources.cpp" />
     <ClCompile Include="src\engine\physics\Collider.cpp" />
+    <ClCompile Include="src\engine\physics\ConstraintSolver.cpp" />
     <ClCompile Include="src\engine\physics\ParticleSystem.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="src\engine\scene\entity\component\Mesh.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\ParticleEmitter.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\PointLight.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\Rope.cpp" />
     <ClCompile Include="src\engine\scene\MatrixStack.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\scene\entity\Transform.cpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="include\engine\InputSystem.h" />
     <ClInclude Include="include\engine\interface\Resources.h" />
     <ClInclude Include="include\engine\physics\Collider.h" />
+    <ClInclude Include="include\engine\physics\ConstraintSolver.h" />
     <ClInclude Include="include\engine\physics\ParticleSystem.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\physics\PlaneCollider.h" />
@@ -183,6 +186,7 @@
     <ClInclude Include="include\engine\scene\entity\component\Mesh.h" />
     <ClInclude Include="include\engine\scene\entity\component\ParticleEmitter.h" />
     <ClInclude Include="include\engine\scene\entity\component\PointLight.h" />
+    <ClInclude Include="include\engine\scene\entity\component\Rope.h" />
     <ClInclude Include="include\engine\scene\MatrixStack.h" />
     <ClInclude Include="include\engine\scene\entity\Transform.h" />
     <ClInclude Include="include\engine\scene\SkyBox.h" />

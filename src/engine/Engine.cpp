@@ -19,6 +19,7 @@
 #include "engine/scene/entity/component/Behaviour.h"
 #include "engine/scene/entity/component/ParticleEmitter.h"
 #include "engine/scene/entity/component/Cloth.h"
+#include "engine/scene/entity/component/Rope.h"
 #include "behaviour/CameraController.h"
 
 #include <map>
@@ -114,11 +115,8 @@ void Engine::run()
 			behaviour->update(dt);
 		}
 		
-		if (Input::checkKey(GLFW_KEY_SPACE))
-		{
-			_physicsSystem->update(dt);
-		}
-
+		_physicsSystem->update(dt);
+		
 		_renderSystem->draw();
 
         _windowSystem->show();
@@ -171,6 +169,11 @@ int main(int argc, char *argv[])
 	clothEntity->getTransform()->setPosition(glm::vec3(0.0f, 50.0f, 0.0f));
 	clothEntity->addComponent(cloth);
 	scene->addEntity(clothEntity);
+
+	Rope *rope = new Rope();
+	Entity *ropeEntity = new Entity();
+	ropeEntity->addComponent(rope);
+	scene->addEntity(ropeEntity);
 
 	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");
 

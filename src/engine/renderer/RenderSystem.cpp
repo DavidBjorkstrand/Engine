@@ -34,6 +34,8 @@ RenderSystem::RenderSystem()
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_POINT_SPRITE);
 	glEnable(GL_PROGRAM_POINT_SIZE);
+	glEnable(GL_LINE_SMOOTH);
+	glLineWidth(5.0f);
 
 	_fluidRenderer = new FluidRenderer();
 
@@ -204,7 +206,7 @@ void RenderSystem::draw()
 			GLuint nIndices = mesh->getNIndices();
 
 			glBindVertexArray(VAO);
-			glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+			glDrawElements(mesh->getDrawMode(), nIndices, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 		}
 		_sceneGenerator->unbind();
@@ -231,7 +233,7 @@ void RenderSystem::draw()
 		GLuint nIndices = _screenAlignedQuad->getNIndices();
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_INT, 0);
+		glDrawElements(_screenAlignedQuad->getDrawMode(), nIndices, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		glDisable(GL_BLEND);
