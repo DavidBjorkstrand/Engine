@@ -26,9 +26,9 @@ void PlaneCollider::setHeight(float height)
 	_height = height;
 }
 
-Collision PlaneCollider::checkCollision(Particle *particle)
+Intersection PlaneCollider::checkCollision(Particle *particle)
 {
-	Collision collision;
+	Intersection intersection;
 	_transform = getEntity()->getTransform();
 	glm::vec3 planeNormal = glm::normalize(glm::mat3(_transform->getMatrix()) * _planeNormal);
 	float distanceNominator = glm::dot(planeNormal, particle->position) + _D;
@@ -39,25 +39,25 @@ Collision PlaneCollider::checkCollision(Particle *particle)
 
 	if (distance > particle->radius)
 	{
-		collision.colliding = false;
+		intersection.intersecting = false;
 	}
 	else if (planeDistance < 50.0f)
 	{
-		collision.colliding = true;
-		collision.distance = distance - particle->radius;
-		collision.normal = -planeNormal;
-		collision.point = particle->position + collision.normal*distance;
+		intersection.intersecting = true;
+		intersection.distance = distance - particle->radius;
+		intersection.normal = -planeNormal;
+		intersection.point = particle->position + intersection.normal*distance;
 	}
 
-	return collision;
+	return intersection;
 }
 
-Collision PlaneCollider::checkCollision(SphereCollider *sphereCollider)
+Intersection PlaneCollider::checkCollision(SphereCollider *sphereCollider)
 {
-	return Collision();
+	return Intersection();
 }
 
-Collision PlaneCollider::checkCollision(PlaneCollider *planeCollider)
+Intersection PlaneCollider::checkCollision(PlaneCollider *planeCollider)
 {
-	return Collision();
+	return Intersection();
 }

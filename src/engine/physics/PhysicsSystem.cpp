@@ -141,12 +141,12 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 			Particle *particle = &it;
 			for (Collider *collider : *colliders)
 			{
-				Collision collision = collider->checkCollision(particle);
+				Intersection intersection = collider->checkCollision(particle);
 
-				if (collision.colliding)
+				if (intersection.intersecting)
 				{
-					glm::vec3 normalVelocity = glm::dot(-collision.normal, particle->velocity)*-collision.normal;
-					float NdotV = glm::dot(-collision.normal, particle->velocity);
+					glm::vec3 normalVelocity = glm::dot(-intersection.normal, particle->velocity)*-intersection.normal;
+					float NdotV = glm::dot(-intersection.normal, particle->velocity);
 
 					if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
 					{
@@ -160,11 +160,11 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 						float e = (4.0f / kS) / ((_timeStep*_timeStep)*(1.0f + 4.0f*d));
 						float a = (4.0f / _timeStep) / (1.0f + 4.0f*d);
 						float b = (4.0f*d) / (1.0f + 4.0f*d);
-						float q = collision.distance;
+						float q = intersection.distance;
 						glm::vec3 v = normalVelocity;
-						glm::vec3 f_m = glm::dot(-collision.normal, (particle->force*particle->inverseMass))*-collision.normal;
+						glm::vec3 f_m = glm::dot(-intersection.normal, (particle->force*particle->inverseMass))*-intersection.normal;
 
-						glm::vec3 lambda = (-(a / _timeStep)*q*-collision.normal - b*v -_timeStep*f_m) / (1.0f + e*particle->mass);
+						glm::vec3 lambda = (-(a / _timeStep)*q*-intersection.normal - b*v -_timeStep*f_m) / (1.0f + e*particle->mass);
 
 						particle->force -= lambda;
 					}

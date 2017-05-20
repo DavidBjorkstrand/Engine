@@ -13,7 +13,7 @@ class SphereCollider : public Collider
 	public:
 		SphereCollider(float radius);
 		void setRadius(float radius);
-		Collision checkCollision(Particle *particle);
-		Collision checkCollision(SphereCollider *sphereCollider);
-		Collision checkCollision(PlaneCollider *sphereCollider);
+		Intersection checkCollision(Particle *particle);
+		Intersection checkCollision(SphereCollider *sphereCollider);
+		Intersection checkCollision(PlaneCollider *sphereCollider);
 };

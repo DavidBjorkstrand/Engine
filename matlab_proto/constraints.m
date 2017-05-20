@@ -141,30 +141,30 @@ for i = 2:length(t)
         q(2, i) = norm(r23) - 1;
         q(3, i) = norm(r01) - 1;
 
-        MAX_IT = 100;
-        lambda = zeros(3, 1);
-        for it = 1:MAX_IT
-            
-            for ci = 1:3
-                if ci == 1
-                    Bi = -dt*((r12/norm(r12))'*a1(:, i) + (-(r12/norm(r12))'*a2(:, i)));
-                    Bi = Bi - b*((r12/norm(r12))'*v1(:, i) + (-(r12/norm(r12))'*v2(:, i)));
-                    Bi = Bi - q(ci, i);
-                elseif ci == 2
-                    Bi = -dt*((r23/norm(r23))'*a2(:, i) + (-(r23/norm(r23))'*a3(:, i)));
-                    Bi = Bi - b*((r23/norm(r23))'*v2(:, i) + (-(r23/norm(r23))'*v3(:, i)));
-                    Bi = Bi - q(ci, i);
-                elseif ci == 3
-                    Bi = -dt*((r01/norm(r01))'*a1(:, i));
-                    Bi = Bi - b*((r01/norm(r01))'*v1(:, i));
-                    Bi = Bi - q(ci, i);
-                end
-            
-                
-            end
-        end
-%         b = -dt*G*inv(M)*f - b*G*v - a*q(1:3, i);
-%         lambda = S\b;
+%         MAX_IT = 100;
+%         lambda = zeros(3, 1);
+%         for it = 1:MAX_IT
+%             
+%             for ci = 1:3
+%                 if ci == 1
+%                     Bi = -dt*((r12/norm(r12))'*a1(:, i) + (-(r12/norm(r12))'*a2(:, i)));
+%                     Bi = Bi - b*((r12/norm(r12))'*v1(:, i) + (-(r12/norm(r12))'*v2(:, i)));
+%                     Bi = Bi - q(ci, i);
+%                 elseif ci == 2
+%                     Bi = -dt*((r23/norm(r23))'*a2(:, i) + (-(r23/norm(r23))'*a3(:, i)));
+%                     Bi = Bi - b*((r23/norm(r23))'*v2(:, i) + (-(r23/norm(r23))'*v3(:, i)));
+%                     Bi = Bi - q(ci, i);
+%                 elseif ci == 3
+%                     Bi = -dt*((r01/norm(r01))'*a1(:, i));
+%                     Bi = Bi - b*((r01/norm(r01))'*v1(:, i));
+%                     Bi = Bi - q(ci, i);
+%                 end
+%             
+%                 
+%             end
+%         end
+        b = -dt*G*inv(M)*f - b*G*v - a*q(1:3, i);
+        lambda = S\b;
 
         fc(1:6, i) = (G'*lambda);
 

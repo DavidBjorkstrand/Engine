@@ -23,7 +23,7 @@ class PlaneCollider : public Collider
 		PlaneCollider(glm::vec3 position, float width, float height);
 		void setWidth(float width);
 		void setHeight(float height);
-		Collision checkCollision(Particle *particle);
-		Collision checkCollision(SphereCollider *sphereCollider);
-		Collision checkCollision(PlaneCollider *planeCollider);
+		Intersection checkCollision(Particle *particle);
+		Intersection checkCollision(SphereCollider *sphereCollider);
+		Intersection checkCollision(PlaneCollider *planeCollider);
 };
