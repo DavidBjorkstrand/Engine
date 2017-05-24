@@ -427,7 +427,7 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 				glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
 
 				float NdotV = glm::dot(normal, relativeVelocity);
-				glm::vec3 r = normal*sphereCollider->getRigidbody()->getVelocity();
+				glm::vec3 r = -normal*sphereCollider->getRadius();
 
 				if (NdotV < 0.0f && glm::length(relativeVelocity) > 0.5f)
 				{

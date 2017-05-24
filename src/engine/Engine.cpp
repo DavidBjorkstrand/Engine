@@ -21,6 +21,7 @@
 #include "engine/scene/entity/component/Cloth.h"
 #include "engine/scene/entity/component/Rope.h"
 #include "behaviour/CameraController.h"
+#include "engine/SceneBuilder.h"
 
 #include <map>
 #include <vector>
@@ -127,125 +128,8 @@ int main(int argc, char *argv[])
 {
 
     Engine *engine = new Engine();
-	Scene *scene = new Scene("TheScene");
-
-	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, -15.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 27.0f, -15.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 40.0f, -15.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 55.0f, -15.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 70.0f, -15.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, -25.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 27.0f, -25.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 40.0f, -25.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 55.0f, -25.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
-	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 70.0f, -25.0f));
-	entity->getTransform()->setScale(glm::vec3(10.0f, 10.0f, 10.0f));
-	entity->getComponent<SphereCollider>()->setRadius(5.0f);
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
-	entity->getComponent<Mesh>()->setMaterial("floor");
-	entity->getTransform()->rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	entity->getTransform()->setScale(glm::vec3(500.0f, 500.0f, 1.0f));
-	scene->addEntity(entity);
-
-	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
-	entity->getComponent<Mesh>()->setMaterial("floor");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 0.0f, -150.0f));
-	//entity->getTransform()->rotate(-90.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-	entity->getTransform()->setScale(glm::vec3(500.0f, 500.0f, 1.0f));
-	scene->addEntity(entity);
-
-	Camera *camera = new Camera(45.0f, 0.1f, 400.0f);
-	CameraController *cameraController = new CameraController();
-	Entity *cameraEntity = new Entity();
-	cameraEntity->addComponent(camera);
-	cameraEntity->addComponent(cameraController);
-	cameraEntity->getTransform()->setPosition(glm::vec3(60.0f, 50.0f, 85.0f));
-	cameraEntity->getTransform()->rotate(-15.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	cameraEntity->getTransform()->rotate(25.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	scene->addEntity(cameraEntity);
-
-	/*PointLight *pointLight = new PointLight(glm::vec3(300.0f, 300.0f, 300.0f));
-	Entity *lightEntity = new Entity();
-	lightEntity->addComponent(pointLight);
-	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
-	scene->addEntity(lightEntity);*/
-
-	ParticleEmitter *particleEmitter = new ParticleEmitter(0.6f, 1.2f, 0.0025f, 5.0f, 100.0f, 1.0f, 1000, 10.0f);
-	Entity *particleEnity = new Entity();
-	particleEnity->addComponent(particleEmitter);
-	particleEnity->getTransform()->rotate(17.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 2.0f, 450.0f));
-	scene->addEntity(particleEnity);
-
-	Cloth *cloth = new Cloth(41, 41, 1.0f);
-	Entity *clothEntity = new Entity();
-	clothEntity->getTransform()->setPosition(glm::vec3(0.0f, 41.0f, -100.0f));
-	clothEntity->addComponent(cloth);
-	scene->addEntity(clothEntity);
-
-	Rope *rope = new Rope();
-	Entity *ropeEntity = new Entity();
-	ropeEntity->addComponent(rope);
-	scene->addEntity(ropeEntity);
-
+	SceneBuilder *sceneBuilder = new SceneBuilder();
+	Scene *scene = sceneBuilder->buildScene5();
 	SkyBox *skyBox = new SkyBox("resources\\textures\\malibu3k.hdr");
 
 	scene->setSkyBox(skyBox);

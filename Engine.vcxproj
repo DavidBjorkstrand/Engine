@@ -144,6 +144,7 @@
     <ClCompile Include="src\engine\renderer\RenderSystem.cpp" />
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\engine\renderer\Texture.cpp" />
+    <ClCompile Include="src\engine\SceneBuilder.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Behaviour.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Camera.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Cloth.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="include\engine\renderer\RenderSystem.h" />
     <ClInclude Include="include\engine\renderer\Shader.h" />
     <ClInclude Include="include\engine\renderer\Texture.h" />
+    <ClInclude Include="include\engine\SceneBuilder.h" />
     <ClInclude Include="include\engine\scene\entity\component\Behaviour.h" />
     <ClInclude Include="include\engine\scene\entity\component\Camera.h" />
     <ClInclude Include="include\engine\renderer\Material.h" />

@@ -132,6 +132,9 @@
     <ClCompile Include="src\engine\scene\entity\component\RigidBodyComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\SceneBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\renderer\Material.h">
@@ -255,6 +258,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\scene\entity\component\RigidbodyComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\SceneBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
