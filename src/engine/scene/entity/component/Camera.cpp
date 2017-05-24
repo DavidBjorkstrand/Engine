@@ -20,6 +20,11 @@ void Camera::accept(Scene *scene)
 	scene->visit(this);
 }
 
+void Camera::onAttach()
+{
+
+}
+
 glm::mat4 Camera::getProjectionMatrix()
 {
 	float aspect = (float)Window::getWindowWidth() / (float)Window::getWindowHeight();

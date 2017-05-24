@@ -18,6 +18,8 @@ class Collider;
 class Cloth;
 class SoftBody;
 class Rope;
+class RigidbodyComponent;
+class Rigidbody;
 
 struct Particle;
 struct RenderCommand;
@@ -42,6 +44,7 @@ class Scene
 		vector<ParticleSystem *> *_particleSystems;
 		vector<Collider *> *_colliders;
 		vector<SoftBody *> *_softBodies;
+		vector<Rigidbody *> *_rigidbodies;
 
     public:
 		/*
@@ -82,6 +85,8 @@ class Scene
 
 		vector<SoftBody *> *getSoftBodies();
 
+		vector<Rigidbody *> *getRigidbodies();
+
 		/*
 		* Parse functions
 		*/
@@ -102,6 +107,8 @@ class Scene
 		void visit(Cloth *cloth);
 
 		void visit(Rope *rope);
+
+		void visit(RigidbodyComponent *rigidbodyComponent);
 
     private:
 		void depthFirst(vector<Entity*> *entities);

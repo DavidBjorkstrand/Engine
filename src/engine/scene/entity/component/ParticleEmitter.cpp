@@ -81,6 +81,11 @@ void ParticleEmitter::accept(Scene *scene)
 	scene->visit(this);
 }
 
+void ParticleEmitter::onAttach()
+{
+
+}
+
 void ParticleEmitter::init(float particleRadius, float spawnRate, float mass, float velocity,
 	float velocityDeviation, GLuint maxParticles, float maxLifeTime)
 {

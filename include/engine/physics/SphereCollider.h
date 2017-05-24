@@ -13,6 +13,8 @@ class SphereCollider : public Collider
 	public:
 		SphereCollider(float radius);
 		void setRadius(float radius);
+		float getRadius();
+		glm::vec3 getPosition();
 		Intersection checkCollision(Particle *particle);
 		Intersection checkCollision(SphereCollider *sphereCollider);
 		Intersection checkCollision(PlaneCollider *sphereCollider);

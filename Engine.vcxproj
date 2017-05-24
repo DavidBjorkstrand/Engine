@@ -131,7 +131,9 @@
     <ClCompile Include="src\engine\physics\ParticleSystem.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
+    <ClCompile Include="src\engine\physics\Rigidbody.cpp" />
     <ClCompile Include="src\engine\physics\SoftBody.cpp" />
+    <ClCompile Include="src\engine\physics\SpatialHashing.cpp" />
     <ClCompile Include="src\engine\physics\SphereCollider.cpp" />
     <ClCompile Include="src\engine\renderer\CubeMap.cpp" />
     <ClCompile Include="src\engine\renderer\FluidRenderer.cpp" />
@@ -150,6 +152,7 @@
     <ClCompile Include="src\engine\scene\entity\component\Mesh.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\ParticleEmitter.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\PointLight.cpp" />
+    <ClCompile Include="src\engine\scene\entity\component\RigidBodyComponent.cpp" />
     <ClCompile Include="src\engine\scene\entity\component\Rope.cpp" />
     <ClCompile Include="src\engine\scene\MatrixStack.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
@@ -169,7 +172,9 @@
     <ClInclude Include="include\engine\physics\ParticleSystem.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\physics\PlaneCollider.h" />
+    <ClInclude Include="include\engine\physics\Rigidbody.h" />
     <ClInclude Include="include\engine\physics\SoftBody.h" />
+    <ClInclude Include="include\engine\physics\SpatialHashing.h" />
     <ClInclude Include="include\engine\physics\SphereCollider.h" />
     <ClInclude Include="include\engine\renderer\CubeMap.h" />
     <ClInclude Include="include\engine\renderer\FluidRenderer.h" />
@@ -186,6 +191,7 @@
     <ClInclude Include="include\engine\scene\entity\component\Mesh.h" />
     <ClInclude Include="include\engine\scene\entity\component\ParticleEmitter.h" />
     <ClInclude Include="include\engine\scene\entity\component\PointLight.h" />
+    <ClInclude Include="include\engine\scene\entity\component\RigidbodyComponent.h" />
     <ClInclude Include="include\engine\scene\entity\component\Rope.h" />
     <ClInclude Include="include\engine\scene\MatrixStack.h" />
     <ClInclude Include="include\engine\scene\entity\Transform.h" />

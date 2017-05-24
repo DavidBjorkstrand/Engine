@@ -9,12 +9,14 @@
 #include "engine/scene/entity/component/ParticleEmitter.h"
 #include "engine/scene/entity/component/Cloth.h"
 #include "engine/scene/entity/component/Rope.h"
+#include "engine/scene/entity/component/RigidbodyComponent.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/Collider.h"
 #include "engine/physics/SoftBody.h"
+#include "engine/physics/Rigidbody.h"
 
 #include <string>
 #include <iostream>
@@ -36,6 +38,7 @@ Scene::Scene(string sceneName)
 	_particleSystems = new vector<ParticleSystem *>();
 	_colliders = new vector<Collider *>();
 	_softBodies = new vector<SoftBody *>();
+	_rigidbodies = new vector<Rigidbody *>();
 }
 
 Scene::~Scene()
@@ -51,6 +54,7 @@ Scene::~Scene()
 	delete _particleSystems;
 	delete _colliders;
 	delete _softBodies;
+	delete _rigidbodies;
 }
 
 string Scene::getName()
@@ -118,6 +122,11 @@ vector<SoftBody *> *Scene::getSoftBodies()
 	return _softBodies;
 }
 
+vector<Rigidbody *> *Scene::getRigidbodies()
+{
+	return _rigidbodies;
+}
+
 void Scene::traverse()
 {
 	_behaviours->clear();
@@ -127,6 +136,7 @@ void Scene::traverse()
 	_particleSystems->clear();
 	_colliders->clear();
 	_softBodies->clear();
+	_rigidbodies->clear();
 
 	depthFirst(_entities);
 }
@@ -188,6 +198,13 @@ void Scene::visit(Rope *rope)
 	_renderCommands->push_back(rope->getRenderCommand());
 
 	_softBodies->push_back(rope->getSoftBody());
+}
+
+void Scene::visit(RigidbodyComponent *rigidbodyComponent)
+{
+	glm::vec3 position = rigidbodyComponent->getEntity()->getTransform()->getWorldPosition();
+	rigidbodyComponent->getRigidbody()->setPosition(position);
+	_rigidbodies->push_back(rigidbodyComponent->getRigidbody());
 }
 
 void Scene::depthFirst(vector<Entity*> *entities)

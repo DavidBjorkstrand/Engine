@@ -59,6 +59,11 @@ void Mesh::accept(Scene *scene)
 	scene->visit(this);
 }
 
+void Mesh::onAttach()
+{
+
+}
+
 void Mesh::setMaterial(string materialName)
 {
 	_material = Resources::findMaterial(materialName);

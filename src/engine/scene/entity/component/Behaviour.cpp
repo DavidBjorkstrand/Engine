@@ -6,3 +6,8 @@ void Behaviour::accept(Scene *scene)
 {
 	scene->visit(this);
 }
+
+void Behaviour::onAttach()
+{
+
+}

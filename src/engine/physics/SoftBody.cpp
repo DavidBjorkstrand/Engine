@@ -11,7 +11,7 @@ SoftBody::SoftBody(glm::vec3 position, GLint numParticles, float particleMass)
 {
 	_position = position;
 	_springConstraints = new vector<SpringConstraint>();
-	_distanceConstraints = new vector<DistanceConstraint>();
+	_distanceConstraints = new vector<PPDistanceConstraint>();
 }
 
 void SoftBody::setPosition(glm::vec3 position)
@@ -50,7 +50,7 @@ void SoftBody::addSpringConstraint(GLuint particleIndexI, GLuint particleIndexJ,
 
 void SoftBody::addDistanceConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length)
 {
-	DistanceConstraint distanceConstraint;
+	PPDistanceConstraint distanceConstraint;
 	Particle *i = getParticle(particleIndexI);
 	Particle *j = getParticle(particleIndexJ);
 
@@ -66,7 +66,7 @@ vector<SpringConstraint> *SoftBody::getSpringConstraints()
 	return _springConstraints;
 }
 
-vector<DistanceConstraint> *SoftBody::getDistanceConstraints()
+vector<PPDistanceConstraint> *SoftBody::getDistanceConstraints()
 {
 	return _distanceConstraints;
 }

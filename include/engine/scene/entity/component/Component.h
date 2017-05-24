@@ -20,6 +20,8 @@ class Component
 		*/
 		virtual void accept(Scene *scene) = 0;
 
+		virtual void onAttach() = 0;
+
 		/*
 		* Gets the entity the component belongs to.
 		*/

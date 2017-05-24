@@ -10,8 +10,11 @@ class Collider;
 class SoftBody;
 class ParticleSystem;
 class ConstraintSolver;
+class SpatialHashing;
+class Rigidbody;
 
 struct Particle;
+struct RRCollisionConstraint;
 
 using namespace std;
 
@@ -29,6 +32,8 @@ class PhysicsSystem
 	private:
 		Scene *_scene;
 		ConstraintSolver *_constraintSolver;
+		SpatialHashing *_spatialHashing;
+		vector<RRCollisionConstraint> *_collisionConstraints;
 		float _timeStep;
 		float _dtRest;
 
@@ -48,14 +53,19 @@ class PhysicsSystem
 		void update(float dt);
 
 	private:
-		void applyConstraints(vector<SoftBody *> *softBodies);
+		void applySpringConstraints(vector<SoftBody *> *softBodies);
 		void applyExternalForces(vector<ParticleSystem *> *particleSystems);
 		void applyExternalForces(vector<SoftBody *> *softBodies);
+		void applyExternalForces(vector<Rigidbody *> *rigidbodies);
 		void applyGravity(Particle *particle);
+		void applyGravity(Rigidbody *rigidbody);
 		void applyViscousFriction(Particle *particle);
+		void applyViscousFriction(Rigidbody *rigidbody);
 		void applyAirFriction(Particle *particle);
-		void collisionResolution(vector<ParticleSystem *> *particleSystems, vector<Collider *> *colliders);
+		void applyAirFriction(Rigidbody *rigidbody);
+		void collisionResolution(vector<ParticleSystem *> *particleSystems, vector<SoftBody *> *softbodies, vector<Collider *> *colliders);
 		void integrate(vector<ParticleSystem *> *particleSystems);
 		void integrate(vector<SoftBody *> *softBodies);
+		void integrate(vector<Rigidbody *> *rigidbodies);
 		
 };

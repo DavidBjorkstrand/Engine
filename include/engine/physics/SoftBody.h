@@ -8,14 +8,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 struct SpringConstraint;
-struct DistanceConstraint;
+struct PPDistanceConstraint;
 
 class SoftBody : public ParticleSystem
 {
 	private:
 		glm::vec3 _position;
 		vector<SpringConstraint> *_springConstraints;
-		vector<DistanceConstraint> *_distanceConstraints;
+		vector<PPDistanceConstraint> *_distanceConstraints;
 
 	public:
 		SoftBody(glm::vec3 position, GLint numParticles, float particleMass);
@@ -24,5 +24,5 @@ class SoftBody : public ParticleSystem
 		void addSpringConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length, float ks, float kd);
 		void addDistanceConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length);
 		vector<SpringConstraint> *getSpringConstraints();
-		vector<DistanceConstraint> *getDistanceConstraints();
+		vector<PPDistanceConstraint> *getDistanceConstraints();
 };

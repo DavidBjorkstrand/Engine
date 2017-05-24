@@ -45,6 +45,7 @@ class ParticleEmitter : public Behaviour
 		ParticleSystem *getParticleSystem();
 		RenderCommand getRenderCommand();
 		void accept(Scene *scene);
+		void onAttach();
 		void update(float dt);
 
 	private:

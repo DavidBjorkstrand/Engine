@@ -4,6 +4,7 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Component.h"
 #include "engine/physics/ParticleSystem.h"
+#include "engine/physics/SphereCollider.h"
 
 #include <glm\gtc\type_ptr.hpp>
 
@@ -30,18 +31,18 @@ Intersection PlaneCollider::checkCollision(Particle *particle)
 {
 	Intersection intersection;
 	_transform = getEntity()->getTransform();
+	_D = glm::dot(-_planeNormal, _transform->getWorldPosition());
 	glm::vec3 planeNormal = glm::normalize(glm::mat3(_transform->getMatrix()) * _planeNormal);
 	float distanceNominator = glm::dot(planeNormal, particle->position) + _D;
 	float distanceDenominator = glm::length(planeNormal);
 	float distance = distanceNominator / distanceDenominator;
-	glm::vec3 planeProjection = glm::dot(_planeNormal, particle->position)*_planeNormal;
-	float planeDistance = glm::length(planeProjection - glm::vec3(0.0f));
+
 
 	if (distance > particle->radius)
 	{
 		intersection.intersecting = false;
 	}
-	else if (planeDistance < 50.0f)
+	else
 	{
 		intersection.intersecting = true;
 		intersection.distance = distance - particle->radius;
@@ -54,7 +55,29 @@ Intersection PlaneCollider::checkCollision(Particle *particle)
 
 Intersection PlaneCollider::checkCollision(SphereCollider *sphereCollider)
 {
-	return Intersection();
+	Intersection intersection;
+	_transform = getEntity()->getTransform();
+	_D = glm::dot(-_planeNormal, _transform->getWorldPosition());
+	glm::vec3 planeNormal = glm::normalize(glm::mat3(_transform->getMatrix()) * _planeNormal);
+	float distanceNominator = glm::dot(planeNormal, sphereCollider->getPosition()) + _D;
+	float distanceDenominator = glm::length(planeNormal);
+	float distance = distanceNominator / distanceDenominator;
+	glm::vec3 planeProjection = glm::dot(_planeNormal, sphereCollider->getPosition())*_planeNormal;
+	float planeDistance = glm::length(planeProjection - _transform->getWorldPosition());
+
+	if (distance > sphereCollider->getRadius())
+	{
+		intersection.intersecting = false;
+	}
+	else
+	{
+		intersection.intersecting = true;
+		intersection.distance = distance - sphereCollider->getRadius();
+		intersection.normal = -planeNormal;
+		intersection.point = sphereCollider->getPosition() + intersection.normal*distance;
+	}
+
+	return intersection;
 }
 
 Intersection PlaneCollider::checkCollision(PlaneCollider *planeCollider)

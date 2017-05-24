@@ -26,6 +26,7 @@ class Rope : public Component
 	public:
 		Rope();
 		void accept(Scene *scene);
+		void onAttach();
 		SoftBody *getSoftBody();
 		RenderCommand getRenderCommand();
 };

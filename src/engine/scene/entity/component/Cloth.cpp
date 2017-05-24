@@ -40,9 +40,24 @@ void Cloth::accept(Scene *scene)
 	scene->visit(this);
 }
 
+void Cloth::onAttach()
+{
+
+}
+
 RenderCommand Cloth::getRenderCommand()
 {
 	RenderCommand renderCommand;
+
+	GLuint count = 0;
+	GLint startColumn = -(_width / 2);
+	GLint endColumn = _width + startColumn - 1;
+	for (GLint i = startColumn; i <= endColumn; i++)
+	{
+		_softBody->getParticle(count)->position = glm::vec3(i, 41.0f, -100.0f);
+		_softBody->getParticle(count)->velocity = glm::vec3(0.0f);
+		count += _height;
+	}
 
 	for (ParticleSystem::iterator it = _softBody->begin(); it != _softBody->end(); it++)
 	{
@@ -165,7 +180,7 @@ void Cloth::setConstraints()
 {
 	float kd = 2.0f;
 	float distance = _spacing;
-	float springForce = 10.0f;
+	float springForce = 1000.0f;
 	for (GLuint r = 0; r < _height; r++)
 	{
 		for (GLuint c = 0; c < _width; c++)

@@ -51,6 +51,8 @@ class Mesh : public Component
 		*/
 		void accept(Scene *scene);
 
+		void onAttach();
+
 		/*
 		* Sets the material of the mesh. 
 		*/

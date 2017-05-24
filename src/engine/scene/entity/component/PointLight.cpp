@@ -14,6 +14,11 @@ void PointLight::accept(Scene *scene)
 	scene->visit(this);
 }
 
+void PointLight::onAttach()
+{
+
+}
+
 glm::vec3 PointLight::getColor()
 {
 	return _color;

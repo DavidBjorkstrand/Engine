@@ -16,6 +16,8 @@ class PointLight : public Component
 		*/
 		void accept(Scene *scene);
 
+		void onAttach();
+
 		/*
 		* Gets the color of the light.
 		*/

@@ -11,7 +11,7 @@
   },
   "uRoughness": {
     "type": "float",
-    "value": 1.0
+    "value": 0.0
   },
   "uMetallic": {
     "type": "float",

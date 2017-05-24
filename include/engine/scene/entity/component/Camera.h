@@ -22,6 +22,8 @@ class Camera : public Component
 		*/
 		void accept(Scene *scene);
 
+		void onAttach();
+
 		/*
 		* Get projection matrix.
 		*/

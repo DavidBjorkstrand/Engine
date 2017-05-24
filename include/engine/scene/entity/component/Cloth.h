@@ -31,6 +31,7 @@ class Cloth : public Component
 		Cloth(GLint width, GLint height, float spacing);
 		~Cloth();
 		void accept(Scene *scene);
+		void onAttach();
 		RenderCommand getRenderCommand();
 		SoftBody *getSoftBody();
 

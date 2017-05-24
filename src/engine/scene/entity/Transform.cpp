@@ -29,6 +29,12 @@ void Transform::setScale(glm::vec3 scale)
 	_dirty = true;
 }
 
+void Transform::setOrientation(glm::quat orientation)
+{
+	_orientation = orientation;
+	_dirty = true;
+}
+
 void Transform::move(glm::vec3 deltaPosition)
 {
 	_position += deltaPosition;

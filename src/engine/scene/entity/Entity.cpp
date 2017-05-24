@@ -5,6 +5,7 @@
 #include "engine/scene/entity/component/Mesh.h" 
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/PlaneCollider.h"
+#include "engine/scene/entity/component/RigidbodyComponent.h"
 
 #include <vector>
 
@@ -49,6 +50,8 @@ void Entity::addComponent(Component *component)
 	component->_entity = this;
 
     _components->push_back(component);
+
+	component->onAttach();
 }
 
 void Entity::addChild(Entity *entity)
@@ -72,9 +75,11 @@ Entity *Entity::createPrimitive(PrimitiveTypes type)
 	{
 		Mesh *mesh = Mesh::createSphere();
 		SphereCollider *sphereCollider = new SphereCollider(1.0f);
+		RigidbodyComponent *rigidbody = new RigidbodyComponent(100.0f);
 
 		entity->addComponent(mesh);
 		entity->addComponent(sphereCollider);
+		entity->addComponent(rigidbody);
 	}
 	else if (type == PrimitiveTypes::Cube)
 	{

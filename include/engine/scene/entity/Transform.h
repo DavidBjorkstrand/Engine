@@ -4,6 +4,14 @@
 
 class Transform
 {
+	private:
+		glm::vec3 _position;
+		glm::quat _orientation;
+		glm::vec3 _scale;
+		glm::mat4 _parentTransform;
+		glm::mat4 _modelMatrix;
+		bool _dirty;
+
     public:
         /*
         * Constructor, created with position [0 0 0]. 
@@ -16,6 +24,8 @@ class Transform
 		void setPosition(glm::vec3 position);
 
 		void setScale(glm::vec3 scale);
+
+		void setOrientation(glm::quat rotation);
 
 		/*
 		* Moves the transform
@@ -52,12 +62,4 @@ class Transform
 		* Gets a model matrix for the transform. 
 		*/
 		glm::mat4 getMatrix();
-
-    private: 
-        glm::vec3 _position;
-		glm::quat _orientation;
-		glm::vec3 _scale;
-		glm::mat4 _parentTransform;
-		glm::mat4 _modelMatrix;
-		bool _dirty;
 };
