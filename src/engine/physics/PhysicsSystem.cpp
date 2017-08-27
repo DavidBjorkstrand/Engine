@@ -8,6 +8,8 @@
 #include "engine/physics/Rigidbody.h"
 #include "engine/physics/SphereCollider.h"
 #include "engine/physics/PlaneCollider.h"
+#include "engine/physics/RCollisionConstraint.h"
+#include "engine/physics/RRCollisionConstraint.h"
 #include "engine/scene/Scene.h"
 
 #include <vector>
@@ -19,6 +21,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_cross_product.hpp>
 
 PhysicsSystem::PhysicsSystem()
 {
@@ -27,7 +30,6 @@ PhysicsSystem::PhysicsSystem()
 
 	_constraintSolver = new ConstraintSolver(_dt);
 	_spatialHashing = new SpatialHashing();
-	_collisionConstraints = new vector<RRCollisionConstraint>();
 
 	_g = glm::vec3(0.0f, -9.82f, 0.0f);
 	_k = 0.00005f;
@@ -181,16 +183,8 @@ void PhysicsSystem::applyAirFriction(Rigidbody *rigidbody)
 
 void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystems, vector<SoftBody *> *softbodies, vector<Collider *> *colliders)
 {
-	float k = 10000.0f;
-	float d = 3.0f;
-	float e = (4.0f / k) / ((_dt*_dt)*(1.0f + 4.0f*d));
-	float a = (4.0f / _dt) / (1.0f + 4.0f*d);
-	float b = (4.0f*d) / (1.0f + 4.0f*d);
-
 	vector<SphereCollider *> sphereColliders;
 	vector<PlaneCollider *> planeColliders;
-
-	_collisionConstraints->clear();
 
 	for (Collider *collider : *colliders)
 	{
@@ -217,200 +211,6 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 		_spatialHashing->insert(sphereCollider);
 	}
 
-	for (ParticleSystem *particleSystem : *particleSystems)
-	{
-		for (ParticleSystem::iterator it = particleSystem->begin(); it != particleSystem->end(); it++)
-		{
-			Particle *particle = &it;
-			vector<SphereCollider *> *possibleIntersections = _spatialHashing->checkSphere(particle);
-
-			for (SphereCollider *collider : *possibleIntersections)
-			{
-				Intersection intersection = collider->checkCollision(particle);
-
-				if (intersection.intersecting)
-				{
-					glm::vec3 relativeVelocity = collider->getRigidbody()->getVelocity() - particle->velocity;
-					glm::vec3 normal = intersection.normal;
-					glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-					glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
-
-					float NdotV = glm::dot(normal, relativeVelocity);
-					glm::vec3 r = -normal*collider->getRadius();
-
-					if (NdotV < 0.0f && glm::length(relativeVelocity) > 0.5f)
-					{
-						float inertiaPart = glm::dot(glm::cross(collider->getRigidbody()->getInvI()*glm::cross(r, normal), r), normal);
-						float j = -((1.0f + 0.1f) * glm::dot(relativeVelocity, normal)) / (collider->getRigidbody()->getInverseMass() + particle->inverseMass + inertiaPart);
-						glm::vec3 impulse = (j*normal - 0.9f*j*tangent);
-
-						glm::vec3 newVelocitySphere = collider->getRigidbody()->getVelocity() + collider->getRigidbody()->getInverseMass()*impulse;
-						glm::vec3 newVelocityParticle = particle->velocity - particle->inverseMass*impulse;
-						glm::vec3 newAngularVelocity = collider->getRigidbody()->getAngularVelocity() + collider->getRigidbody()->getInvI()*glm::cross(r, impulse);
-
-						collider->getRigidbody()->setVelocity(newVelocitySphere);
-						collider->getRigidbody()->setAngularVelocity(newAngularVelocity);
-						particle->velocity = newVelocityParticle;
-					}
-					else if (NdotV < 0.00001f)
-					{
-						float Dkk = glm::dot(normal, normal)*collider->getRigidbody()->getInverseMass() + glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_dt*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
-						q -= b*(glm::dot(normal, collider->getRigidbody()->getVelocity()) + glm::dot(-normal, particle->velocity));
-						q -= a*intersection.distance;
-						float lambda = -(1.0f / Dkk)*(-q);
-
-						if (lambda < 0.0f)
-						{
-							lambda = 0.0f;
-						}
-
-						collider->getRigidbody()->setVelocity(collider->getRigidbody()->getVelocity() + collider->getRigidbody()->getInverseMass()*normal*lambda);
-						collider->getRigidbody()->setAngularVelocity(collider->getRigidbody()->getAngularVelocity() + collider->getRigidbody()->getInvI()*glm::cross(r, normal));
-						particle->velocity += particle->inverseMass*(-normal)*lambda;
-					}
-				}
-			}
-
-			for (PlaneCollider *planeCollider : planeColliders)
-			{
-				Intersection intersection = planeCollider->checkCollision(particle);
-
-				if (intersection.intersecting)
-				{
-					glm::vec3 relativeVelocity = particle->velocity;
-					glm::vec3 normal = intersection.normal;
-					glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-					glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
-
-					float NdotV = glm::dot(-normal, relativeVelocity);
-
-					if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
-					{
-						float j = -((1.0f + 0.1f) * glm::dot(relativeVelocity, normal))*particle->mass;
-						glm::vec3 impulse = (j*normal - 0.5f*j*tangent);
-						glm::vec3 newVelocityParticle = particle->velocity + particle->inverseMass*impulse;
-						particle->velocity = newVelocityParticle;
-
-					}
-					else if (NdotV < 0.00001f)
-					{
-						float Dkk = glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_dt*glm::dot(-normal, particle->force*particle->inverseMass);
-						q -= b*glm::dot(-normal, particle->velocity);
-						q -= a*intersection.distance;
-						float lambda = -(1.0f / Dkk)*(-q);
-
-						if (lambda < 0.0f)
-						{
-							lambda = 0.0f;
-						}
-
-
-						particle->velocity += particle->inverseMass*(-normal)*lambda;
-					}
-				}
-			}
-		}
-	}
-
-	for (SoftBody *softbody : *softbodies)
-	{
-		for (ParticleSystem::iterator it = softbody->begin(); it != softbody->end(); it++)
-		{
-			Particle *particle = &it;
-			vector<SphereCollider *> *possibleIntersections = _spatialHashing->checkSphere(particle);
-
-			for (SphereCollider *collider : *possibleIntersections)
-			{
-				Intersection intersection = collider->checkCollision(particle);
-
-				if (intersection.intersecting)
-				{
-					glm::vec3 relativeVelocity = collider->getRigidbody()->getVelocity() - particle->velocity;
-					glm::vec3 normal = intersection.normal;
-					glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-					glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
-
-					float NdotV = glm::dot(normal, relativeVelocity);
-					glm::vec3 r = -normal*collider->getRadius();
-
-					if (NdotV < 0.0f && glm::length(relativeVelocity) > 0.5f)
-					{
-						float inertiaPart = glm::dot(glm::cross(collider->getRigidbody()->getInvI()*glm::cross(r, normal), r), normal);
-						float j = -((1.0f + 0.1f) * glm::dot(relativeVelocity, normal)) / (collider->getRigidbody()->getInverseMass() + particle->inverseMass + inertiaPart);
-						glm::vec3 impulse = (j*normal - 0.9f*j*tangent);
-
-						glm::vec3 newVelocitySphere = collider->getRigidbody()->getVelocity() + collider->getRigidbody()->getInverseMass()*impulse;
-						glm::vec3 newVelocityParticle = particle->velocity - particle->inverseMass*impulse;
-						glm::vec3 newAngularVelocity = collider->getRigidbody()->getAngularVelocity() + collider->getRigidbody()->getInvI()*glm::cross(r, impulse);
-
-						collider->getRigidbody()->setVelocity(newVelocitySphere);
-						collider->getRigidbody()->setAngularVelocity(newAngularVelocity);
-						particle->velocity = newVelocityParticle;
-					}
-					else if (NdotV < 0.00001f)
-					{
-						float Dkk = glm::dot(normal, normal)*collider->getRigidbody()->getInverseMass() + glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_dt*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
-						q -= b*(glm::dot(normal, collider->getRigidbody()->getVelocity()) + glm::dot(-normal, particle->velocity));
-						q -= a*intersection.distance;
-						float lambda = -(1.0f / Dkk)*(-q);
-
-						if (lambda < 0.0f)
-						{
-							lambda = 0.0f;
-						}
-
-						collider->getRigidbody()->setVelocity(collider->getRigidbody()->getVelocity() + collider->getRigidbody()->getInverseMass()*normal*lambda);
-						collider->getRigidbody()->setAngularVelocity(collider->getRigidbody()->getAngularVelocity() + collider->getRigidbody()->getInvI()*glm::cross(r, normal));
-						particle->velocity += particle->inverseMass*(-normal)*lambda;
-					}
-				}
-			}
-
-			for (PlaneCollider *planeCollider : planeColliders)
-			{
-				Intersection intersection = planeCollider->checkCollision(particle);
-
-				if (intersection.intersecting)
-				{
-					glm::vec3 relativeVelocity = particle->velocity;
-					glm::vec3 normal = intersection.normal;
-					glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-					glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
-
-					float NdotV = glm::dot(-normal, relativeVelocity);
-
-					if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
-					{
-						float j = -((1.0f + 0.1f) * glm::dot(relativeVelocity, normal))*particle->mass;
-						glm::vec3 impulse = (j*normal - 0.9f*j*tangent);
-						glm::vec3 newVelocityParticle = particle->velocity + particle->inverseMass*impulse;
-						particle->velocity = newVelocityParticle;
-
-					}
-					else if (NdotV < 0.00001f)
-					{
-						float Dkk = glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_dt*glm::dot(-normal, particle->force*particle->inverseMass);
-						q -= b*glm::dot(-normal, particle->velocity);
-						q -= a*intersection.distance;
-						float lambda = -(1.0f / Dkk)*(-q);
-
-						if (lambda < 0.0f)
-						{
-							lambda = 0.0f;
-						}
-
-
-						particle->velocity += particle->inverseMass*(-normal)*lambda;
-					}
-				}
-			}
-		}
-	}
-
 	for (SphereCollider *sphereCollider : sphereColliders)
 	{
 		vector<SphereCollider *> *possibleIntersections = _spatialHashing->checkSphere(sphereCollider);
@@ -421,42 +221,56 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 
 			if (intersection.intersecting)
 			{
-				glm::vec3 relativeVelocity = sphereCollider->getRigidbody()->getVelocity() - sphereCollider2->getRigidbody()->getVelocity();
-				glm::vec3 normal = -intersection.normal;
-				glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-				glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
+				Rigidbody *r1 = sphereCollider->getRigidbody();
+				Rigidbody *r2 = sphereCollider2->getRigidbody();
+				glm::vec3 u = r1->getVelocity() - r2->getVelocity();
+				glm::vec3 n = intersection.normal;
+				glm::vec3 un = glm::dot(u, n)*n;
+				glm::vec3 t = glm::normalize(u - un);
 
-				float NdotV = glm::dot(normal, relativeVelocity);
-				glm::vec3 r = -normal*sphereCollider->getRadius();
+				float NdotV = glm::dot(-n, u);
+				glm::vec3 ra = -n*sphereCollider->getRadius();
+				glm::vec3 rb = n*sphereCollider2->getRadius();
 
-				if (NdotV < 0.0f && glm::length(relativeVelocity) > 0.5f)
+				if (NdotV < 0.0f && glm::length(u) > 0.5f)
 				{
-					float inertiaPart = glm::dot(glm::cross(sphereCollider->getRigidbody()->getInvI()*glm::cross(r, normal), r), normal) + glm::dot(glm::cross(sphereCollider2->getRigidbody()->getInvI()*glm::cross(-r, -normal), -r), -normal);
-					float j = -((1.0f + 0.1f) * glm::dot(relativeVelocity, normal)) / (sphereCollider->getRigidbody()->getInverseMass() + sphereCollider2->getRigidbody()->getInverseMass() + inertiaPart);
-					glm::vec3 impulse = (j*normal);
+					glm::mat3 K = r1->getInverseMass()*glm::mat3() + r2->getInverseMass()*glm::mat3();
+					K -= glm::matrixCross3(ra)*r1->getInvI()*glm::matrixCross3(ra);
+					K -= glm::matrixCross3(ra)*r2->getInvI()*glm::matrixCross3(rb);
+					glm::vec3 J = glm::inverse(K)*(-0.1f*un - u);
+					glm::vec3 Jn = glm::dot(J, n)*n;
+					glm::vec3 Jt = J - Jn;
+					float coef = 0.075f;
 
-					glm::vec3 newVelocitySphere = sphereCollider->getRigidbody()->getVelocity() + sphereCollider->getRigidbody()->getInverseMass()*impulse;
-					glm::vec3 newVelocitySphere2 = sphereCollider2->getRigidbody()->getVelocity() - sphereCollider2->getRigidbody()->getInverseMass()*impulse;
-					glm::vec3 newAngularVelocity = sphereCollider->getRigidbody()->getAngularVelocity() + sphereCollider->getRigidbody()->getInvI()*glm::cross(r, impulse);
-					glm::vec3 newAngularVelocity2 = sphereCollider2->getRigidbody()->getAngularVelocity() - sphereCollider2->getRigidbody()->getInvI()*glm::cross(-r, impulse);
+					if (glm::length(Jt) > coef*glm::length(Jn))
+					{
+						glm::vec3 ut = u - un;
+						glm::vec3 t = glm::normalize(ut);
+						glm::vec3 j = -((1.0f + 0.1f) * un) / (glm::dot(n, K * (n - coef*t)));
 
-					sphereCollider->getRigidbody()->setVelocity(newVelocitySphere);
-					sphereCollider->getRigidbody()->setAngularVelocity(newAngularVelocity);
-					sphereCollider2->getRigidbody()->setVelocity(newVelocitySphere2);
-					sphereCollider2->getRigidbody()->setAngularVelocity(newAngularVelocity2);
+						J = j*n - coef*j*t;
+					}
+
+					glm::vec3 currentVelocity1 = r1->getVelocity();
+					glm::vec3 currentVelocity2 = r2->getVelocity();
+					glm::vec3 currentAngularVelocity1 = r1->getAngularVelocity();
+					glm::vec3 currentAngularVelocity2 = r2->getAngularVelocity();
+					glm::vec3 newVelocity1 = currentVelocity1 + r1->getInverseMass()*J;
+					glm::vec3 newVelocity2 = currentVelocity2 - r2->getInverseMass()*J;
+					glm::vec3 newAngularVelocity1 = currentAngularVelocity1 + r1->getInvI()* glm::cross(ra, J);
+					glm::vec3 newAngularVelocity2 = currentAngularVelocity2 - r2->getInvI()* glm::cross(rb, J);
+
+					r1->setVelocity(newVelocity1);
+					r2->setVelocity(newVelocity2);
+					r1->setAngularVelocity(newAngularVelocity1);
+					r2->setAngularVelocity(newAngularVelocity2);
 
 				}
 				else if (NdotV < 0.00001f)
 				{
-					RRCollisionConstraint collisionConstraint;
+					RRCollisionConstraint *constraint = new RRCollisionConstraint(sphereCollider->getRigidbody(), sphereCollider2->getRigidbody(), -intersection.normal, intersection.distance);
 
-					collisionConstraint.i = sphereCollider->getRigidbody();
-					collisionConstraint.j = sphereCollider2->getRigidbody();
-					collisionConstraint.overlap = intersection.distance;
-					collisionConstraint.normal = intersection.normal;
-					collisionConstraint.twoBodies = true;
-
-					_collisionConstraints->push_back(collisionConstraint);
+					_constraintSolver->addConstraint(constraint);
 				}
 			}
 		}
@@ -467,46 +281,52 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 
 			if (intersection.intersecting)
 			{
-				glm::vec3 relativeVelocity = sphereCollider->getRigidbody()->getVelocity();
-				glm::vec3 normal = intersection.normal;
-				glm::vec3 normalVelocity = glm::dot(relativeVelocity, normal)*normal;
-				glm::vec3 tangent = glm::normalize(relativeVelocity - normalVelocity);
+				Rigidbody *r1 = sphereCollider->getRigidbody();
+				glm::vec3 u = r1->getVelocity();
+				glm::vec3 n = -intersection.normal;
+				glm::vec3 un = glm::dot(u, n)*n;
+				glm::vec3 t = glm::normalize(u - un);
 
-				float NdotV = glm::dot(-normal, relativeVelocity);
-				glm::vec3 r = normal*sphereCollider->getRadius();
+				float NdotV = glm::dot(n, u);
+				glm::vec3 ra = -n*sphereCollider->getRadius();
 
-				if (NdotV < 0.0f && glm::length(normalVelocity) > 0.5f)
+				if (NdotV < 0.0f && glm::length(u) > 0.5f)
 				{
-					float inertiaPart = glm::dot(glm::cross(sphereCollider->getRigidbody()->getInvI()*glm::cross(r, normal), r), normal);
-					float j = -((1.0f + 0.5f) * glm::dot(relativeVelocity, normal)) / (sphereCollider->getRigidbody()->getInverseMass() + inertiaPart);
-					glm::vec3 impulse = (j*normal);
+					glm::mat3 K = r1->getInverseMass()*glm::mat3();
+					K -= glm::matrixCross3(ra)*r1->getInvI()*glm::matrixCross3(ra);
+					glm::vec3 J = glm::inverse(K)*(-0.9f*un - u);
+					glm::vec3 Jn = glm::dot(J, n)*n;
+					glm::vec3 Jt = J - Jn;
+					float coef = 0.45f;
 
-					glm::vec3 newVelocitySphere = sphereCollider->getRigidbody()->getVelocity() + sphereCollider->getRigidbody()->getInverseMass()*impulse;
-					glm::vec3 newAngularVelocity = sphereCollider->getRigidbody()->getAngularVelocity() + sphereCollider->getRigidbody()->getInvI()*glm::cross(r, impulse);
+					if (!(glm::length(Jt) <= coef*glm::length(Jn)))
+					{
+						glm::vec3 ut = u - un;
+						glm::vec3 t = glm::normalize(ut);
+						glm::vec3 j = -((1.0f + 0.9f) * un) / (glm::dot(n, K * (n - coef*t)));
 
-					sphereCollider->getRigidbody()->setVelocity(newVelocitySphere);
-					sphereCollider->getRigidbody()->setAngularVelocity(newAngularVelocity);
+						J = j*n - coef*j*t;
+					}
+
+					glm::vec3 currentVelocity1 = r1->getVelocity();
+					glm::vec3 currentAngularVelocity1 = r1->getAngularVelocity();
+					glm::vec3 newVelocity1 = currentVelocity1 + r1->getInverseMass()*J;
+					glm::vec3 newAngularVelocity1 = currentAngularVelocity1 + r1->getInvI()* glm::cross(ra, J);
+
+					r1->setVelocity(newVelocity1);
+					r1->setAngularVelocity(newAngularVelocity1);
 				}
 				else if (NdotV < 0.00001f)
 				{
-					RRCollisionConstraint collisionConstraint;
+					RCollisionConstraint *constraint = new RCollisionConstraint(sphereCollider->getRigidbody(), intersection.normal, intersection.distance);
 
-					collisionConstraint.i = sphereCollider->getRigidbody();
-					collisionConstraint.overlap = intersection.distance;
-					collisionConstraint.normal = intersection.normal;
-					collisionConstraint.twoBodies = false;
-
-					_collisionConstraints->push_back(collisionConstraint);
+					_constraintSolver->addConstraint(constraint);
 				}
 			}
 		}
 	}
 
-	if (!_collisionConstraints->empty())
-	{
-		_constraintSolver->solveConstraints(_collisionConstraints);
-	}
-	
+	_constraintSolver->solve();
 }
 
 void PhysicsSystem::integrate(vector<ParticleSystem *> *particleSystems)
@@ -537,10 +357,10 @@ void PhysicsSystem::integrate(vector<SoftBody *> *softBodies)
 {
 	for (SoftBody *softBody : *softBodies)
 	{
-		if (!softBody->getDistanceConstraints()->empty())
+		/*if (!softBody->getDistanceConstraints()->empty())
 		{
 			_constraintSolver->solveConstraints(softBody->getDistanceConstraints());
-		}
+		}*/
 
 		for (ParticleSystem::iterator it = softBody->begin(); it != softBody->end(); it++)
 		{

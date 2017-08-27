@@ -131,7 +131,9 @@
     <ClCompile Include="src\engine\physics\ParticleSystem.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
+    <ClCompile Include="src\engine\physics\RCollisionConstraint.cpp" />
     <ClCompile Include="src\engine\physics\Rigidbody.cpp" />
+    <ClCompile Include="src\engine\physics\RRCollisionConstraint.cpp" />
     <ClCompile Include="src\engine\physics\SoftBody.cpp" />
     <ClCompile Include="src\engine\physics\SpatialHashing.cpp" />
     <ClCompile Include="src\engine\physics\SphereCollider.cpp" />
@@ -169,11 +171,14 @@
     <ClInclude Include="include\engine\InputSystem.h" />
     <ClInclude Include="include\engine\interface\Resources.h" />
     <ClInclude Include="include\engine\physics\Collider.h" />
+    <ClInclude Include="include\engine\physics\Constraint.h" />
     <ClInclude Include="include\engine\physics\ConstraintSolver.h" />
+    <ClInclude Include="include\engine\physics\RCollisionConstraint.h" />
     <ClInclude Include="include\engine\physics\ParticleSystem.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
     <ClInclude Include="include\engine\physics\PlaneCollider.h" />
     <ClInclude Include="include\engine\physics\Rigidbody.h" />
+    <ClInclude Include="include\engine\physics\RRCollisionConstraint.h" />
     <ClInclude Include="include\engine\physics\SoftBody.h" />
     <ClInclude Include="include\engine\physics\SpatialHashing.h" />
     <ClInclude Include="include\engine\physics\SphereCollider.h" />

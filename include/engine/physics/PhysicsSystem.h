@@ -14,7 +14,6 @@ class SpatialHashing;
 class Rigidbody;
 
 struct Particle;
-struct RRCollisionConstraint;
 
 using namespace std;
 
@@ -33,7 +32,6 @@ class PhysicsSystem
 		Scene *_scene;
 		ConstraintSolver *_constraintSolver;
 		SpatialHashing *_spatialHashing;
-		vector<RRCollisionConstraint> *_collisionConstraints;
 		float _dt;
 		float _dtRest;
 

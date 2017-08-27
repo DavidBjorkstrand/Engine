@@ -8,7 +8,7 @@
 
 RigidbodyComponent::RigidbodyComponent(float mass)
 {
-	float i = (2.0f / 5.0f)*100.0f*100.0f;
+	float i = 0.5f;
 	glm::mat3 I = glm::mat3(0.0f);
 	I[0].x = i;
 	I[1].y = i;

@@ -50,7 +50,7 @@ void SoftBody::addSpringConstraint(GLuint particleIndexI, GLuint particleIndexJ,
 
 void SoftBody::addDistanceConstraint(GLuint particleIndexI, GLuint particleIndexJ, float length)
 {
-	PPDistanceConstraint distanceConstraint;
+	/*PPDistanceConstraint distanceConstraint;
 	Particle *i = getParticle(particleIndexI);
 	Particle *j = getParticle(particleIndexJ);
 
@@ -58,7 +58,7 @@ void SoftBody::addDistanceConstraint(GLuint particleIndexI, GLuint particleIndex
 	distanceConstraint.j = j;
 	distanceConstraint.length = length;
 
-	_distanceConstraints->push_back(distanceConstraint);
+	_distanceConstraints->push_back(distanceConstraint);*/
 }
 
 vector<SpringConstraint> *SoftBody::getSpringConstraints()
