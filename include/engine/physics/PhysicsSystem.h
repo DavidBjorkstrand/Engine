@@ -34,7 +34,7 @@ class PhysicsSystem
 		ConstraintSolver *_constraintSolver;
 		SpatialHashing *_spatialHashing;
 		vector<RRCollisionConstraint> *_collisionConstraints;
-		float _timeStep;
+		float _dt;
 		float _dtRest;
 
 		// Gravity constant

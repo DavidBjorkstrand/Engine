@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <chrono>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -21,10 +22,10 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	_timeStep = 1.0f / 500.0f;
+	_dt = 1.0f / 500.0f;
 	_dtRest = 0.0f;
 
-	_constraintSolver = new ConstraintSolver(_timeStep);
+	_constraintSolver = new ConstraintSolver(_dt);
 	_spatialHashing = new SpatialHashing();
 	_collisionConstraints = new vector<RRCollisionConstraint>();
 
@@ -47,8 +48,7 @@ void PhysicsSystem::update(float dt)
 {
 	_scene->traverse();
 	_dtRest += dt;
-
-	while (_dtRest >= _timeStep)
+	while (_dtRest >= _dt)
 	{
 		vector<ParticleSystem *> *particleSystems = _scene->getParticleSystems();
 		vector<Collider *> *colliders = _scene->getColliders();
@@ -59,12 +59,12 @@ void PhysicsSystem::update(float dt)
 		applyExternalForces(particleSystems);
 		applyExternalForces(softBodies);
 		applyExternalForces(rigidbodies);
-		collisionResolution(particleSystems, softBodies, colliders);
 		integrate(particleSystems);
 		integrate(softBodies);
 		integrate(rigidbodies);
+		collisionResolution(particleSystems, softBodies, colliders);
 
-		_dtRest -= _timeStep;
+		_dtRest -= _dt;
 	}
 }
 
@@ -181,10 +181,10 @@ void PhysicsSystem::applyAirFriction(Rigidbody *rigidbody)
 
 void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystems, vector<SoftBody *> *softbodies, vector<Collider *> *colliders)
 {
-	float k = 100000.0f;
+	float k = 10000.0f;
 	float d = 3.0f;
-	float e = (4.0f / k) / ((_timeStep*_timeStep)*(1.0f + 4.0f*d));
-	float a = (4.0f / _timeStep) / (1.0f + 4.0f*d);
+	float e = (4.0f / k) / ((_dt*_dt)*(1.0f + 4.0f*d));
+	float a = (4.0f / _dt) / (1.0f + 4.0f*d);
 	float b = (4.0f*d) / (1.0f + 4.0f*d);
 
 	vector<SphereCollider *> sphereColliders;
@@ -255,7 +255,7 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					else if (NdotV < 0.00001f)
 					{
 						float Dkk = glm::dot(normal, normal)*collider->getRigidbody()->getInverseMass() + glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_timeStep*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
+						float q = -_dt*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
 						q -= b*(glm::dot(normal, collider->getRigidbody()->getVelocity()) + glm::dot(-normal, particle->velocity));
 						q -= a*intersection.distance;
 						float lambda = -(1.0f / Dkk)*(-q);
@@ -296,7 +296,7 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					else if (NdotV < 0.00001f)
 					{
 						float Dkk = glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_timeStep*glm::dot(-normal, particle->force*particle->inverseMass);
+						float q = -_dt*glm::dot(-normal, particle->force*particle->inverseMass);
 						q -= b*glm::dot(-normal, particle->velocity);
 						q -= a*intersection.distance;
 						float lambda = -(1.0f / Dkk)*(-q);
@@ -352,7 +352,7 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					else if (NdotV < 0.00001f)
 					{
 						float Dkk = glm::dot(normal, normal)*collider->getRigidbody()->getInverseMass() + glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_timeStep*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
+						float q = -_dt*(glm::dot(normal, collider->getRigidbody()->getForce()*collider->getRigidbody()->getInverseMass()) + glm::dot(-normal, particle->force*particle->inverseMass));
 						q -= b*(glm::dot(normal, collider->getRigidbody()->getVelocity()) + glm::dot(-normal, particle->velocity));
 						q -= a*intersection.distance;
 						float lambda = -(1.0f / Dkk)*(-q);
@@ -393,7 +393,7 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					else if (NdotV < 0.00001f)
 					{
 						float Dkk = glm::dot(-normal, -normal)*particle->inverseMass + e;
-						float q = -_timeStep*glm::dot(-normal, particle->force*particle->inverseMass);
+						float q = -_dt*glm::dot(-normal, particle->force*particle->inverseMass);
 						q -= b*glm::dot(-normal, particle->velocity);
 						q -= a*intersection.distance;
 						float lambda = -(1.0f / Dkk)*(-q);
@@ -521,14 +521,14 @@ void PhysicsSystem::integrate(vector<ParticleSystem *> *particleSystems)
 			glm::vec3 newAcceleration = particle->force * particle->inverseMass;
 
 			//v_(n)
-			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_timeStep;
+			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_dt;
 
 			particle->acceleration = newAcceleration;
 			particle->force = glm::vec3(0.0f);
 
 			//r_(n+1)
-			particle->position = particle->position + particle->velocity*_timeStep + 0.5f*particle->acceleration*_timeStep*_timeStep;
-			particle->predictedVelocity = particle->velocity + particle->acceleration*_timeStep;
+			particle->position = particle->position + particle->velocity*_dt + 0.5f*particle->acceleration*_dt*_dt;
+			particle->predictedVelocity = particle->velocity + particle->acceleration*_dt;
 		}
 	}
 }
@@ -550,14 +550,14 @@ void PhysicsSystem::integrate(vector<SoftBody *> *softBodies)
 			glm::vec3 newAcceleration = particle->force * particle->inverseMass;
 
 			//v_(n)
-			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_timeStep;
+			particle->velocity = particle->velocity + 0.5f*(particle->acceleration + newAcceleration)*_dt;
 
 			particle->acceleration = newAcceleration;
 			particle->force = glm::vec3(0.0f);
 
 			//r_(n+1)
-			particle->position = particle->position + particle->velocity*_timeStep + 0.5f*particle->acceleration*_timeStep*_timeStep;
-			particle->predictedVelocity = particle->velocity + particle->acceleration*_timeStep;
+			particle->position = particle->position + particle->velocity*_dt + 0.5f*particle->acceleration*_dt*_dt;
+			particle->predictedVelocity = particle->velocity + particle->acceleration*_dt;
 
 		}
 	}
@@ -570,17 +570,17 @@ void PhysicsSystem::integrate(vector<Rigidbody *> *rigidbodies)
 		glm::vec3 newAcceleration = rigidbody->getForce() * rigidbody->getInverseMass();
 		glm::vec3 torqueGyro = glm::cross(rigidbody->getAngularVelocity(), rigidbody->getI()*rigidbody->getAngularVelocity());
 
-		rigidbody->setVelocity(rigidbody->getVelocity() + 0.5f*(rigidbody->getAcceleration() + newAcceleration)*_timeStep);
-		rigidbody->setAngularVelocity(rigidbody->getAngularVelocity() + _timeStep*rigidbody->getInvI()*torqueGyro);
+		rigidbody->setVelocity(rigidbody->getVelocity() + 0.5f*(rigidbody->getAcceleration() + newAcceleration)*_dt);
+		rigidbody->setAngularVelocity(rigidbody->getAngularVelocity() + _dt*rigidbody->getInvI()*torqueGyro);
 
 		rigidbody->setAcceleration(newAcceleration);
 		rigidbody->resetForce();
 
-		rigidbody->setPosition(rigidbody->getPosition() + rigidbody->getVelocity()*_timeStep + 0.5f*rigidbody->getAcceleration()*_timeStep*_timeStep);
-		rigidbody->setPredictedVelocity(rigidbody->getVelocity() + rigidbody->getAcceleration()*_timeStep);
+		rigidbody->setPosition(rigidbody->getPosition() + rigidbody->getVelocity()*_dt + 0.5f*rigidbody->getAcceleration()*_dt*_dt);
+		rigidbody->setPredictedVelocity(rigidbody->getVelocity() + rigidbody->getAcceleration()*_dt);
 
 		glm::vec3 omega = rigidbody->getAngularVelocity();
-		glm::quat q = glm::quat(0.0f, omega)* (_timeStep / 2.0f);
+		glm::quat q = glm::quat(0.0f, omega)* (_dt / 2.0f);
 		q = glm::exp(q);
 		q = glm::normalize(q);
 

@@ -75,7 +75,7 @@ Entity *Entity::createPrimitive(PrimitiveTypes type)
 	{
 		Mesh *mesh = Mesh::createSphere();
 		SphereCollider *sphereCollider = new SphereCollider(1.0f);
-		RigidbodyComponent *rigidbody = new RigidbodyComponent(100.0f);
+		RigidbodyComponent *rigidbody = new RigidbodyComponent(1.0f);
 
 		entity->addComponent(mesh);
 		entity->addComponent(sphereCollider);

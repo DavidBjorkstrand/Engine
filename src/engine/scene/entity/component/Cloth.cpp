@@ -54,7 +54,7 @@ RenderCommand Cloth::getRenderCommand()
 	GLint endColumn = _width + startColumn - 1;
 	for (GLint i = startColumn; i <= endColumn; i++)
 	{
-		_softBody->getParticle(count)->position = glm::vec3(i, 41.0f, -100.0f);
+		_softBody->getParticle(count)->position = glm::vec3(i*0.1f, 4.1f, -20.0f);
 		_softBody->getParticle(count)->velocity = glm::vec3(0.0f);
 		count += _height;
 	}
@@ -94,7 +94,7 @@ void Cloth::init()
 	for (GLint c = startColumn; c <= endColumn; c++)
 	{
 		for (GLint r = startRow; r <= endRow; r++)
-		{
+		{ 
 			Vertex vertex;
 			vertex.position = glm::vec3(c*_spacing, 0.0f, r*_spacing);
 			vertex.normal = glm::vec3(0.0f, 0.0f, 0.0f);

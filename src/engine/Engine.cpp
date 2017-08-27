@@ -25,7 +25,7 @@
 
 #include <map>
 #include <vector>
-#include <windows.h>
+#include <chrono>
 #include <iostream>
 
 #include <GLFW\glfw3.h>
@@ -73,50 +73,47 @@ void Engine::addScene(Scene *scene)
 
 void Engine::run() 
 {
-	SYSTEMTIME time;
-	GetSystemTime(&time);
-	float currentTime = time.wSecond + time.wMilliseconds / 1000.0f;
-	float newTime;
-	float dt;
+	std::chrono::time_point<std::chrono::high_resolution_clock> currentTime = std::chrono::high_resolution_clock::now();
+	std::chrono::time_point<std::chrono::high_resolution_clock> newTime;
+	std::chrono::duration<float> dt;
 	float printFps = 0.0f;
 	int samples = 0;
 	float totalFps = 0.0f;
 
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
-		GetSystemTime(&time);
-		newTime = time.wSecond + time.wMilliseconds / 1000.0f;
-		dt = (newTime - currentTime);
+		newTime = std::chrono::high_resolution_clock::now();
+		dt = newTime - currentTime;
 		currentTime = newTime;
 
-		if (dt <= 0.0f)
+		/*if (dt.count() <= 0.0f)
 		{
 			cout << "Weird error" << endl;
-			dt = 0.0f;
-		}
+			dt.count() = 0.0f;
+		}*/
 
 
-		printFps += dt;
-		totalFps += (1.0f / dt);
+		/*printFps += dt.count();
+		totalFps += (1.0f / dt.count());
 		samples++;
 
 		if (printFps >= 1.0f)
 		{
-			cout << totalFps / samples << " fps" << endl;
+			cout << "\r" << totalFps / samples << " fps" << endl;
 			printFps = 0.0f;
 			totalFps = 0.0f;
 			samples = 0;
-		}
+		}*/
 
         _inputSystem->pollEvents();
 
 		_activeScene->traverse();
 		for (Behaviour *behaviour : *_activeScene->getBehaviours())
 		{
-			behaviour->update(dt);
+			behaviour->update(dt.count());
 		}
 		
-		_physicsSystem->update(dt);
+		_physicsSystem->update(dt.count());
 		
 		_renderSystem->draw();
 
@@ -139,7 +136,6 @@ int main(int argc, char *argv[])
     engine->run();
 
     delete engine;
-	delete scene;
 
     return 0;
 }
