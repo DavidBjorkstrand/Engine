@@ -34,6 +34,7 @@ void SpatialHashing::insert(SphereCollider *sphereCollider)
 	max.y = floor(max.y / k);
 	max.z = floor(max.z / k);
 
+	int count = 0;
 	for (float x = min.x; x <= max.x; x++)
 	{
 		for (float y = min.y; y <= max.y; y++)
@@ -42,6 +43,7 @@ void SpatialHashing::insert(SphereCollider *sphereCollider)
 			{
 				long key = hash(x, y, z, subdivision);
 				insertIntoMap(key, sphereCollider);
+				count++;
 			}
 		}
 	}
@@ -86,7 +88,7 @@ vector<SphereCollider *> *SpatialHashing::checkSphere(SphereCollider *sphereColl
 						{
 							s = cellContent->erase(s);
 						}
-						else
+						else if(std::find(_possibleSphereCollisions->begin(), _possibleSphereCollisions->end(), *s) == _possibleSphereCollisions->end())
 						{
 							_possibleSphereCollisions->push_back(*s);
 						}
@@ -127,7 +129,14 @@ vector<SphereCollider *> *SpatialHashing::checkSphere(Particle *particle)
 					if (_sphereMap->find(key) != _sphereMap->end())
 					{
 						vector<SphereCollider *> *cellContent = _sphereMap->find(key)->second;
-						_possibleSphereCollisions->insert(_possibleSphereCollisions->end(), cellContent->begin(), cellContent->end());
+
+						for (SphereCollider *sphereCollider : *cellContent)
+						{
+							if (std::find(_possibleSphereCollisions->begin(), _possibleSphereCollisions->end(), sphereCollider) == _possibleSphereCollisions->end())
+							{
+								_possibleSphereCollisions->push_back(sphereCollider);
+							}
+						}
 					}
 				}
 			}
@@ -146,10 +155,10 @@ long SpatialHashing::hash(float x, float y, float z, GLuint subdivision)
 {
 	long hash = 5381;
 
-	hash = hash * 33 + x;
-	hash = hash * 33 + y;
-	hash = hash * 33 + z;
-	hash = hash * 33 + subdivision;
+	hash = 73856093 * x;
+	hash = hash ^ ((long)(19349663 * y));
+	hash = hash ^ ((long)(83492791* z));
+	hash = hash ^ ((long)(67867979 * subdivision));
 
 	return hash % NUM_BUCKETS;
 }

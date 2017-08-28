@@ -19,6 +19,7 @@ struct Particle
 	glm::vec3 predictedVelocity;
 	glm::vec3 acceleration;
 	glm::vec3 force;
+	glm::vec3 J;
 };
 
 class ParticleSystem

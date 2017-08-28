@@ -49,6 +49,7 @@ GLuint ParticleSystem::createParticle(glm::vec3 position, glm::vec3 velocity)
 	_particles[index].velocity = velocity;
 	_particles[index].force = glm::vec3(0.0f);
 	_particles[index].acceleration = glm::vec3(0.0f);
+	_particles[index].J = glm::vec3(0.0f);
 
 	_valid[index] = true;
 

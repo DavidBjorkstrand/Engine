@@ -14,7 +14,7 @@ ConstraintSolver::ConstraintSolver(float dt)
 {
 	_dt = dt;
 	_d = 4.0f;
-	_k = 100000.0f;
+	_k = 1000000.0f;
 	_e = 4.0f / (dt * dt * _k * (1 + 4 * _d));
 }
 
@@ -44,8 +44,11 @@ void ConstraintSolver::solve()
 
 			z = std::max(0.0f, (-_r[i] / constraint->Dii()) + _lambda[i]);
 			deltaLambda = z - _lambda[i];
+			_lambda[i] = z;
 
 			constraint->updateVelocity(deltaLambda);
+
+			i++;
 		}
 	}
 

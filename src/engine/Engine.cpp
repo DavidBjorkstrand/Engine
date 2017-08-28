@@ -79,6 +79,7 @@ void Engine::run()
 	float printFps = 0.0f;
 	int samples = 0;
 	float totalFps = 0.0f;
+	GLboolean canPress = true;
 
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
@@ -113,7 +114,17 @@ void Engine::run()
 			behaviour->update(dt.count());
 		}
 		
-		_physicsSystem->update(dt.count());
+		//if (Input::checkKey(GLFW_KEY_SPACE) && canPress)
+		//{
+			_physicsSystem->update(dt.count());
+			//canPress = false;
+		//}
+
+		//if (Input::checkKey(GLFW_KEY_ENTER))
+		//{
+		//	canPress = true;
+		//}
+		
 		
 		_renderSystem->draw();
 

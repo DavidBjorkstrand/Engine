@@ -23,6 +23,8 @@ class Rigidbody
 		glm::vec3 _angularVelocity;
 		glm::vec3 _acceleration;
 		glm::vec3 _force;
+		glm::vec3 _linearJ;
+		glm::vec3 _angularJ;
 		float _mass;
 		float _inverseMass;
 		glm::mat3 _I;
@@ -41,7 +43,11 @@ class Rigidbody
 		void setAcceleration(glm::vec3 acceleration);
 		void addForce(glm::vec3 deltaForce);
 		void resetForce();
-
+		void addLinearImpulse(glm::vec3 impulse);
+		void addAngularImpulse(glm::vec3 impulse);
+		void addImpuleseToVelocity();
+		void resetImpulse();
+		
 		glm::vec3 getPosition();
 		glm::quat getRotation();
 		glm::vec3 getVelocity();

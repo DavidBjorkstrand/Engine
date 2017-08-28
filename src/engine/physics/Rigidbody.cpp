@@ -11,6 +11,8 @@ Rigidbody::Rigidbody(glm::vec3 position, float mass, glm::mat3 I)
 	_angularVelocity = glm::vec3(0.0f);
 	_acceleration = glm::vec3(0.0f);
 	_force = glm::vec3(0.0f);
+	_linearJ = glm::vec3(0.0f);
+	_angularJ = glm::vec3(0.0f);
 	_mass = mass;
 	_inverseMass = 1.0f / mass;
 	_I = I;
@@ -127,4 +129,26 @@ glm::mat3 Rigidbody::getI()
 glm::mat3 Rigidbody::getInvI()
 {
 	return _invI;
+}
+
+void Rigidbody::addLinearImpulse(glm::vec3 impulse)
+{
+	_linearJ += impulse;
+}
+
+void Rigidbody::addAngularImpulse(glm::vec3 impulse)
+{
+	_angularJ += impulse;
+}
+
+void Rigidbody::addImpuleseToVelocity()
+{
+	_velocity += _inverseMass*_linearJ;
+	_angularVelocity += _invI*_angularJ;
+}
+
+void Rigidbody::resetImpulse()
+{
+	_linearJ = glm::vec3(0.0f);
+	_angularJ = glm::vec3(0.0f);
 }
