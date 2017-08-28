@@ -264,10 +264,10 @@ Scene *SceneBuilder::buildScene5()
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 3.0f, -3.0f));
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 10.0f, 10.0f));
 	entity->getTransform()->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	entity->getComponent<SphereCollider>()->setRadius(0.5f);
-	entity->getComponent<RigidbodyComponent>()->getRigidbody()->setVelocity(glm::vec3(0.0f, 0.0f, -10.0f));
+	entity->getComponent<RigidbodyComponent>()->getRigidbody()->setVelocity(glm::vec3(0.0f, 0.0f, -30.0f));
 	//scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
@@ -291,7 +291,7 @@ Scene *SceneBuilder::buildScene5()
 	entity->getComponent<SphereCollider>()->setRadius(0.5f);
 	scene->addEntity(entity);
 
-	/*entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
+	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
 	entity->getTransform()->setPosition(glm::vec3(0.0f, 7.0f, 0.0f));
 	entity->getTransform()->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -331,7 +331,7 @@ Scene *SceneBuilder::buildScene5()
 	entity->getTransform()->setPosition(glm::vec3(0.0f, 7.0f, -1.5f));
 	entity->getTransform()->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	entity->getComponent<SphereCollider>()->setRadius(0.5f);
-	scene->addEntity(entity);*/
+	scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
 	entity->getComponent<Mesh>()->setMaterial("floor");

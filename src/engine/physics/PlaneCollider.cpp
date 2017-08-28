@@ -46,7 +46,7 @@ Intersection PlaneCollider::checkCollision(Particle *particle)
 	{
 		intersection.intersecting = true;
 		intersection.distance = distance - particle->radius;
-		intersection.normal = -planeNormal;
+		intersection.normal = planeNormal;
 		intersection.point = particle->position + intersection.normal*distance;
 	}
 

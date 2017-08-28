@@ -223,16 +223,16 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 			{
 				Rigidbody *r1 = sphereCollider->getRigidbody();
 				Rigidbody *r2 = sphereCollider2->getRigidbody();
-				glm::vec3 u = r1->getVelocity() - r2->getVelocity();
+				glm::vec3 u = r2->getVelocity() - r1->getVelocity();
 				glm::vec3 n = intersection.normal;
 				glm::vec3 un = glm::dot(u, n)*n;
 				glm::vec3 t = glm::normalize(u - un);
 
-				float NdotV = glm::dot(-n, u);
-				glm::vec3 ra = -n*sphereCollider->getRadius();
-				glm::vec3 rb = n*sphereCollider2->getRadius();
+				float NdotV = glm::dot(n, u);
+				glm::vec3 ra = n*sphereCollider->getRadius();
+				glm::vec3 rb = -n*sphereCollider2->getRadius();
 
-				if (NdotV < 0.0f && glm::length(u) > 0.5f)
+				if (NdotV < 0.0f && glm::length(un) > 1.0f)
 				{
 					glm::mat3 K = r1->getInverseMass()*glm::mat3() + r2->getInverseMass()*glm::mat3();
 					K -= glm::matrixCross3(ra)*r1->getInvI()*glm::matrixCross3(ra);
@@ -240,9 +240,9 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					glm::vec3 J = glm::inverse(K)*(-0.1f*un - u);
 					glm::vec3 Jn = glm::dot(J, n)*n;
 					glm::vec3 Jt = J - Jn;
-					float coef = 0.075f;
+					float coef = 0.45f;
 
-					if (glm::length(Jt) > coef*glm::length(Jn))
+					if (!(glm::length(Jt) <= coef*glm::length(Jn)))
 					{
 						glm::vec3 ut = u - un;
 						glm::vec3 t = glm::normalize(ut);
@@ -255,8 +255,8 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					glm::vec3 currentVelocity2 = r2->getVelocity();
 					glm::vec3 currentAngularVelocity1 = r1->getAngularVelocity();
 					glm::vec3 currentAngularVelocity2 = r2->getAngularVelocity();
-					glm::vec3 newVelocity1 = currentVelocity1 + r1->getInverseMass()*J;
-					glm::vec3 newVelocity2 = currentVelocity2 - r2->getInverseMass()*J;
+					glm::vec3 newVelocity1 = currentVelocity1 - r1->getInverseMass()*J;
+					glm::vec3 newVelocity2 = currentVelocity2 + r2->getInverseMass()*J;
 					glm::vec3 newAngularVelocity1 = currentAngularVelocity1 + r1->getInvI()* glm::cross(ra, J);
 					glm::vec3 newAngularVelocity2 = currentAngularVelocity2 - r2->getInvI()* glm::cross(rb, J);
 
@@ -283,18 +283,18 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 			{
 				Rigidbody *r1 = sphereCollider->getRigidbody();
 				glm::vec3 u = r1->getVelocity();
-				glm::vec3 n = -intersection.normal;
+				glm::vec3 n = intersection.normal;
 				glm::vec3 un = glm::dot(u, n)*n;
 				glm::vec3 t = glm::normalize(u - un);
 
-				float NdotV = glm::dot(n, u);
+				float NdotV = glm::dot(-n, u);
 				glm::vec3 ra = -n*sphereCollider->getRadius();
 
-				if (NdotV < 0.0f && glm::length(u) > 0.5f)
+				if (NdotV < 0.0f && glm::length(un) > 1.0f)
 				{
 					glm::mat3 K = r1->getInverseMass()*glm::mat3();
 					K -= glm::matrixCross3(ra)*r1->getInvI()*glm::matrixCross3(ra);
-					glm::vec3 J = glm::inverse(K)*(-0.9f*un - u);
+					glm::vec3 J = glm::inverse(K)*(-0.5f*un - u);
 					glm::vec3 Jn = glm::dot(J, n)*n;
 					glm::vec3 Jt = J - Jn;
 					float coef = 0.45f;
@@ -303,9 +303,9 @@ void PhysicsSystem::collisionResolution(vector<ParticleSystem *> *particleSystem
 					{
 						glm::vec3 ut = u - un;
 						glm::vec3 t = glm::normalize(ut);
-						glm::vec3 j = -((1.0f + 0.9f) * un) / (glm::dot(n, K * (n - coef*t)));
+						glm::vec3 j = -((1.0f + 0.5f) * un) / (glm::dot(n, K * (n - coef*t)));
 
-						J = j*n - coef*j*t;
+						J = -j*n + coef*j*t;
 					}
 
 					glm::vec3 currentVelocity1 = r1->getVelocity();
