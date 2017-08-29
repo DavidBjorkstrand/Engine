@@ -7,6 +7,7 @@
 
 #include <vector>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <GL\glew.h>
 
 Rope::Rope()
@@ -22,7 +23,7 @@ Rope::Rope()
 	for (GLuint i = 0; i < NUM_PARTICLES; i++)
 	{
 		Vertex vertex;
-		vertex.position = glm::vec3(float(i)*0.5f, 40.0f, 0.0f);
+		vertex.position = glm::vec3(float(i)*0.1f, 5.0f, -0.7f);
 		vertex.texCoords = glm::vec2(0.0f);
 		vertex.normal = glm::vec3(0.0f);
 
@@ -40,7 +41,7 @@ Rope::Rope()
 
 	for (GLuint i = 1; i < NUM_PARTICLES; i++)
 	{
-		_softBody->addDistanceConstraint(i - 1, i, 0.5f);
+		_softBody->addDistanceConstraint(i - 1, i, 0.1f);
 	}
 }
 
@@ -53,6 +54,12 @@ void Rope::onAttach()
 {
 
 }
+
+void Rope::attach(int particleIndex, glm::vec3 position, float length)
+{
+	_softBody->addDistanceConstraint(particleIndex, position, length);
+}
+
 
 SoftBody *Rope::getSoftBody()
 {

@@ -42,3 +42,8 @@ void RRCollisionConstraint::updateVelocity(float deltaLambda)
 	_r1->setVelocity(currentVelocity1);
 	_r2->setVelocity(currentVelocity2);
 }
+
+bool RRCollisionConstraint::complementaryCondition()
+{
+	return true;
+}

@@ -45,11 +45,16 @@ void Cloth::onAttach()
 
 }
 
+void Cloth::attach(int column, int row, glm::vec3 position, float length)
+{
+	_softBody->addDistanceConstraint(column*_height + row, position, length);
+}
+
 RenderCommand Cloth::getRenderCommand()
 {
 	RenderCommand renderCommand;
 
-	GLuint count = 0;
+	/*GLuint count = 0;
 	GLint startColumn = -(_width / 2);
 	GLint endColumn = _width + startColumn - 1;
 	for (GLint i = startColumn; i <= endColumn; i++)
@@ -57,7 +62,7 @@ RenderCommand Cloth::getRenderCommand()
 		_softBody->getParticle(count)->position = glm::vec3(i*0.1f, 4.1f, -20.0f);
 		_softBody->getParticle(count)->velocity = glm::vec3(0.0f);
 		count += _height;
-	}
+	}*/
 
 	for (ParticleSystem::iterator it = _softBody->begin(); it != _softBody->end(); it++)
 	{
@@ -81,7 +86,7 @@ SoftBody *Cloth::getSoftBody()
 
 void Cloth::init()
 {
-	_softBody = new SoftBody(glm::vec3(0.0f), _width * _height, 0.1f);
+	_softBody = new SoftBody(glm::vec3(0.0f), _width * _height, 0.05f);
 	_vertices = new vector<Vertex>();
 	_indices = new vector<GLuint>((_width * 2) * (_height - 1) + (_height - 2));
 

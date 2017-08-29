@@ -13,6 +13,7 @@ struct Vertex;
 #include <vector>
 
 #include <GL\glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class Cloth : public Component
 		~Cloth();
 		void accept(Scene *scene);
 		void onAttach();
+		void attach(int column, int row, glm::vec3 position, float length);
 		RenderCommand getRenderCommand();
 		SoftBody *getSoftBody();
 

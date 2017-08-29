@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <GL\glew.h>
 
 class SoftBody;
@@ -27,6 +28,7 @@ class Rope : public Component
 		Rope();
 		void accept(Scene *scene);
 		void onAttach();
+		void attach(int particleIndex, glm::vec3 position, float length);
 		SoftBody *getSoftBody();
 		RenderCommand getRenderCommand();
 };

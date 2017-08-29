@@ -38,3 +38,8 @@ void RCollisionConstraint::updateVelocity(float deltaLambda)
 
 	_rigidbody->setVelocity(currentVelocity);
 }
+
+bool RCollisionConstraint::complementaryCondition()
+{
+	return true;
+}

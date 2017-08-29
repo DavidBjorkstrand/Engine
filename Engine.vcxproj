@@ -130,8 +130,10 @@
     <ClCompile Include="src\engine\physics\ConstraintSolver.cpp" />
     <ClCompile Include="src\engine\physics\ParticleSystem.cpp" />
     <ClCompile Include="src\engine\physics\PCollisionConstraint.cpp" />
+    <ClCompile Include="src\engine\physics\PDistanceConstraint.cpp" />
     <ClCompile Include="src\engine\physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\engine\physics\PlaneCollider.cpp" />
+    <ClCompile Include="src\engine\physics\PPDistanceConstraint.cpp" />
     <ClCompile Include="src\engine\physics\RCollisionConstraint.cpp" />
     <ClCompile Include="src\engine\physics\Rigidbody.cpp" />
     <ClCompile Include="src\engine\physics\RPCollisionConstraint.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="include\engine\physics\Constraint.h" />
     <ClInclude Include="include\engine\physics\ConstraintSolver.h" />
     <ClInclude Include="include\engine\physics\PCollisionConstraint.h" />
+    <ClInclude Include="include\engine\physics\PDistanceConstraint.h" />
+    <ClInclude Include="include\engine\physics\PPDistanceConstraint.h" />
     <ClInclude Include="include\engine\physics\RCollisionConstraint.h" />
     <ClInclude Include="include\engine\physics\ParticleSystem.h" />
     <ClInclude Include="include\engine\physics\PhysicsSystem.h" />
@@ -219,6 +223,7 @@
     <None Include="resources\materials\cloth.mat" />
     <None Include="resources\materials\floor.mat" />
     <None Include="resources\materials\particle.mat" />
+    <None Include="resources\materials\wall.mat" />
     <None Include="src\engine\renderer\materials\default.mat" />
     <None Include="src\engine\renderer\materials\red.mat" />
     <None Include="src\engine\renderer\shaders\fluid\bilateralFilter.fs" />

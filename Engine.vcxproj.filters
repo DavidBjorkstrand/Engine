@@ -147,6 +147,12 @@
     <ClCompile Include="src\engine\physics\PCollisionConstraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\physics\PDistanceConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\PPDistanceConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\renderer\Material.h">
@@ -290,6 +296,12 @@
     <ClInclude Include="include\engine\physics\PCollisionConstraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\physics\PDistanceConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\PPDistanceConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\engine\renderer\shaders\pbr.vs" />
@@ -320,5 +332,6 @@
     <None Include="src\engine\renderer\shaders\fluid\noise.fs" />
     <None Include="src\engine\renderer\shaders\fluid\curvatureFlow.fs" />
     <None Include="resources\materials\cloth.mat" />
+    <None Include="resources\materials\wall.mat" />
   </ItemGroup>
 </Project>

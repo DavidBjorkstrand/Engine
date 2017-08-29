@@ -38,3 +38,8 @@ void PCollisionConstraint::updateVelocity(float deltaLambda)
 
 	_p->velocity = currentVelocity;
 }
+
+bool PCollisionConstraint::complementaryCondition()
+{
+	return true;
+}

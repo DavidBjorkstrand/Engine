@@ -34,7 +34,7 @@ void ConstraintSolver::solve()
 		_lambda.push_back(0.0f);
 	}
 
-	for (int it = 0; it < 100; it++)
+	for (int it = 0; it < 20; it++)
 	{
 		int i = 0;
 		for (Constraint *constraint : _constraints)
@@ -42,7 +42,15 @@ void ConstraintSolver::solve()
 			_r[i] = -constraint->b(_dt, _d) + _e*_lambda[i];
 			_r[i] += constraint->Gv();
 
-			z = std::max(0.0f, (-_r[i] / constraint->Dii()) + _lambda[i]);
+			if (constraint->complementaryCondition())
+			{
+				z = std::max(0.0f, (-_r[i] / constraint->Dii()) + _lambda[i]);
+			}
+			else
+			{
+				z = (-_r[i] / constraint->Dii()) + _lambda[i];
+			}
+			
 			deltaLambda = z - _lambda[i];
 			_lambda[i] = z;
 

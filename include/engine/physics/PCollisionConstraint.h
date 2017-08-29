@@ -19,5 +19,6 @@ public:
 	float Gv();
 	float Dii();
 	void updateVelocity(float deltaLambda);
+	bool complementaryCondition();
 
 };

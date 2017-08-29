@@ -1,0 +1,16 @@
+{
+	"name": "wall",
+	"shader": "default",
+	"albedoMap": {
+		"type":"texture",
+		"value": "resources\\textures\\wall\\albedo.png"
+	},
+	"roughnessMap": {
+		"type":"texture",
+		"value": "resources\\textures\\wall\\roughness.png"
+	},
+	"normalMap": {
+		"type":"texture",
+		"value": "resources\\textures\\wall\\normal.png"
+	}
+}

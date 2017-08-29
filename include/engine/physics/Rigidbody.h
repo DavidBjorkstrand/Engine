@@ -35,6 +35,7 @@ class Rigidbody
 	public:
 		Rigidbody(glm::vec3 position, float mass, glm::mat3 I);
 		void addListener(RigidbodyListener *rigidbodyListener);
+		void setMass(float mass);
 		void setPosition(glm::vec3 position);
 		void setRotation(glm::quat rotation);
 		void setVelocity(glm::vec3 velocity);

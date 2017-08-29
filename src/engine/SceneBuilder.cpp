@@ -264,10 +264,10 @@ Scene *SceneBuilder::buildScene5()
 
 	Entity *entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
 	entity->getComponent<Mesh>()->setMaterial("rustediron");
-	entity->getTransform()->setPosition(glm::vec3(0.0f, 3.0f, -5.0f));
+	entity->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, -5.0f));
 	entity->getTransform()->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	entity->getComponent<SphereCollider>()->setRadius(0.5f);
-	entity->getComponent<RigidbodyComponent>()->getRigidbody()->setVelocity(glm::vec3(0.0f, 0.0f, -30.0f));
+	entity->getComponent<RigidbodyComponent>()->getRigidbody()->setVelocity(glm::vec3(0.0f, 0.0f, -20.0f));
 	scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Sphere);
@@ -340,7 +340,7 @@ Scene *SceneBuilder::buildScene5()
 	scene->addEntity(entity);
 
 	entity = Entity::createPrimitive(PrimitiveTypes::Plane);
-	entity->getComponent<Mesh>()->setMaterial("floor");
+	entity->getComponent<Mesh>()->setMaterial("wall");
 	entity->getTransform()->setPosition(glm::vec3(0.0f, 0.0f, -25.0f));
 	//entity->getTransform()->rotate(-90.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	entity->getTransform()->setScale(glm::vec3(50.0f, 50.0f, 1.0f));
@@ -362,23 +362,28 @@ Scene *SceneBuilder::buildScene5()
 	lightEntity->getTransform()->setPosition(glm::vec3(0.0f, 12.0f, 0.0f));
 	scene->addEntity(lightEntity);*/
 
-	ParticleEmitter *particleEmitter = new ParticleEmitter(0.06f, 0.12f, 0.0025f, 0.05f, 22.0f, 0.1f, 1000, 3.0f);
+	ParticleEmitter *particleEmitter = new ParticleEmitter(0.1f, 0.1f, 0.005f, 0.05f, 22.0f, 0.1f, 1000, 3.0f);
 	Entity *particleEnity = new Entity();
 	particleEnity->addComponent(particleEmitter);
-	particleEnity->getTransform()->rotate(17.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 2.0f, 25.0f));
+	particleEnity->getTransform()->rotate(21.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	particleEnity->getTransform()->setPosition(glm::vec3(0.0f, 0.5f, 25.0f));
 	scene->addEntity(particleEnity);
 
-	/*Cloth *cloth = new Cloth(41, 41, 0.1f);
+	Cloth *cloth = new Cloth(41, 41, 0.1f);
 	Entity *clothEntity = new Entity();
-	clothEntity->getTransform()->setPosition(glm::vec3(0.0f, 4.1f, -20.0f));
+	clothEntity->getTransform()->setPosition(glm::vec3(0.0f, 4.1f, -15.0f));
 	clothEntity->addComponent(cloth);
-	scene->addEntity(clothEntity);*/
+	scene->addEntity(clothEntity);
+	for (int i = 0; i < 41; i++)
+	{
+		cloth->attach(i, 0, glm::vec3(i*0.1f-2.0f, 5.1f, -17.0f), 1.0f);
+	}
 
-	/*Rope *rope = new Rope();
+	Rope *rope = new Rope();
 	Entity *ropeEntity = new Entity();
 	ropeEntity->addComponent(rope);
-	scene->addEntity(ropeEntity);*/
+	scene->addEntity(ropeEntity);
+	rope->attach(0, glm::vec3(0.0f, 6.0f, -0.7f), 1.0f);
 
 	return scene;
 }

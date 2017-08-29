@@ -26,6 +26,12 @@ void Rigidbody::addListener(RigidbodyListener *rigidbodyListener)
 	_listeners->push_back(rigidbodyListener);
 }
 
+void Rigidbody::setMass(float mass)
+{
+	_mass = mass;
+	_inverseMass = 1.0f / mass;
+}
+
 void Rigidbody::setPosition(glm::vec3 position)
 {
 	_position = position;

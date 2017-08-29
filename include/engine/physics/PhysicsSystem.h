@@ -12,6 +12,7 @@ class ParticleSystem;
 class ConstraintSolver;
 class SpatialHashing;
 class Rigidbody;
+class PlaneCollider;
 
 struct Particle;
 
@@ -62,6 +63,7 @@ class PhysicsSystem
 		void applyAirFriction(Particle *particle);
 		void applyAirFriction(Rigidbody *rigidbody);
 		void collisionResolution(vector<ParticleSystem *> *particleSystems, vector<SoftBody *> *softbodies, vector<Collider *> *colliders);
+		void particleSpherePlane(Particle *particle, vector<PlaneCollider *> planeColliders);
 		void integrate(vector<ParticleSystem *> *particleSystems);
 		void integrate(vector<SoftBody *> *softBodies);
 		void integrate(vector<Rigidbody *> *rigidbodies);
