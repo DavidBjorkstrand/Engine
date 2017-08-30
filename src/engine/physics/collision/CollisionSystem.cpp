@@ -135,13 +135,11 @@ void CollisionSystem::particleSphereResolution(Particle *particle)
 
 			float NdotV = glm::dot(n, u);
 			glm::vec3 ra = -n*collider->getRadius();
-			glm::vec3 rb = n*particle->radius;
 
 			if (NdotV < 0.0f && glm::length(un) > 0.5f)
 			{
 				glm::mat3 K = r->getInverseMass()*glm::mat3() + particle->inverseMass*glm::mat3();
 				K -= glm::matrixCross3(ra)*r->getInvI()*glm::matrixCross3(ra);
-				K -= glm::matrixCross3(rb)*glm::mat3()*glm::matrixCross3(rb);
 				glm::vec3 J = glm::inverse(K)*(-0.1f*un - u);
 				glm::vec3 Jn = glm::dot(J, n)*n;
 				glm::vec3 Jt = J - Jn;
