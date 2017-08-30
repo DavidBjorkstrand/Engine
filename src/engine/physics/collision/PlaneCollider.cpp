@@ -1,10 +1,10 @@
-#include "engine/physics/PlaneCollider.h"
+#include "engine/physics/collision/PlaneCollider.h"
 
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Component.h"
 #include "engine/physics/ParticleSystem.h"
-#include "engine/physics/SphereCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
 
 #include <glm\gtc\type_ptr.hpp>
 

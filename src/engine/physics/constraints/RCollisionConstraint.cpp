@@ -1,7 +1,7 @@
-#include "engine/physics/RCollisionConstraint.h"
+#include "engine/physics/constraint/RCollisionConstraint.h"
 
 #include "engine/physics/Rigidbody.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

@@ -4,7 +4,7 @@
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 
 RigidbodyComponent::RigidbodyComponent(float mass)
 {

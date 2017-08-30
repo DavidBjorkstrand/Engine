@@ -2,10 +2,10 @@
 
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/PhysicsSystem.h"
-#include "engine/physics/ConstraintSolver.h"
-#include "engine/physics/Constraint.h"
-#include "engine/physics/PDistanceConstraint.h"
-#include "engine/physics/PPDistanceConstraint.h"
+#include "engine/physics/constraint/ConstraintSolver.h"
+#include "engine/physics/constraint/Constraint.h"
+#include "engine/physics/constraint/PDistanceConstraint.h"
+#include "engine/physics/constraint/PPDistanceConstraint.h"
 
 #include <GL/glew.h>
 

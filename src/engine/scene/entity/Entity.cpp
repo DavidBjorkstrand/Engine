@@ -3,8 +3,8 @@
 #include "engine/scene/entity/Transform.h"
 #include "engine/scene/entity/component/Component.h"
 #include "engine/scene/entity/component/Mesh.h" 
-#include "engine/physics/SphereCollider.h"
-#include "engine/physics/PlaneCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
+#include "engine/physics/collision/PlaneCollider.h"
 #include "engine/scene/entity/component/RigidbodyComponent.h"
 
 #include <vector>

@@ -8,7 +8,7 @@
 #include "engine/interface/Window.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
-#include "engine/physics/SphereCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
@@ -79,56 +79,35 @@ void Engine::run()
 	float printFps = 0.0f;
 	int samples = 0;
 	float totalFps = 0.0f;
-	GLboolean canPress = true;
+	GLboolean run = false;
 
     while (!Input::checkKey(GLFW_KEY_ESCAPE)) 
     {
+		if (Input::checkKey(GLFW_KEY_SPACE))
+		{
+			run = true;
+		}
+
 		newTime = std::chrono::high_resolution_clock::now();
 		dt = newTime - currentTime;
 		currentTime = newTime;
 
-		/*if (dt.count() <= 0.0f)
+		_inputSystem->pollEvents();
+
+		if (run)
 		{
-			cout << "Weird error" << endl;
-			dt.count() = 0.0f;
-		}*/
+			_activeScene->traverse();
+			for (Behaviour *behaviour : *_activeScene->getBehaviours())
+			{
+				behaviour->update(dt.count());
+			}
 
-
-		/*printFps += dt.count();
-		totalFps += (1.0f / dt.count());
-		samples++;
-
-		if (printFps >= 1.0f)
-		{
-			cout << "\r" << totalFps / samples << " fps" << endl;
-			printFps = 0.0f;
-			totalFps = 0.0f;
-			samples = 0;
-		}*/
-
-        _inputSystem->pollEvents();
-
-		_activeScene->traverse();
-		for (Behaviour *behaviour : *_activeScene->getBehaviours())
-		{
-			behaviour->update(dt.count());
-		}
-		
-		//if (Input::checkKey(GLFW_KEY_SPACE) && canPress)
-		//{
 			_physicsSystem->update(dt.count());
-			//canPress = false;
-		//}
+		}
 
-		//if (Input::checkKey(GLFW_KEY_ENTER))
-		//{
-		//	canPress = true;
-		//}
-		
-		
 		_renderSystem->draw();
 
-        _windowSystem->show();
+		_windowSystem->show();
     }
 }
 

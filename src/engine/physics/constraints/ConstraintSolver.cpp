@@ -1,7 +1,7 @@
-#include "engine/physics/ConstraintSolver.h"
+#include "engine/physics/constraint/ConstraintSolver.h"
 #include "engine/physics/ParticleSystem.h"
 #include "engine/physics/Rigidbody.h"
-#include "engine/physics/Constraint.h"
+#include "engine/physics/constraint/Constraint.h"
 
 #include <vector>
 #include <iostream>

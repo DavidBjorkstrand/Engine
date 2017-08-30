@@ -13,8 +13,8 @@
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
 #include "engine/physics/ParticleSystem.h"
-#include "engine/physics/SphereCollider.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/SphereCollider.h"
+#include "engine/physics/collision/Collider.h"
 #include "engine/physics/SoftBody.h"
 #include "engine/physics/Rigidbody.h"
 

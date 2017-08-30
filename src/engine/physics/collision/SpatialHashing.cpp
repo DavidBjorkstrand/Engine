@@ -1,7 +1,7 @@
-#include "engine/physics/SpatialHashing.h"
+#include "engine/physics/collision/SpatialHashing.h"
 
 #include "engine/physics/ParticleSystem.h"
-#include "engine/physics/SphereCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
 
 #include <map>
 #include <vector>

@@ -1,9 +1,9 @@
-#include "engine/physics/SphereCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
 
 #include "engine/scene/Scene.h"
 #include "engine/scene/entity/Entity.h"
 #include "engine/scene/entity/Transform.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 #include "engine/physics/ParticleSystem.h"
 
 #include <GL\glew.h>

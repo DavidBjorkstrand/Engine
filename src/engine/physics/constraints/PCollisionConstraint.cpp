@@ -1,7 +1,7 @@
-#include "engine/physics/PCollisionConstraint.h"
+#include "engine/physics/constraint/PCollisionConstraint.h"
 
 #include "engine/physics/ParticleSystem.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

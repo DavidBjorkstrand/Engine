@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 #include "engine/scene/entity/component/Component.h"
 
 class Scene;

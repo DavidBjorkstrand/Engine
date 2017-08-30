@@ -8,7 +8,7 @@
 #include "engine/interface/Window.h"
 #include "engine/renderer/RenderSystem.h"
 #include "engine/physics/PhysicsSystem.h"
-#include "engine/physics/SphereCollider.h"
+#include "engine/physics/collision/SphereCollider.h"
 #include "engine/physics/Rigidbody.h"
 #include "engine/scene/SkyBox.h"
 #include "engine/scene/Scene.h"

@@ -99,15 +99,6 @@
     <ClCompile Include="src\engine\renderer\FluidRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\SphereCollider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\physics\PlaneCollider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\physics\Collider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\scene\entity\component\Cloth.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,13 +108,7 @@
     <ClCompile Include="src\engine\physics\SoftBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\ConstraintSolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\scene\entity\component\Rope.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\physics\SpatialHashing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\physics\Rigidbody.cpp">
@@ -135,22 +120,40 @@
     <ClCompile Include="src\engine\SceneBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\RCollisionConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\ConstraintSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\RRCollisionConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\PCollisionConstraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\RPCollisionConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\PDistanceConstraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\PCollisionConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\PPDistanceConstraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\PDistanceConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\RCollisionConstraint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\physics\PPDistanceConstraint.cpp">
+    <ClCompile Include="src\engine\physics\constraints\RPCollisionConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\constraints\RRCollisionConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\collision\Collider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\collision\SpatialHashing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\collision\SphereCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\collision\PlaneCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\physics\collision\CollisionSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,15 +248,6 @@
     <ClInclude Include="include\engine\renderer\FluidRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\physics\SphereCollider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\physics\PlaneCollider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine\scene\entity\component\Cloth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -263,13 +257,7 @@
     <ClInclude Include="include\engine\physics\SoftBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\ConstraintSolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine\scene\entity\component\Rope.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\physics\SpatialHashing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\physics\Rigidbody.h">
@@ -281,25 +269,43 @@
     <ClInclude Include="include\engine\SceneBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\Constraint.h">
+    <ClInclude Include="include\engine\physics\collision\Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\RCollisionConstraint.h">
+    <ClInclude Include="include\engine\physics\collision\PlaneCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\RRCollisionConstraint.h">
+    <ClInclude Include="include\engine\physics\collision\SpatialHashing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\RPCollisionConstraint.h">
+    <ClInclude Include="include\engine\physics\collision\SphereCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\PCollisionConstraint.h">
+    <ClInclude Include="include\engine\physics\constraint\Constraint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\PDistanceConstraint.h">
+    <ClInclude Include="include\engine\physics\constraint\ConstraintSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\physics\PPDistanceConstraint.h">
+    <ClInclude Include="include\engine\physics\constraint\PCollisionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\constraint\PDistanceConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\constraint\PPDistanceConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\constraint\RCollisionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\constraint\RPCollisionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\constraint\RRCollisionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\physics\collision\CollisionSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

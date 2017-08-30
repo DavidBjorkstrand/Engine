@@ -1,7 +1,7 @@
-#include "engine/physics/PDistanceConstraint.h"
+#include "engine/physics/constraint/PDistanceConstraint.h"
 
 #include "engine/physics/ParticleSystem.h"
-#include "engine/physics/Collider.h"
+#include "engine/physics/collision/Collider.h"
 
 #include <iostream>
 
